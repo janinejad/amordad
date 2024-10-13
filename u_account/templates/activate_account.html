@@ -1,0 +1,47 @@
+{% extends 'Shared/_MainLayout.html' %}
+{% load static %}
+{% block content %}
+    <div class="container pt-5 pb-lg-4 mt-5 mb-sm-2">
+        <!-- Breadcrumb-->
+        <nav class="mb-4 pt-md-3" aria-label="Breadcrumb">
+            <ol class="breadcrumb breadcrumb-light">
+                <li class="breadcrumb-item"><a href="car-finder-home.html">خانه</a></li>
+                <li class="breadcrumb-item"><a href="car-finder-account-info.html">اکانت من</a></li>
+                <li class="breadcrumb-item active" aria-current="page">فعال سازی</li>
+            </ol>
+        </nav>
+        <!-- Page content-->
+        <div class="row">
+            <!-- Sidebar-->
+            {% include '_Sidebar.html' %}
+            <div class="col-lg-8 col-md-7 mb-5">
+                {% if request.user.is_active %}
+                    <h1 class="h4 font-vazir text-light">تبریک</h1>
+                    <p class="text-light pt-1">حساب کاربری شما با موفقیت فعال شده است!.</p>
+                {% else %}
+                    <h1 class="h4 font-vazir text-light">فعال سازی حساب</h1>
+                    <p class="text-light pt-1">لینک فعال سازی به ایمیل شما ارسال گردید. لطفا به ایمیل خود مراجه نمایید و
+                        روی لینک کلیک کنید.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'vendor/jquery-3.6.0.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/simplebar/dist/simplebar.min.js' %}"></script>
+    <script src="{% static 'vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js' %}"></script>
+    <script src="{% static 'vendor/leaflet/dist/leaflet.js' %}"></script>
+    <script src="{% static 'js/cruds/auth.js' %}"></script>
+    <!-- Main theme script-->
+    <script src="{% static 'js/theme.min.js' %}"></script>
+{% endblock %}
+{% block css %}
+    <!-- Vendor Styles-->
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/leaflet/dist/leaflet.css' %}"/>
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
+{% endblock %}

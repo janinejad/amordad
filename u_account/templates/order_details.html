@@ -1,0 +1,112 @@
+{% extends 'Shared/_MainLayout.html' %}
+{% load static %}
+{% load paginator_tags %}
+{% block content %}
+    <div class="container pt-5 pb-lg-4 mt-5 mb-sm-2">
+        <!-- Breadcrumb-->
+        <nav class="mb-4 pt-md-3" aria-label="Breadcrumb">
+            <ol class="breadcrumb breadcrumb-light">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">خانه</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'account:edit_personal_info' %}">اکانت من</a></li>
+                <li class="breadcrumb-item active" aria-current="page">سفارشات من</li>
+            </ol>
+        </nav>
+        <!-- Page content-->
+        <div class="row">
+            <!-- Sidebar-->
+            {% include '_Sidebar.html' with user_model=user %}
+            <div class="col-lg-8 col-md-7 mb-5">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h1 class="h4 font-vazir text-light mb-0"><a href="{% url 'account:orders' %}"><i
+                            class="fi-arrow-right"></i></a></h1>
+                </div>
+                <p class="text-light pt-1 mb-4">شما در این قسمت می توانید جزئیات سفارش {{ order.id }} را مشاهده
+                    بفرمایید.</p>
+                <!-- Item-->
+                {% for i in order.orderitem.all %}
+                    <div class="card card-light card-hover card-horizontal mb-4">
+                        <div class="tns-carousel-wrapper card-img-top card-img-hover"><a class="img-overlay"
+                                                                                         href="{% url 'products:product' id=i.variant.products.id product_name=i.variant.products.title %}"></a>
+                            <div class="tns-carousel-inner position-absolute top-0 h-100">
+                                <div class="bg-size-cover bg-position-center w-100 h-100"
+                                     style="background-image: url({{ i.variant.products.image.url }});"></div>
+                                {% for image in i.variant.products.productgallery_set.all %}
+                                    <div class="bg-size-cover bg-position-center w-100 h-100"
+                                         style="background-image: url({{ image.image.url }});"></div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="fs-base mb-1 fw-500"><a class="nav-link-light"
+                                                               href="{% url 'products:product' id=i.variant.products.id product_name=i.variant.products.title %}">{{ i.variant.products.title }}</a>
+                            </h3>
+                            <div class="text-primary fw-bold mb-1">{{ i.item_amount_with_tax_ir }}</div>
+                            <div class="fs-sm text-light mt-2 opacity-70"></div>
+                            <div class="border-top border-light mt-3 pt-3">
+                                <div class="row g-2">
+                                    <div class="col me-sm-1">
+                                        <div class="bg-dark rounded text-center w-100 h-100 p-2"><i
+                                                class="fi-arrow-down d-block h4 text-light mb-0 mx-center"></i><span
+                                                class="fs-xs text-light">{{ i.variant.variant_name }}</span></div>
+                                    </div>
+                                    <div class="col me-sm-1">
+                                        <div class="bg-dark rounded text-center w-100 h-100 p-2"><i
+                                                class="fi-grid d-block h4 text-light mb-0 mx-center"></i><span
+                                                class="fs-xs text-light">{{ i.variant.products.RootCategoryId }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="bg-dark rounded text-center w-100 h-100 p-2"><i
+                                                class="fi-bookmark d-block h4 text-light mb-0 mx-center"></i><span
+                                                class="fs-xs text-light">{{ i.variant.products.brandId }}</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'vendor/jquery-3.6.0.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/simplebar/dist/simplebar.min.js' %}"></script>
+    <script src="{% static 'vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js' %}"></script>
+    <script src="{% static 'vendor/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.min.js' %}"></script>
+    <script src="{% static 'vendor/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js' %}"></script>
+    <script src="{% static 'vendor/filepond-plugin-image-crop/dist/filepond-plugin-image-crop.min.js' %}"></script>
+    <script src="{% static 'vendor/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.min.js' %}"></script>
+    <script src="{% static 'vendor/filepond-plugin-image-transform/dist/filepond-plugin-image-transform.min.js' %}"></script>
+    <script src="{% static 'vendor/tiny-slider/dist/min/tiny-slider.js' %}"></script>
+    <script src="{% static 'vendor/filepond/dist/filepond.min.js' %}"></script>
+    <script src="{% static 'js/cruds/auth.js' %}"></script>
+    <!-- Main theme script-->
+    <script src="{% static 'js/theme.min.js' %}"></script>
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>
+    <link rel="stylesheet" media="screen"
+          href="{% static 'vendor/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css' %}"/>
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/filepond/dist/filepond.min.css' %}"/>
+        <link rel="stylesheet" media="screen" href="{% static 'vendor/tiny-slider/dist/tiny-slider.css' %}"/>
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
+{% endblock %}
+
+{% block js_code %}
+    <script>
+        $(document).ready(function () {
+            $('#isOfficial').change(function () {
+                if (this.checked) {
+                    $("#officialPart").removeClass('d-none');
+                } else {
+                    $("#officialPart").addClass('d-none');
+                }
+            });
+        });
+    </script>
+{% endblock %}
+

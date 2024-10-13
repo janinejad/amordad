@@ -1,0 +1,247 @@
+{% extends 'Shared/_MainLayout.html' %}
+{% load static %}
+{% block content %}
+    <div class="container pt-5 pb-lg-4 my-5">
+        <!-- Breadcrumb-->
+        <nav class="mb-3 pb-md-1 pt-md-3" aria-label="Breadcrumb">
+            <ol class="breadcrumb breadcrumb-light m-0">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">خانه</a></li>
+                <li class="breadcrumb-item"><a
+                        href="{{ data.post.category.get_abs_url }}">{{ data.post.category.title }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ data.post.title }}</li>
+            </ol>
+        </nav>
+
+        <div class="row mt-4 pt-3">
+            <!-- Post content-->
+            <div class="col-lg-8">
+                <!-- Page title-->
+                <h1 class="h4 font-vazir text-light pb-3">{{ data.post.title }}</h1><img class="rounded-3"
+                                                                                         src="{{ data.post.image.url }}"
+                                                                                         alt="Image">
+                <!-- Post meta-->
+                <div class="d-flex flex-wrap border-bottom border-light pb-3 mb-4 mt-3"><a
+                        class="text-uppercase text-decoration-none border-end border-light pe-3 me-3 mb-2"
+                        href="#">مطلب</a>
+                    <div class="d-flex align-items-center text-light border-end border-light pe-3 me-3 mb-2"><i
+                            class="fi-calendar-alt opacity-70 me-2"></i><span>{{ data.post.post_date }}</span></div>
+                    <div class="d-flex align-items-center text-light border-end border-light pe-3 me-3 mb-2"><i
+                            class="fi-clock opacity-70 me-2"></i><span>2 دقیقه زمان مطالعه</span></div>
+                    <a class="d-flex align-items-center text-light text-decoration-none ms-3 mb-2" href="#comments"
+                       data-scroll><i class="fi-chat-circle opacity-70 me-2"></i><span>{{ data.post.comment_counts }} نظر</span></a>
+                </div>
+                <div class="row white-custom">
+                    {{ data.post.Description|safe }}
+                </div>
+
+                <!-- Tags + Sharing-->
+                <div class="pt-4 pb-5 mb-md-3">
+                    <div class="d-md-flex align-items-center justify-content-between border-top border-light pt-4">
+                        <div class="d-flex align-items-center me-3 mb-3 mb-md-0">
+                            <div class="d-none d-sm-block text-light text-nowrap mb-2 me-2 pe-1">تگ ها:</div>
+                            <div class="d-flex flex-wrap">
+                                {% for t in tags %}
+                                    <a class="btn btn-xs btn-translucent-light rounded-pill fs-sm fw-normal me-2 mb-2"
+                                       href="{{ t.get_abs_url }}">{{ t.title }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="text-light text-nowrap pe-1 mb-2">اشتراک گذاری:</div>
+                            <div class="d-flex"><a
+                                    class="btn btn-icon btn-translucent-light btn-xs rounded-circle mb-2 ms-2" href="#"
+                                    data-bs-toggle="tooltip" title="Share with Facebook"><i class="fi-facebook"></i></a><a
+                                    class="btn btn-icon btn-translucent-light btn-xs rounded-circle mb-2 ms-2" href="#"
+                                    data-bs-toggle="tooltip" title="Share with Twitter"><i class="fi-twitter"></i></a><a
+                                    class="btn btn-icon btn-translucent-light btn-xs rounded-circle mb-2 ms-2" href="#"
+                                    data-bs-toggle="tooltip" title="Share with LinkedIn"><i class="fi-linkedin"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Comments-->
+                <div class="mb-4 mb-md-5" id="comments">
+                    <h3 class="text-light mb-4 pb-2 font-vazir h5">{{ data.post.comment_counts }} نظر ثبت شده</h3>
+                    <!-- Comment-->
+                    {% for comment in data.post.comments_set.all %}
+                        <div class="border-bottom border-light pb-4 mb-4">
+                            <p class="text-light white-70">{{ comment.comment }}</p>
+                            <h6 class="text-light opacity-50 fs-base mb-0 white-70 fw-500">{{ comment }}</h6>
+                            <div class="d-flex mt-2 justify-content-between align-items-center">
+                                <div class="d-flex align-items-center pe-2">
+                                    <div class="ps-2">
+                                        <span class="text-light opacity-50 fs-sm">{{ comment.comment_date }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <!-- Comment form-->
+                <h3 class="text-light mb-4 pb-sm-2 h5 font-vazir">ثبت نظر</h3>
+                <form class="needs-validation row gy-md-4 gy-3 pb-sm-2" method="post" novalidate>
+                    {% csrf_token %}
+                    <div class="col-12">
+                        {{ data.form }}
+                        <div class="invalid-feedback">لطفا نظر خود را بنویسید</div>
+                    </div>
+                    <div class="col-12 py-2">
+                        <button class="btn btn-lg btn-primary" type="submit">ثبت</button>
+                    </div>
+                </form>
+            </div>
+            <!-- Sidebar-->
+            <aside class="col-lg-4">
+                <div class="offcanvas-lg offcanvas-end bg-dark" id="blog-sidebar">
+                    <div class="offcanvas-header bg-transparent border-bottom border-light">
+                        <h2 class="h5 text-light mb-0">سایدبار</h2>
+                        <button class="btn-close btn-close-white" type="button" data-bs-dismiss="offcanvas"
+                                data-bs-target="#blog-sidebar"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <!-- Search-->
+                        <form action="{% url 'blog:blog' %}" method="get">
+                            <div class="position-relative mb-4">
+                                <input class="form-control form-control-light" name="qs" type="text"
+                                       placeholder="جستجو..."><i
+                                    class="fi-search position-absolute top-50 end-0 translate-middle-y text-light opacity-70 me-3"></i>
+                            </div>
+                        </form>
+                        <!-- Recent posts widget-->
+                        <div class="card card-flush bg-transparent border-light mb-4">
+                            <div class="card-body blog-list">
+                                <h3 class="h5 text-light pt-3 pt-lg-0">آخرین اخبار</h3>
+                                {% for p in other_post %}
+                                    <div class="d-flex align-items-start border-bottom border-light pb-3 mb-3"><a
+                                            class="flex-shrink-0" href="#"><img class="rounded-3"
+                                                                                src="{{ p.image.url }}"
+                                                                                width="80"
+                                                                                alt="Image"></a>
+                                        <div class="ps-3"><a
+                                                class="fs-sm text-uppercase text-primary text-decoration-none"
+                                                href="{{ p.category.get_abs_url }}">{{ p.category }}</a>
+                                            <h4 class="fs-base text-light pt-1 mb-2"><a class="nav-link" href="{{ p.get_abs_url }}">{{ p.title }}</a></h4>
+                                            <div class="d-flex fs-xs text-light opacity-70"><span class="me-2 pe-1"><i
+                                                    class="fi-calendar-alt opacity-70 mt-n1 me-1 align-middle"></i>{{ p.post_date }}</span><span><i
+                                                    class="fi-chat-circle opacity-70 mt-n1 me-1 align-middle"></i>{{ p.comment_counts }} نظر</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <!-- Subscription form-->
+                        <div class="card card-flush bg-transparent border-light mb-4">
+                            <div class="card-body">
+                                <h3 class="h6 font-nonBold text-light pt-3 pt-lg-0 pb-1 mb-2">عضویت در خبرنامه</h3>
+                                <p class="fs-sm text-light opacity-70">در خبرنامه ما مشترک شوید و اولین کسی باشید که
+                                    جدیدترین پست ها و نکات را مشاهده می کنید.</p>
+                                <form class="form-group form-group-light w-100">
+                                    <div class="input-group input-group-sm"><span class="input-group-text"> <i
+                                            class="fi-mail"></i></span>
+                                        <input class="form-control" type="text" placeholder="ایمیل شما...">
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" type="button">عضویت</button>
+                                </form>
+                                <p class="fs-sm pt-3 mb-0"><span
+                                        class="text-light opacity-70">* با ثبت نام در خبرنامه </span><a href="#">شرایط و
+                                    قوانین </a> سایت را میپذیرم.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="{% static 'vendor/jquery-3.6.0.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/simplebar/dist/simplebar.min.js' %}"></script>
+    <script src="{% static 'vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js' %}"></script>
+    <script src="{% static 'vendor/tiny-slider/dist/min/tiny-slider.js' %}"></script>
+    <script src="{% static 'js/cruds/auth.js' %}"></script>
+    <!-- Main theme script-->
+    <script src="{% static 'js/theme.min.js' %}"></script>
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/tiny-slider/dist/tiny-slider.css' %}"/>
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/lightgallery.js/dist/css/lightgallery.min.css' %}"/>
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
+{% endblock %}
+{% block schema %}
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": "{{ st.siteUrl }}{{ data.post.get_abs_url }}"
+            },
+            "headline": "{% if data.post.meta_title %}{{ data.post.meta_title }}{% else %}
+        {{ data.post.title }}{% endif %}",
+            "image": ["{{ data.post.image.url }}"],
+            "author": {
+              "@type": "Person",
+              "name": "{{ st.brand_name }}",
+              "url": "{{st.siteUrl }}/blog/"
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "{{ st.brand_name }}",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "{{ st.brand_logo.url }}"
+              }
+            },
+            "datePublished": "{{ data.post.published_at_f_s }}",
+            "dateModified": "{{ data.post.updated_at_f_s }}"
+        }
+    </script>
+{% endblock %}
+{% block page_meta %}
+    <link rel="alternate" href="{{st.siteUrl }}{{ data.post.get_abs_url }}" hrefLang="fa-IR"/>
+    <title>{% if data.post.meta_title %}{{ data.post.meta_title }}{% else %}{{ data.post.title }}{% endif %}</title>
+    <meta name="description"
+          content="{% if data.post.meta_desc %}{{ data.post.meta_desc }}{% else %} {{ data.post.title }}{% endif %}"/>
+    <meta name="keywords"
+          content="{% if data.post.keywords %}{{ data.post.keywords }}{% else %}{{ data.post.title }}{% endif %}"/>
+    <link rel="canonical" href="{% if data.post.canonical %}{{ data.post.canonical }}{% else %}{{st.siteUrl }}{{ data.post.get_abs_url }}{% endif %}"/>
+    <meta property="og:locale" content="fa_IR"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title"
+          content="{% if data.post.meta_title %}{{ data.post.meta_title }}{% else %}{{ data.post.title }}{% endif %}"/>
+    <meta property="og:description"
+          content="{% if data.post.meta_desc %}{{ data.post.meta_desc }}{% else %} {{ data.post.title }}{% endif %}"/>
+    <meta property="og:url" content="{{st.siteUrl }}{{ data.post.get_abs_url }}"/>
+    <meta property="og:site_name" content="{{ st.brand_name }}"/>
+    {% for tag in tags %}
+        <meta key="meta-article-tag-{{ forloop.counter0 }}" property="article:tag" content="{{ tag.title }}"/>
+    {% endfor %}
+    <meta property="article:section" content="{{ data.post.category.title }}"/>
+    <meta property="article:published_time" content="{{ data.post.create_date_f }}"/>
+    <meta property="article:modified_time" content="{{ data.post.updated_at_f }}"/>
+    <meta property="og:updated_time" content="{{ data.post.updated_at_f }}"/>
+    <meta name="twitter:creator" content="@https://twitter.com/jimboshopir"/>
+    {#<meta name="twitter:site" content="@jimboshopir"/>#}
+    <meta name="twitter:label1" content="نوشته شده توسط"/>
+    <meta name="twitter:data1" content="{{ st.brand_name }}"/>
+    {% if data.post.image %}
+        <meta property="og:image" content="{{ post.image.url }}"/>
+        <meta property="og:image:secure_url" content="{{ post.image.url }}"/>
+        <meta property="og:image:width" content="1284"/>
+        <meta property="og:image:height" content="600"/>
+    {% endif %}
+    <meta property="og:image:alt"
+          content="{% if data.post.meta_desc %}{{ data.post.meta_desc }}{% else %} {{ data.post.title }}{% endif %}"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:description"
+          content="{% if data.post.meta_desc %}{{ data.post.meta_desc }}{% else %}{{ data.post.title }}{% endif %}"/>
+    <meta name="twitter:title"
+          content="{% if data.post.meta_title %}{{ data.post.meta_title }}{% else %}{{ data.post.title }}{% endif %}"/>
+    {% if data.post.image %}
+        <meta name="twitter:image" content="{{ data.post.image.url }}"/>
+    {% endif %}
+{% endblock %}

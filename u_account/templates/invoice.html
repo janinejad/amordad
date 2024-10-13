@@ -1,0 +1,302 @@
+{% load static %}
+{% load render_partial %}
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>
+        {% if order.status_id == '2' %}
+            فاکتور
+        {% elif order.status_id == '3' or order.status_id == '1' %}
+            پیش فاکتور
+        {% endif %}
+    </title>
+    <!-- Bootstrap -->
+    <!-- Main CSS File -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/additional.css' %}">
+</head>
+<style>
+    body {
+        font-family: 'Shabnam', serif;
+        background-color: #fff;
+    }
+
+    html {
+        direction: rtl;
+    }
+
+    @page {
+        size: landscape; /* Change from the default size of A4 */
+        margin: 0; /* Set margin on each page */
+    }
+
+    .stamp-image {
+        position: absolute;
+        right: 300px;
+        bottom: 0px;
+        z-index: 1000;
+        width: 300px;
+    }
+</style>
+<body>
+
+<div class="wrapper">
+    <!-- Start main-content -->
+    <main class="main-content dt-sl dt-sn pt-4 pb-10">
+        <div class="container main-container" style="page-break-before: always">
+            <table style="text-align:center;border-collapse: collapse;padding-left: 10px;width: 100%">
+                <tr>
+                    <th style="width: 20%"></th>
+                    <th style="width: 50%">
+                        <h4 style="text-align: center;">
+                            {% if order.status_id == '2' %}
+                                صورتحسـاب فـروش كـالا و ارائه خدمت
+                            {% elif order.status_id == '3' or order.status_id == '1' %}
+                                صورتحسـاب پیش فـروش كـالا و ارائه خدمت
+                            {% endif %}
+                        </h4>
+                    </th>
+                    <th style="width: 20%">
+                        <div style="text-align: left">تاریخ : {{ order.jalali_order_only_date }}</div>
+                        <div style="text-align: left">شماره فاکتور
+                            : {{ order.id }}</div>
+                    </th>
+                </tr>
+            </table>
+            <table style="text-align:center;border-collapse: collapse;padding-left: 10px;width: 100%">
+                <tr style="border:1px solid #202326;line-height:0">
+                    <td colspan="3">
+                        <h6>مشخصات فروشنده</h6>
+                    </td>
+                </tr>
+                <tr style="border-left: 1px solid #202326;border-right: 1px solid #202326;text-align: right;">
+                    <td style="padding: 5px 15px 5px 15px;width: 40%"> فروشنده : <span
+                            class="text-dark">
+                        {{ company_info.juridical_personality_title }}
+                    </span>
+                    </td>
+                    <td>
+                        <span>شماره اقتصادی :</span>
+                        <span>{{ company_info.economic_code }}</span>
+                    </td>
+                    <td>
+                        <span>شماره ثبت :</span>
+                        <span>{{ company_info.firm_no }}</span>
+                    </td>
+                </tr>
+                <tr style="border-left: 1px solid #202326;border-right: 1px solid #202326;text-align: right;">
+                    <td style="padding: 5px 15px 5px 15px">
+                        شماره تماس: <span
+                            class="text-dark">{{ company_info.tel_no }}</span>
+                    </td>
+                    <td>
+                        <span>کدپستی :</span>
+                        <span>{{ company_info.postal_code }}</span>
+                    </td>
+                    <td>
+                        <span>شناسه ملی :</span>
+                        <span>{{ company_info.national_id }}</span>
+                    </td>
+                </tr>
+                <tr style="border-left: 1px solid #202326;border-right: 1px solid #202326;text-align: right;">
+                    <td colspan="3" style="padding: 5px 15px 5px 15px">
+                        نشانی: <span
+                            class="text-dark">
+                        {{ company_info.juridical_personality_address }}
+                    </span>
+                    </td>
+                </tr>
+                <tr style="border:1px solid #202326;line-height:0;">
+                    <td colspan="3">
+                        <h6>مشخصات خریدار</h6>
+                    </td>
+                </tr>
+                <tr style="border-left: 1px solid #202326;border-right: 1px solid #202326;text-align: right;">
+                    <td style="padding: 5px 15px 5px 15px"> خریدار : <span
+                            class="text-dark">
+                        {% if order.invoice.is_official %}
+                            {{ order.invoice.organization_name }}
+                        {% else %}
+                            {{ order.invoice.full_name }}
+                        {% endif %}
+                    </span>
+                    </td>
+                    <td>
+                        {% if order.invoice.is_official %}
+                            <span>شماره اقتصادی :</span>
+                            <span>{{ order.invoice.firm_economical_no }}</span>
+                        {% else %}
+                            <span>شماره ملی :</span>
+                            <span>{{ order.invoice.national_code }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if order.invoice.is_official %}
+                            <span>شماره ثبت:</span>
+                            <span>{{ order.invoice.firm_no }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr style="border-left: 1px solid #202326;border-right: 1px solid #202326;text-align: right;">
+                    <td style="padding: 5px 15px 5px 15px">
+                        شماره تماس:
+                        {% if order.invoice.is_official %}
+                            <span class="text-dark">{{ order.invoice.tel_no }}</span>
+                        {% else %}
+                            <span class="text-dark">{{ order.invoice.mobile }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span>کد پستی :</span>
+                        <span>{{ order.invoice.postal_code }}</span>
+                    </td>
+                    <td>
+                        {% if order.invoice.is_official %}
+                            <span>شناسه ملی :</span>
+                            <span>{{ order.invoice.firm_national_id }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr style="border-bottom: 1px solid #202326;border-left: 1px solid #202326;border-right: 1px solid #202326;text-align: right;">
+                    <td colspan="3" style="padding: 5px 15px 5px 15px">
+                        نشانی: <span class="text-dark">{{ order.invoice.full_address }}</span>
+                    </td>
+                </tr>
+            </table>
+            <table style="margin-top:5px;text-align:center;border-collapse: collapse;padding-left: 10px;width: 100%">
+                <tr style="border: 1px solid #202326;text-align: center;: middle">
+                    <th style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;"
+                        scope="col">
+                        ردیف
+                    </th>
+                    <th style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;"
+                        scope="col">کد
+                    </th>
+                    <th style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;"
+                        scope="col">شرح
+                        کالا یا خدمات
+                    </th>
+                    <th style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;"
+                        scope="col">
+                        تعداد/مقدار
+                    </th>
+                    <th style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;"
+                        scope="col">
+                        واحد
+                    </th>
+                    <th style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;"
+                        scope="col">مبلغ
+                        واحد به(ریال)
+                    </th>
+                    <th style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;"
+                        scope="col">مبلغ
+                        کل(ریال)
+                    </th>
+                    <th style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;"
+                        scope="col">مبلغ
+                        تخفیف(ریال)
+                    </th>
+                    <th style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;"
+                        scope="col">مبلغ
+                        کل پس از تخفیف (ریال)
+                    </th>
+                    <th style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;"
+                        scope="col">جمع
+                        مالیات و عوارض(ریال)
+                    </th>
+                    <th style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;"
+                        scope="col">جمع
+                        مبلغ کل بعلاوه جمع مالیات و عوارض (ريال)
+                    </th>
+                </tr>
+                <tbody>
+                {% for i in order.orderitem.all_without_canceled %}
+                    <tr style="border: 1px solid #202326;text-align: center;: middle">
+                        <th style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;"
+                            scope="row">{{ forloop.counter }}
+                        </th>
+                        <td style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;">
+                            {{ i.variant.id }}
+                        </td>
+                        <td style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;">
+                            {{ i.variant }}
+                        </td>
+                        <td style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;">
+                            {{ i.product_count }}
+                        </td>
+                        <td style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;">
+                            {{ i.variant.products.unit }}
+                        </td>
+                        <td style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;">
+                            {{ i.invoice_product_price_ir }}
+                        </td>
+                        <td style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;">
+                            {{ i.invoice_item_amount_before_discount_ir }}
+                        </td>
+                        <td style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;">
+                            {{ i.invoice_discount_ir }}
+                        </td>
+                        <td style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;">
+                            {{ i.invoice_item_amount_after_discount_ir }}
+                        </td>
+                        <td style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;">
+                            {{ i.invoice_tax_ir }}
+                        </td>
+                        <td style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;">
+                            {{ i.invoice_item_amount_with_tax_ir }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr style="border: 1px solid #202326;text-align: center;: middle">
+                    <th colspan="6"
+                        style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;"
+                        scope="row">جمع(ریال)
+                    </th>
+                    <th style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;"
+                        scope="row">
+                        {{ order.invoice_total_item_amount_before_discount_ir }}
+                    </th>
+                    <th style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;"
+                        scope="row">
+                        {{ order.invoice_total_discount_ir }}
+                    </th>
+                    <th style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;"
+                        scope="row">
+                        {{ order.invoice_total_item_amount_after_discount_ir }}
+                    </th>
+                    <th style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;"
+                        scope="row">
+                        {{ order.invoice_total_tax_ir }}
+                    </th>
+                    <th style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;"
+                        scope="row">
+                        {{ order.invoice_total_item_amount_with_tax_ir }}
+                    </th>
+                </tr>
+                <tr style="border: 1px solid #202326;text-align: center;: middle">
+                    <td colspan="5" style="width: 25%">مهر و امضا فروشنده :
+                        <img class="stamp-image" style="width: 200px;position: static;margin-top: 5px"
+                             src="{{ company_info.signature.url }}"
+                             alt="">
+                    </td>
+                    <td colspan="5" style="width: 25%;padding-top: 10px;padding-bottom: 10px">
+                        مهر و امضا خریدار:
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <!-- End main-content -->
+</div>
+
+<!-- Core JS Files -->
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<!-- Plugins -->
+</body>
+
+</html>

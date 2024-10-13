@@ -1,0 +1,363 @@
+{% extends 'Shared/_MainLayout.html' %}
+{% load static %}
+{% block content %}
+    <div class="container mt-5 mb-md-4 py-5">
+        <!-- Breadcrumb-->
+        <nav class="mb-3 pt-md-3" aria-label="Breadcrumb">
+            <ol class="breadcrumb breadcrumb-light">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">خانه</a></li>
+                <li class="breadcrumb-item"><a
+                        href="{{ product.RootCategoryId.get_abs_url }}">{{ product.RootCategoryId }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ product.title }}
+                </li>
+            </ol>
+        </nav>
+        <!-- Title + Sharing-->
+        <div class="d-sm-flex align-items-end align-items-md-center justify-content-between position-relative mb-4"
+             style="z-index: 1025;">
+            <div class="me-3">
+                <h1 class="h5 text-light mb-md-0 fw-500 font-nonBold">{{ product.title }}</h1>
+                <div class="d-md-none">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="h3 mb-0 text-light">قیمت <span
+                                class="regPrice">{{ product.get_default_variant.regular_price_ir }}</span></div>
+                        <div class="text-nowrap ps-3"><span
+                                class="badge {{ product.is_available|yesno:'bg-success ,bg-warning ' }} me-2"
+                                data-bs-toggle="popover" data-bs-placement="bottom"
+                                data-bs-trigger="hover" data-bs-html="true"
+                                data-bs-content="&lt;div class=&quot;d-flex&quot;&gt;&lt;i class=&quot;fi-award mt-1 me-2&quot;&gt;&lt;/i&gt;&lt;div&gt;This car is checked and&lt;br&gt;certified by Finder.&lt;/div&gt;&lt;/div&gt;">{{ product.is_available|yesno:'موجود در انبار,در حال حاضر موجود نیست' }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-nowrap pt-3 pt-sm-0">
+                <form action="{% url 'products:add_favorite' product_id=product.id %}"
+                      method="post" id="add-favorite-form">
+                    {% csrf_token %}
+                </form>
+                <button class="btn btn-icon btn-translucent-light add-to-favorite btn-xs rounded-circle mb-sm-2{{ is_favorite|yesno:'  text-danger,' }}"
+                        type="button"
+                        data-bs-toggle="tooltip" title="افزودن به لیست موردعلاقه"><i class="fi-heart"></i></button>
+                <div class="dropdown d-inline-block" data-bs-toggle="tooltip" title="اشتراک گذاری">
+                    <button class="btn btn-icon btn-translucent-light btn-xs rounded-circle ms-2 mb-sm-2" type="button"
+                            data-bs-toggle="dropdown"><i class="fi-share"></i></button>
+                    <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end my-1">
+                        <button class="dropdown-item" type="button"><i class="fi-facebook fs-base opacity-75 me-2"></i>فیسبوک
+                        </button>
+                        <button class="dropdown-item" type="button"><i class="fi-twitter fs-base opacity-75 me-2"></i>توییتر
+                        </button>
+                        <button class="dropdown-item" type="button"><i class="fi-instagram fs-base opacity-75 me-2"></i>اینستاگرام
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7">
+                <!-- Gallery-->
+                <div class="tns-carousel-wrapper">
+                    <div class="tns-slides-count text-light"><i class="fi-image fs-sm me-2"></i>
+                        <div class="pe-1"><span class="tns-current-slide fs-6"></span><span class="fs-6">/</span><span
+                                class="tns-total-slides fs-6"></span></div>
+                    </div>
+                    <div class="tns-carousel-inner"
+                         data-carousel-options="{&quot;navAsThumbnails&quot;: true, &quot;navContainer&quot;: &quot;#thumbnails&quot;, &quot;gutter&quot;: 12, &quot;responsive&quot;: {&quot;0&quot;:{&quot;controls&quot;: false},&quot;500&quot;:{&quot;controls&quot;: true}}}">
+                        <div><img class="rounded-3" src="{{ product.image.url }}"
+                                  alt="{{ product.title }}"></div>
+                        {% for image in product.productgallery_set.all %}
+                            <div><img class="rounded-3" src="{{ image.image.url }}"
+                                      alt="{{ image.title }}"></div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <ul class="tns-thumbnails" id="thumbnails">
+                    <li class="tns-thumbnail"><img src="{{ product.image.url }}"
+                                                   alt="Thumbnail"></li>
+                    {% for image in product.productgallery_set.all %}
+                        <li class="tns-thumbnail"><img src="{{ image.image.url }}"
+                                                       alt="{{ image.title }}"></li>
+                    {% endfor %}
+                    <li class="tns-thumbnail"><a
+                            class="d-flex flex-column align-items-center justify-content-center w-100 h-100 bg-faded-light rounded text-light text-decoration-none"
+                            href="{{ product.video_link }}"
+                            data-bs-toggle="lightbox"><i
+                            class="fi-play-circle fs-5"></i><span class="opacity-70 mt-1 fs-sm">مشاهده ویدئو</span></a>
+                    </li>
+                </ul>
+                <!-- Specs-->
+                <div class="py-3 mb-3">
+                    <h2 class="h5 text-light mb-4 fw-500 font-nonBold">مشخصات اصلی</h2>
+                    <div class="row text-light">
+                        <div class="col-sm-6 col-md-12 col-lg-6">
+                            <ul class="list-unstyled">
+                                {% for f in product.productmainfeature_set.all %}
+                                    <li class="mb-2">{{ f.feature }} : <span class="opacity-70 ms-1">
+                                        {{ f.feature_value }}
+                                </span></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- Features-->
+                {% if product.get_product_attr %}
+                    <h2 class="h5 fw-500 font-nonBold text-light pt-3 mb-4">ویژگی ها</h2>
+                {% endif %}
+                <div class="accordion accordion-light" id="features">
+                    {% for a in product.get_product_attr %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading{{ forloop.counter0 }}">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#ac{{ forloop.counter0 }}"
+                                        aria-expanded="{{ forloop.first|yesno:'true,false' }}"
+                                        aria-controls="ac{{ forloop.counter0 }}">{{ a.attr.title }}
+                                </button>
+                            </h2>
+                            <div class="accordion-collapse collapse {{ forloop.first|yesno:'show,' }}"
+                                 id="ac{{ forloop.counter0 }}" aria-labelledby="heading{{ forloop.counter0 }}"
+                                 data-bs-parent="#features">
+                                <div class="accordion-body fs-sm text-light opacity-70">
+                                    <ul class="pr-5">
+                                        {% for item in a.items %}
+                                            <li>
+                                                {{ item.attributeItem.item }}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <!-- Description-->
+                <div class="pb-4 mb-3 text-light opacity-70 mb-1 line-h18">
+                    <h2 class="h5 fw-500 font-nonBold text-light pt-4 mt-3">توضیحات محصول</h2>
+                    {{ product.Description|safe }}
+                </div>
+            </div>
+            <!-- Sidebar-->
+            <div class="col-md-5 pt-5 pt-md-0" style="margin-top: -6rem;">
+                <div class="sticky-top pt-5">
+                    <div class="d-none d-md-block pt-5">
+                        <div class="d-flex mb-4"><span
+                                class="badge {{ product.is_available|yesno:'bg-success ,bg-warning ' }}fs-base ms-2"
+                                data-bs-toggle="popover" data-bs-placement="top"
+                                data-bs-trigger="hover" data-bs-html="true"
+                                data-bs-content="&lt;div class=&quot;d-flex&quot;&gt;&lt;i class=&quot;fi-award mt-1 me-2&quot;&gt;&lt;/i&gt;&lt;div&gt;{{ product.is_available|yesno:'این کالا در انبار موجود است!,این کالا در انبار ناموجود است!' }}&lt;/div&gt;&lt;/div&gt;">{{ product.is_available|yesno:'موجود در انبار,ناموجود' }}</span>
+                        </div>
+                        <div class="h4 fw-500 text-light font-nonBold">قیمت <span
+                                class="regPrice">{{ product.get_default_variant.regular_price_ir }}</span></div>
+                    </div>
+                    <div class="d-md-none">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="h3 mb-0 text-light">قیمت <span
+                                    class="regPrice">{{ product.get_default_variant.regular_price_ir }}</span></div>
+                            <div class="text-nowrap ps-3"><span
+                                    class="badge {{ product.is_available|yesno:'bg-success ,bg-warning ' }} me-2"
+                                    data-bs-toggle="popover" data-bs-placement="bottom"
+                                    data-bs-trigger="hover" data-bs-html="true"
+                                    data-bs-content="&lt;div class=&quot;d-flex&quot;&gt;&lt;i class=&quot;fi-award mt-1 me-2&quot;&gt;&lt;/i&gt;&lt;div&gt;This car is checked and&lt;br&gt;certified by Finder.&lt;/div&gt;&lt;/div&gt;">{{ product.is_available|yesno:'موجود در انبار,در حال حاضر موجود نیست' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-light card-body mb-4">
+                        <form action="{% url 'orders:add_to_cart' %}"
+                              method="post" id="add-to-cart-form">
+                            {% csrf_token %}
+                            <h5 class="text-light mb-3">ثبت سفارش</h5>
+                            <div class="mb-4">
+                                <input type="hidden" value="false" name="update">
+                                <label class="form-label text-light" for="sc-condition">تنوع<span
+                                        class="text-danger">*</span></label>
+                                <select name="variant"
+                                        class="form-select form-select-light"{{ product.is_available|yesno:',disabled' }}
+                                        id="sc-condition" required="">
+                                    {% for v in product.productinventory_set.all_availble %}
+                                        <option value="{{ v.id }}">{{ v.dynamic_name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <div id="add_to_cart_err_variant" class="invalid-feedback"></div>
+                            </div>
+                            <div class="mb-4"><p>هر <span class="text-primary">واحد</span> برابر است با : <span
+                                    class="text-primary" id="perUnit"></span></p></div>
+                            <div class="mb-4">
+                                <label for="number-input text-light" class="form-label text-light">تعداد<span
+                                        class="text-danger">*</span></label>
+                                <input name="variant_count"
+                                       class="form-control form-control-light number-only-inp"{{ product.is_available|yesno:',disabled' }}
+                                       type="number"
+                                       id="number-input" value="1">
+                                <div id="add_to_cart_err_variant_count" class="invalid-feedback"></div>
+                            </div>
+                            <div class="mb-4"><p> جمع مبلغ برابر است با : <span
+                                    class="text-primary"><span id="priceLbl"></span></span></p></div>
+                            <button id="addToCartBtn"
+                                    class="btn btn-lg btn-primary d-block w-100"{{ product.is_available|yesno:',disabled' }}
+                                    type="submit">ارسال درخواست
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Related posts (Carousel)-->
+        {% if product.similar_products.get_available_products.count > 0 %}
+            <h2 class="h4 font-nonBold text-light pt-5 pb-3 mt-md-4">کالاهای مشابه</h2>
+        {% endif %}
+        <div class="tns-carousel-wrapper tns-controls-outside-xxl tns-nav-outside tns-carousel-light">
+            <div class="tns-carousel-wrapper tns-controls-outside-xxl tns-nav-outside tns-carousel-light">
+                <div class="tns-carousel-inner car"
+                     data-carousel-options="{&quot;items&quot;: 3, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1, &quot;gutter&quot;: 16},&quot;500&quot;:{&quot;items&quot;:2, &quot;gutter&quot;: 18},&quot;900&quot;:{&quot;items&quot;:3, &quot;gutter&quot;: 20}, &quot;1100&quot;:{&quot;gutter&quot;: 24}}}">
+                    {% for p in product.similar_products.get_available_products %}
+                        <div>
+                            <div class="card card-light card-hover h-100">
+                                <div class="card-img-top card-img-hover"><a class="img-overlay"
+                                                                            href="{{ p.get_full_abs_url }}"></a>
+                                    <div class="content-overlay end-0 top-0 pt-3 pe-3">
+                                        <form action="{% url 'products:add_favorite' product_id=p.id %}"
+                                              method="post" id="add-favorite-form">
+                                            {% csrf_token %}
+                                            <button class="btn btn-icon btn-light btn-xs text-primary rounded-circle"
+                                                    type="submit" data-bs-toggle="tooltip" data-bs-placement="right"
+                                                    title="افزودن به موردعلاقه ها"><i class="fi-heart"></i></button>
+                                        </form>
+                                    </div>
+                                    <img src="{{ p.image.url }}" alt="Image">
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between pb-1"><span
+                                            class="fs-sm text-light me-3">{{ p.title }}</span>
+                                    </div>
+                                    <div class="fw-bold mb-1">قیمت <span class="text-primary">{{ p.get_price }}</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer border-0 pt-0">
+                                    <div class="border-top border-light pt-3">
+                                        <div class="row g-2">
+                                            <div class="col me-sm-1">
+                                                <div class="bg-dark rounded text-center w-100 h-100 p-2"><i
+                                                        class="fi-bell d-block h4 text-light mb-0 mx-center"></i><span
+                                                        class="fs-xs text-light">موجود در انبار</span>
+                                                </div>
+                                            </div>
+                                            <div class="col me-sm-1">
+                                                <div class="bg-dark rounded text-center w-100 h-100 p-2"><i
+                                                        class="fi-grid d-block h4 text-light mb-0 mx-center"></i><span
+                                                        class="fs-xs text-light">{{ p.RootCategoryId }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="bg-dark rounded text-center w-100 h-100 p-2"><i
+                                                        class="fi-bookmark d-block h4 text-light mb-0 mx-center"></i><span
+                                                        class="fs-xs text-light">{{ p.brandId }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="{% static 'vendor/jquery-3.6.0.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/simplebar/dist/simplebar.min.js' %}"></script>
+    <script src="{% static 'vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js' %}"></script>
+    <script src="{% static 'vendor/lightgallery.js/dist/js/lightgallery.min.js' %}"></script>
+    <script src="{% static 'vendor/lg-video.js/dist/lg-video.min.js' %}"></script>
+    <script src="{% static 'js/cruds/auth.js' %}"></script>
+    <script src="{% static 'vendor/tiny-slider/dist/min/tiny-slider.js' %}"></script>
+    <script src="{% static 'js/cruds/product.js' %}"></script>
+    <!-- Main theme script-->
+    <script src="{% static 'js/theme.min.js' %}"></script>
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/tiny-slider/dist/tiny-slider.css' %}"/>
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/lightgallery.js/dist/css/lightgallery.min.css' %}"/>
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
+{% endblock %}
+{% block js_code %}
+    <script>
+        $(document).ready(function () {
+            $('.number-only-inp').on('input', function () {
+                var value = $(this).val();
+                $(this).val(value.replace(/[^0-9]/g, ''));
+                if ($(this).val() == 0) {
+                    $(this).val(1)
+                }
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block schema %}
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org/",
+          "@type": "Product",
+          "name": "{{ product.title }}",
+          "image": "{{ product.image.url }}",
+          "description": "{{ product.meta_desc }}",
+          "brand": {
+            "@type": "Brand",
+            "name": "{{ product.brandId.title }}"
+          },
+          "sku": "{{ product.id }}",
+          "offers": {
+            "@type": "Offer",
+            "url": "{{ product.get_full_sharing_url }}",
+            "priceCurrency": "IRR",
+            "price": "{{ product.get_default_variant.price_ir }}",
+            "priceValidUntil": "{{ product.get_price_valid_until }}",
+            "availability": "https://schema.org/InStock",
+            "itemCondition": "https://schema.org/NewCondition"
+          },
+        {#          "aggregateRating": {#}
+{#            "@type": "AggregateRating",#}
+{#            "ratingValue": "{{ product.get_product_point }}",#}
+{#            "bestRating": "{{ product.get_max_product_point }}",#}
+{#            "worstRating": "{{ product.get_min_product_point }}",#}
+{#            "ratingCount": "{{ product.get_count_product_point }}"#}
+{#          }#}
+        }
+    </script>
+{% endblock %}
+{% block page_meta %}
+    <link rel="alternate" href="{{ product.get_full_sharing_url }}" hrefLang="fa-IR"/>
+    <title>{% if product.meta_title %}{{ product.meta_title }}{% else %}{{ product.title }}{% endif %}</title>
+    <meta name="description" content="
+            {% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{% endif %}"/>
+    <meta name="keywords"
+          content="{% if product.keywords %}{{ product.keywords }}{% else %}{{ product.title }}{% endif %}"/>
+    <link rel="canonical" href="
+            {% if product.canonical %}{{ product.canonical }}{% else %}{{ product.get_full_sharing_url }}{% endif %}"/>
+    <meta property="og:locale" content="fa_IR"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:title"
+          content="{% if product.meta_title %}{{ product.meta_title }}{% else %}{{ product.title }}{% endif %}"/>
+    <meta property="og:description" content="
+
+            {% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{{ SST.setting.brand_name }}{% endif %}"/>
+    <meta property="og:url" content="{{ product.get_full_sharing_url }}"/>
+    <meta property="article:modified_time" content="{{ product.updated_at_f }}"/>
+    <meta property="og:updated_time" content="{{ product.updated_at_f }}"/>
+    <meta property="og:image" content="{{ product.image.url }}"/>
+    <meta property="og:image:secure_url" content="{{ product.image.url }}"/>
+    <meta property="og:image:width" content="1120"/>
+    <meta property="og:image:height" content="630"/>
+    <meta property="og:image:alt" content="
+            {% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{{ SST.setting.brand_name }}{% endif %}"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:description" content="
+            {% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{{ SST.setting.brand_name }}{% endif %}"/>
+    <meta name="twitter:title"
+          content="{% if product.meta_title %}{{ product.meta_title }}{% else %}{{ product.title }}{% endif %}"/>
+    <meta name="twitter:image" content="{{ product.image.url }}"/>
+{% endblock %}

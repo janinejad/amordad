@@ -1,0 +1,313 @@
+{% extends 'Shared/_MainLayout.html' %}
+{% load static %}
+{% block content %}
+    <div class="container pt-5 pb-lg-4 mt-5 mb-sm-2">
+        <!-- Breadcrumb-->
+        <nav class="mb-4 pt-md-3" aria-label="Breadcrumb">
+            <ol class="breadcrumb breadcrumb-light">
+                <li class="breadcrumb-item"><a href="car-finder-home.html">خانه</a></li>
+                <li class="breadcrumb-item active" aria-current="page">اکانت من</li>
+            </ol>
+        </nav>
+        <!-- Page content-->
+        <div class="row">
+            <!-- Sidebar-->
+            {% include '_Sidebar.html' with user_model=user %}
+            <div class="col-lg-8 col-md-7 mb-5">
+                <h1 class="h4 font-vazir text-light">اطلاعات فردی</h1>
+                <form id="EditInfoForm" action="{% url 'account:edit_personal_info' %}" autocomplete="off"
+                      method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row pt-2">
+                        <div class="col-lg-9 col-md-12 col-sm-8 mb-2 mb-m-4">
+                            <div class="border border-light rounded-3 p-3 mb-4" id="personal-info">
+                                <!-- Name-->
+                                <div class="border-bottom border-light pb-3 mb-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="pe-2 opacity-70">
+                                            <label class="form-label fw-bold text-light">نام<span
+                                                    class="text-danger">*</span></label>
+                                            <div id="edit_info_err_first_name" class="invalid-feedback"></div>
+                                            <div class="text-light" id="name-value">{{ form.first_name.value }}</div>
+                                        </div>
+                                        <div class="me-n3" data-bs-toggle="tooltip" title="ویرایش"><a
+                                                class="nav-link nav-link-light py-0" href="#name-collapse"
+                                                data-bs-toggle="collapse"><i class="fi-edit"></i></a></div>
+                                    </div>
+                                    <div class="collapse" id="name-collapse" data-bs-parent="#personal-info">
+                                        {{ form.first_name }}
+                                    </div>
+                                </div>
+                                <!-- Family-->
+                                <div class="border-bottom border-light pb-3 mb-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="pe-2 opacity-70">
+                                            <label class="form-label fw-bold text-light">نام خانوادگی<span
+                                                    class="text-danger">*</span></label>
+                                            <div id="edit_info_err_last_name" class="invalid-feedback"></div>
+                                            <div class="text-light" id="family-value">{{ form.last_name.value }}</div>
+                                        </div>
+                                        <div class="me-n3" data-bs-toggle="tooltip" title="ویرایش"><a
+                                                class="nav-link nav-link-light py-0" href="#family-collapse"
+                                                data-bs-toggle="collapse"><i class="fi-edit"></i></a></div>
+                                    </div>
+                                    <div class="collapse" id="family-collapse" data-bs-parent="#personal-info">
+                                        {{ form.last_name }}
+                                    </div>
+                                </div>
+                                <!-- Phone number-->
+                                <div class="border-bottom border-light pb-3 mb-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="pe-2 opacity-70">
+                                            <label class="form-label fw-bold text-light">شماره تماس<span
+                                                    class="text-danger">*</span></label>
+                                            <div id="edit_info_err_tel_no" class="invalid-feedback"></div>
+                                            <div class="text-light" id="phone-value">
+                                                {% if form.tel_no.value %}{{ form.tel_no.value }}{% else %}مشخص نشده
+                                                    است!{% endif %}</div>
+                                        </div>
+                                        <div class="me-n3" data-bs-toggle="tooltip" title="ویرایش"><a
+                                                class="nav-link nav-link-light py-0" href="#phone-collapse"
+                                                data-bs-toggle="collapse"><i class="fi-edit"></i></a></div>
+                                    </div>
+                                    <div class="collapse" id="phone-collapse" data-bs-parent="#personal-info">
+                                        {{ form.tel_no }}
+                                    </div>
+                                </div>
+                                <!-- Address-->
+                                <div>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="pe-2 opacity-70">
+                                            <label class="form-label fw-bold text-light">آدرس<span
+                                                    class="text-danger">*</span></label>
+                                            <div id="edit_info_err_personal_address" class="invalid-feedback"></div>
+                                            <div class="text-light" id="address-value">
+                                                {% if form.personal_address.value %}
+                                                    {{ form.personal_address.value }}{% else %}مشخص نشده
+                                                    است!{% endif %}</div>
+                                        </div>
+                                        <div class="me-n3" data-bs-toggle="tooltip" title="ویرایش"><a
+                                                class="nav-link nav-link-light py-0" href="#address-collapse"
+                                                data-bs-toggle="collapse"><i class="fi-edit"></i></a></div>
+                                    </div>
+                                    <div class="collapse" id="address-collapse" data-bs-parent="#personal-info">
+                                        {{ form.personal_address }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="form-check form-check-light mb-4">
+                                    {{ form.is_official }}
+                                    <label class="form-check-label" for="isLegal">شخصیت حقوقی هستید؟</label>
+                                    <div id="edit_info_err_is_official" class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div id="officialPart"
+                                 class="border{% if not form.is_official.value %} d-none{% endif %} border-light rounded-3 p-3 mb-4">
+                                <!-- Name-->
+                                <div class="border-bottom border-light pb-3 mb-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="pe-2 opacity-70">
+                                            <label class="form-label fw-bold text-light">نام شرکت/سازمان<span
+                                                    class="text-danger">*</span></label>
+                                            <div id="edit_info_err_organization_name" class="invalid-feedback"></div>
+                                            <div class="text-light" id="organization-name-value">
+                                                {% if form.organization_name.value %}
+                                                    {{ form.organization_name.value }}{% else %}مشخص نشده
+                                                    است!{% endif %}</div>
+                                        </div>
+                                        <div class="me-n3" data-bs-toggle="tooltip" title="ویرایش"><a
+                                                class="nav-link nav-link-light py-0" href="#organization-name-collapse"
+                                                data-bs-toggle="collapse"><i class="fi-edit"></i></a></div>
+                                    </div>
+                                    <div class="collapse" id="organization-name-collapse"
+                                         data-bs-parent="#officialPart">
+                                        {{ form.organization_name }}
+                                    </div>
+                                </div>
+                                <!-- registration code-->
+                                <div class="border-bottom border-light pb-3 mb-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="pe-2 opacity-70">
+                                            <label class="form-label fw-bold text-light">شماره ثبتی</label>
+                                            <div id="edit_info_err_firm_no" class="invalid-feedback"></div>
+                                            <div class="text-light" id="firm_no-value">
+                                                {% if form.firm_no.value %}{{ form.firm_no.value }}{% else %}مشخص نشده
+                                                    است!{% endif %}</div>
+                                        </div>
+                                        <div class="me-n3" data-bs-toggle="tooltip" title="ویرایش"><a
+                                                class="nav-link nav-link-light py-0" href="#firm_no-collapse"
+                                                data-bs-toggle="collapse"><i class="fi-edit"></i></a></div>
+                                    </div>
+                                    <div class="collapse" id="firm_no-collapse" data-bs-parent="#officialPart">
+                                        {{ form.firm_no }}
+                                    </div>
+                                </div>
+                                <!-- national code-->
+                                <div class="border-bottom border-light pb-3 mb-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="pe-2 opacity-70">
+                                            <label class="form-label fw-bold text-light">شناسه ملی<span
+                                                    class="text-danger">*</span></label>
+                                            <div id="edit_info_err_firm_national_id" class="invalid-feedback"></div>
+                                            <div class="text-light" id="firm_national_id-value">
+                                                {% if form.firm_national_id.value %}
+                                                    {{ form.firm_national_id.value }}{% else %}مشخص نشده
+                                                    است!{% endif %}</div>
+                                        </div>
+                                        <div class="me-n3" data-bs-toggle="tooltip" title="ویرایش"><a
+                                                class="nav-link nav-link-light py-0" href="#firm_national_id-collapse"
+                                                data-bs-toggle="collapse"><i class="fi-edit"></i></a></div>
+                                    </div>
+                                    <div class="collapse" id="firm_national_id-collapse"
+                                         data-bs-parent="#officialPart">
+                                        {{ form.firm_national_id }}
+                                    </div>
+                                </div>
+                                <!-- economical firm code-->
+                                <div class="border-bottom border-light pb-3 mb-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="pe-2 opacity-70">
+                                            <label class="form-label fw-bold text-light">کد اقتصادی<span
+                                                    class="text-danger">*</span></label>
+                                            <div id="edit_info_err_firm_economical_no" class="invalid-feedback"></div>
+                                            <div class="text-light" id="firm-economical-no-value">
+                                                {% if form.firm_economical_no.value %}
+                                                    {{ form.firm_economical_no.value }}{% else %}مشخص نشده
+                                                    است!{% endif %}</div>
+                                        </div>
+                                        <div class="me-n3" data-bs-toggle="tooltip" title="ویرایش"><a
+                                                class="nav-link nav-link-light py-0" href="#firm-economical-no-collapse"
+                                                data-bs-toggle="collapse"><i class="fi-edit"></i></a></div>
+                                    </div>
+                                    <div class="collapse" id="firm-economical-no-collapse"
+                                         data-bs-parent="#officialPart">
+                                        {{ form.firm_economical_no }}
+                                    </div>
+                                </div>
+                                <!-- Phone number-->
+                                <div class="border-bottom border-light pb-3 mb-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="pe-2 opacity-70">
+                                            <label class="form-label fw-bold text-light">شماره تماس<span
+                                                    class="text-danger">*</span></label>
+                                            <div id="edit_info_err_firm_tel_no" class="invalid-feedback"></div>
+                                            <div class="text-light" id="firm_tel_no-value">
+                                                {% if form.firm_tel_no.value %}{{ form.firm_tel_no.value }}{% else %}
+                                                    مشخص نشده
+                                                    است!{% endif %}</div>
+                                        </div>
+                                        <div class="me-n3" data-bs-toggle="tooltip" title="ویرایش"><a
+                                                class="nav-link nav-link-light py-0" href="#firm_tel_no-collapse"
+                                                data-bs-toggle="collapse"><i class="fi-edit"></i></a></div>
+                                    </div>
+                                    <div class="collapse" id="firm_tel_no-collapse" data-bs-parent="#officialPart">
+                                        {{ form.firm_tel_no }}
+                                    </div>
+                                </div>
+                                <!-- Postal code-->
+                                <div class="border-bottom border-light pb-3 mb-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="pe-2 opacity-70">
+                                            <label class="form-label fw-bold text-light">کد پستی<span
+                                                    class="text-danger">*</span></label>
+                                            <div id="edit_info_err_official_postal_code" class="invalid-feedback"></div>
+                                            <div class="text-light" id="official_postal_code-value">
+                                                {% if form.official_postal_code.value %}
+                                                    {{ form.official_postal_code.value }}{% else %}
+                                                    مشخص نشده
+                                                    است!{% endif %}</div>
+                                        </div>
+                                        <div class="me-n3" data-bs-toggle="tooltip" title="ویرایش"><a
+                                                class="nav-link nav-link-light py-0"
+                                                href="#official_postal_code-collapse"
+                                                data-bs-toggle="collapse"><i class="fi-edit"></i></a></div>
+                                    </div>
+                                    <div class="collapse" id="official_postal_code-collapse" data-bs-parent="#officialPart">
+                                        {{ form.official_postal_code }}
+                                    </div>
+                                </div>
+                                <!-- Address-->
+                                <div>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="pe-2 opacity-70">
+                                            <label class="form-label fw-bold text-light">آدرس<span
+                                                    class="text-danger">*</span></label>
+                                            <div id="edit_info_err_official_address" class="invalid-feedback"></div>
+                                            <div class="text-light" id="official_address-value">
+                                                {% if form.official_address.value %}
+                                                    {{ form.official_address.value }}{% else %}
+                                                    مشخص نشده
+                                                    است!{% endif %}</div>
+                                        </div>
+                                        <div class="me-n3" data-bs-toggle="tooltip" title="ویرایش"><a
+                                                class="nav-link nav-link-light py-0" href="#official_address-collapse"
+                                                data-bs-toggle="collapse"><i class="fi-edit"></i></a></div>
+                                    </div>
+                                    <div class="collapse" id="official_address-collapse" data-bs-parent="#officialPart">
+                                        {{ form.official_address }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12 col-sm-4 mb-4">
+                            {{ form.image }}
+                            <div class="pt-4 pb-2 py-lg-5">
+                                <h6 class="text-light mb-2 fw-500">چه کسی می تواند مشخصات من را ببیند؟</h6>
+                                <p class="fs-sm text-light opacity-70 mb-0">مشخصات شما خصوصی است
+                                    ، هیچ کس دیگری آن را نخواهد دید.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Action buttons-->
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <div class="d-flex align-items-center justify-content-between pb-1">
+                                <button class="btn btn-primary" id="EditInfoBtn" type="submit">ذخیره تغییرات</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'vendor/jquery-3.6.0.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/simplebar/dist/simplebar.min.js' %}"></script>
+    <script src="{% static 'vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js' %}"></script>
+    <script src="{% static 'vendor/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.min.js' %}"></script>
+    <script src="{% static 'vendor/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js' %}"></script>
+    <script src="{% static 'vendor/filepond-plugin-image-crop/dist/filepond-plugin-image-crop.min.js' %}"></script>
+    <script src="{% static 'vendor/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.min.js' %}"></script>
+    <script src="{% static 'vendor/filepond-plugin-image-transform/dist/filepond-plugin-image-transform.min.js' %}"></script>
+    <script src="{% static 'vendor/filepond/dist/filepond.min.js' %}"></script>
+    <script src="{% static 'js/cruds/auth.js' %}"></script>
+    <!-- Main theme script-->
+    <script src="{% static 'js/theme.min.js' %}"></script>
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>
+    <link rel="stylesheet" media="screen"
+          href="{% static 'vendor/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css' %}"/>
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/filepond/dist/filepond.min.css' %}"/>
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
+{% endblock %}
+
+{% block js_code %}
+    <script>
+        $(document).ready(function () {
+            $('#isOfficial').change(function () {
+                if (this.checked) {
+                    $("#officialPart").removeClass('d-none');
+                } else {
+                    $("#officialPart").addClass('d-none');
+                }
+            });
+        });
+    </script>
+{% endblock %}
+

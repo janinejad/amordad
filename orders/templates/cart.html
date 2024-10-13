@@ -1,0 +1,186 @@
+{% extends 'Shared/_MainLayout.html' %}
+{% load static %}
+{% block content %}
+    <div class="container pt-5 pb-lg-4 mt-5 mb-sm-2">
+        <!-- Breadcrumb-->
+        <nav class="mb-4 pt-md-3" aria-label="Breadcrumb">
+            <ol class="breadcrumb breadcrumb-light">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">خانه</a></li>
+                <li class="breadcrumb-item active" aria-current="page">سبد خرید</li>
+            </ol>
+        </nav>
+        <!-- Page content-->
+        <div class="row">
+            <!-- Content-->
+            <div class="col-lg-8 col-md-7 mb-5">
+                <div class="d-flex align-items-center justify-content-between mb-4 pb-2">
+                    <h1 class="h4 font-vazir text-light">سبد خرید<span
+                            class="badge bg-faded-light fs-base align-middle ms-3">{{ order.orderitem.count }}</span>
+                    </h1>
+                    <form action="{% url 'orders:remove_items' %}"
+                          method="post">
+                        {% csrf_token %}
+                        <div class="input-group mt-3">
+                            <button type="submit"
+                                    class="nav-link-light btn btn-link fw-bold"><i class="fi-x fs-xs mt-n1 me-2"></i>حذف
+                                همه
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+                {% if cart_msgs %}
+                    <div class="alert alert-warning mb-3">
+                        <strong>توجه :</strong> موجودی یا قیمت بعضی از کالاها در سبد خرید شما
+                        تغییر
+                        یافته است:
+                        <ul class="mr-3" style="list-style:circle">
+                            {% for message in cart_msgs %}
+                                <li>
+                                    {{ message }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                {% for i in order.orderitem.all %}
+                    <div class="card card-light card-hover card-horizontal mb-4">
+                        <div class="tns-carousel-wrapper card-img-top card-img-hover"><a class="img-overlay"
+                                                                                         href="{% url 'products:product' id=i.variant.products.id product_name=i.variant.products.title %}"></a>
+                            <div class="tns-carousel-inner position-absolute top-0 h-100">
+                                <div class="bg-size-cover bg-position-center w-100 h-100"
+                                     style="background-image: url({{ i.variant.products.image.url }});"></div>
+                                {% for image in i.variant.products.productgallery_set.all %}
+                                    <div class="bg-size-cover bg-position-center w-100 h-100"
+                                         style="background-image: url({{ image.image.url }});"></div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="fs-base mb-1 fw-500"><a class="nav-link-light"
+                                                               href="{% url 'products:product' id=i.variant.products.id product_name=i.variant.products.title %}">{{ i.variant.products.title }}</a>
+                            </h3>
+                            <div class="text-primary fw-bold mb-1">{{ i.variant.regular_price_ir }}</div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <form action="{% url 'orders:remove-from-cart' variant_id=i.id %}"
+                                          method="post">
+                                        {% csrf_token %}
+                                        <div class="input-group mt-3">
+                                            <button type="submit" class="btn btn-outline-primary btn-icon">
+                                                <i class="fi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-6">
+                                    <form action="{% url 'orders:update_cart' item_id=i.id %}"
+                                          method="post" id="add-to-cart-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="variant"
+                                               value="{{ i.variant.id }}"/>
+                                        <input type="hidden" name="update"
+                                               value="True"
+                                               id="id_update_{{ i.id }}">
+                                        <div class="input-group flex-row-reverse mt-3">
+                                            <button class="btn btn-primary" type="submit"
+                                                    onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
+                                                    style="font-weight: bolder;max-width:10px !important;padding-right: 20px;padding-left: 20px">
+                                                <i class="fi-minus me-2"></i>
+                                            </button>
+                                            <input class="form-control text-center text-center pl-0 pr-0" min="1"
+                                                   max="{{ i.variant.in_basket }}"
+                                                   style="max-width: 40px;padding-left: 5px;padding-right: 5px;-moz-appearance: textfield;"
+                                                   type="number" readonly name="variant_count"
+                                                   value="{{ i.product_count }}">
+                                            <button class="btn btn-primary" type="submit"
+                                                    onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
+                                                    style="font-weight: bolder;max-width: 10px !important;padding-right: 20px;padding-left: 20px">
+                                                <i class="fi-plus me-2"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="fs-sm text-light mt-2 opacity-70"></div>
+                            <div class="border-top border-light mt-3 pt-3">
+                                <div class="row g-2">
+                                    <div class="col me-sm-1">
+                                        <div class="bg-dark rounded text-center w-100 h-100 p-2"><i
+                                                class="fi-arrow-down d-block h4 text-light mb-0 mx-center"></i><span
+                                                class="fs-xs text-light">{{ i.variant.variant_name }}</span></div>
+                                    </div>
+                                    <div class="col me-sm-1">
+                                        <div class="bg-dark rounded text-center w-100 h-100 p-2"><i
+                                                class="fi-grid d-block h4 text-light mb-0 mx-center"></i><span
+                                                class="fs-xs text-light">{{ i.variant.products.RootCategoryId }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="bg-dark rounded text-center w-100 h-100 p-2"><i
+                                                class="fi-bookmark d-block h4 text-light mb-0 mx-center"></i><span
+                                                class="fs-xs text-light">{{ i.variant.products.brandId }}</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <!-- Sidebar-->
+            <aside class="col-lg-4 col-md-5 pe-xl-4 mb-5">
+                <!-- Account nav-->
+                <div class="card card-body card-light border-0 shadow-sm pb-1 me-lg-1">
+                    <div class="d-flex d-md-block d-lg-flex align-items-start pt-lg-2 mb-4">
+                        <ul class="list-unstyled fs-sm mt-3 mr-1 mb-0" style="width: 100%">
+                            <li class="mb-2">مبلغ قبل از مالیات:<span class="opacity-70 ms-5"
+                                                                      style="float: left">{{ order.total_item_amount_before_discount_ir }}</span>
+                            </li>
+                            <li class="mb-2">تحفیف:<span class="opacity-70 ms-5"
+                                                         style="float: left">{{ order.total_discount_ir }}</span></li>
+                            <li class="mb-2">مالیات بر ارزش افزوده:<span class="opacity-70 ms-5"
+                                                                         style="float: left">{{ order.total_tax_ir }}</span>
+                            </li>
+                            <li class="mb-2">مبلغ بعد از مالیات:<span class="opacity-70 ms-5"
+                                                                      style="float: left">{{ order.total_item_amount_with_tax_ir }}</span>
+                            </li>
+                            <li class="mb-2">مبلغ پرداخت شده:<span class="opacity-70 ms-5"
+                                                                   style="float: left">{{ order.get_total_payed_amount_ir }}</span>
+                            </li>
+                            <li class="mb-2">مانده قابل پرداخت:<span class="opacity-70 ms-5"
+                                                                     style="float: left">{{ order.get_unpaid_ir }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <form action="{% url 'orders:complete_shopping' %}"
+                          method="post">
+                        {% csrf_token %}
+                        <button class="btn btn-primary btn-lg w-100 mb-3" type="submit">نهایی کردن سفارش</button>
+                    </form>
+                </div>
+            </aside>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'vendor/jquery-3.6.0.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/simplebar/dist/simplebar.min.js' %}"></script>
+    <script src="{% static 'vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js' %}"></script>
+    <script src="{% static 'vendor/tiny-slider/dist/min/tiny-slider.js' %}"></script>
+    <script src="{% static 'js/cruds/auth.js' %}"></script>
+    <!-- Main theme script-->
+    <script src="{% static 'js/theme.min.js' %}"></script>
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/tiny-slider/dist/tiny-slider.css' %}"/>
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
+{% endblock %}
+{% block page_meta %}
+        <title>سبد خرید</title>
+{% endblock %}
+
+

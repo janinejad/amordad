@@ -1,0 +1,350 @@
+{% load static %}
+<!-- Sign In Modal-->
+{% if not request.user.is_authenticated %}
+    <div class="modal fade modal-login" id="signin-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered p-2 my-0 mx-auto" style="max-width: 950px;">
+            <div class="modal-content bg-dark border-light">
+                <div class="modal-body px-0 py-2 py-sm-0">
+                    <button class="btn-close btn-close-white position-absolute top-0 end-0 mt-3 me-3" type="button"
+                            data-bs-dismiss="modal"></button>
+                    <div class="row mx-0 align-items-center">
+                        <div class="col-md-6 border-end-md border-light p-4 p-sm-5">
+                            <h2 class="h4 text-light mb-4 mb-sm-5">سلام!<br> به سایت ما خوش آمدید.</h2><img
+                                class="d-block mx-auto" src="{% static 'img/signin-modal/signin-dark.svg' %}"
+                                width="344"
+                                alt="Illustartion">
+                            <div class="text-light mt-4 mt-sm-5"><span
+                                    class="opacity-60">هنوز ثبت نام نکرده اید؟ </span><a
+                                    class="text-light" href="#signup-modal" data-bs-toggle="modal"
+                                    data-bs-dismiss="modal">ثبت
+                                نام</a></div>
+                        </div>
+                        <div class="col-md-6 px-4 pt-2 pb-4 px-sm-5 pb-sm-5 pt-md-2">
+                            <a class="btn btn-outline-info w-100 mb-3"
+                               href="{% url 'social:begin' 'google-oauth2' %}"><i
+                                    class="fi-google fs-lg ms-1"></i>ورود با اکانت گوگل</a>
+                            <div class="d-flex align-items-center py-3 mb-3">
+                                <hr class="hr-light w-100">
+                                <div class="text-light opacity-70 px-3">یـا</div>
+                                <hr class="hr-light w-100">
+                            </div>
+                            <form class="needs-validation" autocomplete="off" method="post"
+                                  action="{% url 'account:login' %}"
+                                  id="LoginForm" novalidate>
+                                {% csrf_token %}
+                                <div class="mb-4">
+                                    <label class="form-label text-light mb-2" for="signin-email">پست الکترونیکی</label>
+                                    {{ login_form.email }}
+                                </div>
+                                <div id="log_err_email" class="invalid-feedback"></div>
+                                <div class="mb-4">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <label class="form-label text-light mb-0"
+                                               for="signin-password">رمزعبور</label><a
+                                            class="fs-sm text-light" id="forgotPassword" href="#forgot-password-modal">رمز
+                                        عبور خود را
+                                        فراموش کرده اید؟</a>
+                                    </div>
+                                    <div class="password-toggle">
+                                        {{ login_form.password }}
+                                        <label class="password-toggle-btn" aria-label="Show/hide password">
+                                            <input class="password-toggle-check" type="checkbox"><span
+                                                class="password-toggle-indicator"></span>
+                                        </label>
+                                    </div>
+                                    <div id="log_err_password" class="invalid-feedback"></div>
+                                </div>
+                                <button class="btn btn-primary btn-lg w-100" type="submit">ورود به حساب کاربری</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+<!-- Sign Up Modal-->
+{% if not request.user.is_authenticated %}
+    <div class="modal fade modal-register" id="signup-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered p-2 my-0 mx-auto" style="max-width: 950px;">
+            <div class="modal-content bg-dark border-light">
+                <div class="modal-body px-0 py-2 py-sm-0">
+                    <button class="btn-close btn-close-white position-absolute top-0 end-0 mt-3 me-3" type="button"
+                            data-bs-dismiss="modal"></button>
+                    <div class="row mx-0 align-items-center">
+                        <div class="col-md-6 border-end-md border-light p-4 p-sm-5">
+                            <h2 class="h4 text-light mb-4 mb-sm-5">درسایت ما با اطمینان ثبت نام کنید.</h2>
+                            <ul class="list-unstyled mb-4 mb-sm-5">
+                                <li class="d-flex mb-2"><i class="fi-check-circle text-primary mt-1 me-2"></i><span
+                                        class="text-light">ثبت و بروزرسانی آگهی</span></li>
+                                <li class="d-flex mb-2"><i class="fi-check-circle text-primary mt-1 me-2"></i><span
+                                        class="text-light">مدیریت لیست علاقه مندی ها</span></li>
+                                <li class="d-flex mb-0"><i class="fi-check-circle text-primary mt-1 me-2"></i><span
+                                        class="text-light">ثبت نظر</span></li>
+                            </ul>
+                            <img class="d-block mx-auto" src="{% static 'img/signin-modal/signup-dark.svg' %}"
+                                 width="344"
+                                 alt="Illustartion">
+                            <div class="text-light mt-sm-4 pt-md-3"><span class="opacity-60">ثبت نام کرده اید؟ </span><a
+                                    class="text-light" href="#signin-modal" data-bs-toggle="modal"
+                                    data-bs-dismiss="modal">ورود
+                                به حساب کاربری</a></div>
+                        </div>
+                        <div class="col-md-6 px-4 pt-2 pb-4 px-sm-5 pb-sm-5 pt-md-5">
+                            <form class="needs-validation" method="post" id="registerForm" autocomplete="off"
+                                  action="{% url 'account:register' %}" novalidate>
+                                {% csrf_token %}
+                                <div class="mb-4">
+                                    <label class="form-label text-light" for="{{ register_form.first_name.auto_id }}">نام</label>
+                                    {{ register_form.first_name }}
+                                    <div id="err_first_name" class="invalid-feedback"></div>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label text-light" for="{{ register_form.last_name.auto_id }}">نام
+                                        خانوادگی</label>
+                                    {{ register_form.last_name }}
+                                    <div id="err_last_name" class="invalid-feedback"></div>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label text-light"
+                                           for="{{ register_form.mobile.auto_id }}">موبایل</label>
+                                    {{ register_form.mobile }}
+                                    <div id="err_mobile" class="invalid-feedback"></div>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label text-light" for="{{ register_form.email.auto_id }}">پست
+                                        الکترونیکی</label>
+                                    {{ register_form.email }}
+                                    <div id="err_email" class="invalid-feedback"></div>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label text-light" for="{{ register_form.password.auto_id }}">رمز
+                                        عبور <span
+                                                class='fs-sm opacity-50'>حداقل 8 کاراکتر</span></label>
+                                    <div class="password-toggle">
+                                        {{ register_form.password }}
+                                        <label class="password-toggle-btn" aria-label="Show/hide password">
+                                            <input class="password-toggle-check" type="checkbox"><span
+                                                class="password-toggle-indicator"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label text-light" for="{{ register_form.password2.auto_id }}">تایید
+                                        رمز
+                                        عبور</label>
+                                    <div class="password-toggle">
+                                        {{ register_form.password2 }}
+                                        <label class="password-toggle-btn" aria-label="Show/hide password">
+                                            <input class="password-toggle-check" type="checkbox"><span
+                                                class="password-toggle-indicator"></span>
+                                        </label>
+                                    </div>
+                                    <div id="err_password2" class="invalid-feedback"></div>
+                                </div>
+                                <div class="form-check form-check-light mb-4">
+                                    {{ register_form.agree_to_terms }}
+                                    <label class="form-check-label"
+                                           for="{{ register_form.agree_to_terms.auto_id }}"><span class='opacity-70'>با ثبت نام در این سایت </span>
+                                        <a href='#' class='text-light'>شرایط </a> <span class='opacity-70'> و </span> <a
+                                                href='#' class='text-light'>قوانین </a> سایت را میپذیرم.</label>
+                                    <div id="err_agree_to_terms" class="invalid-feedback"></div>
+                                </div>
+                                <button class="btn btn-primary btn-lg w-100" id="registerFormBtn" type="submit">ثبت
+                                    نام
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% if not request.user.is_authenticated %}
+    <div class="modal fade modal-login" id="forgot-password-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered p-5 my-0 mx-auto" style="max-width: 500px;">
+            <div class="modal-content bg-dark border-light">
+                <div class="modal-body px-0 py-2 py-sm-0">
+                    <button class="btn-close btn-close-white position-absolute top-0 end-0 mt-3 me-3" type="button"
+                            data-bs-dismiss="modal"></button>
+                    <div class="row mx-0 align-items-center">
+                        <div class="col-md-12 px-4 pt-5 pb-4 px-sm-5 pb-sm-5 pt-md-2">
+                            <a class="btn btn-outline-info w-100 mb-3 mt-5"
+                               href="{% url 'social:begin' 'google-oauth2' %}"><i
+                                    class="fi-google fs-lg ms-1"></i>ورود با اکانت گوگل</a>
+                            <div class="d-flex align-items-center py-3 mb-3">
+                                <hr class="hr-light w-100">
+                                <div class="text-light opacity-70 px-3">یـا</div>
+                                <hr class="hr-light w-100">
+                            </div>
+                            <form class="needs-validation" autocomplete="off" method="post"
+                                  action="{% url 'account:forget_password' %}"
+                                  id="ForgotPasswordForm" novalidate>
+                                {% csrf_token %}
+                                <div class="mb-4">
+                                    <label class="form-label text-light mb-2" for="signin-email">پست الکترونیکی</label>
+                                    {{ forgo_password.email }}
+                                </div>
+                                <div id="fg_pass_err_email" class="invalid-feedback"></div>
+                                <button class="btn btn-primary btn-lg w-100" id="ForgetPassBtn" type="submit">بازیابی
+                                    رمز عبور
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+<!-- Navbar-->
+<header class="navbar navbar-expand-lg navbar-dark fixed-top" data-scroll-header>
+    <div class="container">
+        <a class="navbar-brand me-3 me-xl-4" href="{% url 'home' %}"><img class="d-block"
+                                                                          src="{{ logo }}"
+                                                                          width="116"
+                                                                          alt="Finder"></a>
+        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span
+                class="navbar-toggler-icon"></span></button>
+        {% if not request.user.is_authenticated %}
+            <a class="btn btn-link btn-light btn-sm d-none d-lg-block order-lg-3" href="#signin-modal"
+               data-bs-toggle="modal"><i class="fi-user me-2"></i>ورود به حساب کاربری</a>
+        {% else %}
+            <div class="dropdown d-none d-lg-block order-lg-3 my-n2 me-3"><a class="d-block py-2"
+                                                                             href="#"><img
+                    class="rounded-circle" src="{% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'img/avatars/02.png' %}{% endif %}"
+                    width="40" alt="Robert Fox"></a>
+                <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
+                    <div class="d-flex align-items-start border-bottom border-light px-3 py-1 mb-2"
+                         style="width: 16rem;">
+                        <img class="rounded-circle" src="{% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'img/avatars/02.png' %}{% endif %}"
+                             width="48" alt="Robert Fox">
+                        <div class="ps-3 text-end">
+                            <h6 class="fs-base text-light mb-0">{{ request.user|truncatechars:15 }}</h6>
+                            <div class="fs-xs py-2">{% if request.user.mobile %}{{ request.user.mobile }}
+                                <br>{% endif %}{{ request.user.email }}</div>
+                        </div>
+                    </div>
+                    <a class="dropdown-item" href="{% url 'account:edit_personal_info' %}"><i class="fi-user me-2"></i>اطلاعات
+                        فردی</a>
+                    {#                    <a class="dropdown-item" href="car-finder-account-security.html"><i#}
+                    {#                        class="fi-lock me-2"></i>گذرواژه و امنیتی</a>#}
+                    {% if request.user.is_staff %}
+                        <a class="dropdown-item" href="/apanel/"><i
+                                class="fi-user me-2"></i>پنل مدیریتی</a>
+                    {% endif %}
+                    <a class="dropdown-item" href="{% url 'account:orders' %}"><i class="fi-user me-2"></i>سفارشات
+                        من</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" onclick="logout()">خروج</a>
+                </div>
+            </div>
+        {% endif %}
+        {% if request.user.is_authenticated %}
+            <a class="btn btn-primary btn-sm ms-2 order-lg-3" href="{% url 'orders:cart' %}"><i
+                    class="fi-shopping-bag me-2"></i>سبد خرید</a>
+        {% endif %}
+        <div class="collapse navbar-collapse order-lg-2" id="navbarNav">
+            <div class="row d-lg-none d-md-block d-sm-block w-100">
+                <div class="col-12 mt-3">
+                    <form action="{% url 'products:search' %}" method="get" class="search-form">
+                        <div class="input-group searchBox-m-15 flex-row-reverse">
+                            <button type="submit" class="btn btn-translucent-primary">
+                                <i class="fi-search"></i>
+                            </button>
+                            <input class="form-control form-control-light mr-2 search-input"
+                                   {% if request.GET.q %}{% else %}name="q"{% endif %}
+                                   type="text"
+                                   placeholder="جستجو...">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <ul class="navbar-nav navbar-nav-scroll" style="max-height: 35rem;">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false"><i
+                            class="fi-grid ms-2"></i> دسته بندی کالا</a>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        {% for item in cats_menu %}
+                            <li class="dropdown"><a
+                                    class="dropdown-item{% if item.has_children %} dropdown-toggle{% endif %}"
+                                    href="{{ item.get_abs_url }}"
+                                    role="button"
+                                    aria-expanded="false">{{ item.title }}</a>
+                                {% if item.children.count > 0 %}
+                                    <ul class="dropdown-menu dropdown-menu-dark">
+                                        {% for sub_item in item.children.all %}
+                                            <li><a class="dropdown-item"
+                                                   href="{{ sub_item.get_abs_url }}">{{ sub_item.title }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'blog:blog' %}">وبلاگ</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'pages:contact_us' %}">تماس با ما</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ about_us }}">درباره ما</a></li>
+                {% if not request.user.is_authenticated %}
+                    <li class="nav-item d-lg-none"><a class="nav-link" href="#signin-modal" data-bs-toggle="modal"><i
+                            class="fi-user me-2"></i>ورودs به حساب کاربری</a></li>
+                {% else %}
+                    <li class="nav-item d-lg-none">
+                        <a class="nav-link" href="{% url 'account:edit_personal_info' %}"><i
+                                class="fi-user me-2"></i>اطلاعات
+                            فردی</a></li>
+                    {% if request.user.is_staff %}
+                        <li class="nav-item d-lg-none">
+                            <a class="nav-link" href="/apanel/"><i
+                                    class="fi-user me-2"></i>پنل مدیریتی</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item d-lg-none">
+                        <a class="nav-link" href="{% url 'account:orders' %}"><i class="fi-user me-2"></i>سفارشات
+                            من</a>
+                    </li>
+                    <li class="nav-item d-lg-none">
+                        <a class="nav-link" onclick="logout()">خروج</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+        <div class="collapse navbar-collapse order-2">
+            <form action="{% url 'products:search' %}" method="get" class="search-form">
+                <div class="input-group flex-row-reverse w-95">
+                    <button type="submit" class="btn btn-translucent-primary">
+                        <i class="fi-search"></i>
+                    </button>
+                    <input class="form-control form-control-light search-input"
+                           {% if request.GET.q %}{% else %}name="q"{% endif %}
+                           type="text"
+                           placeholder="جستجو...">
+                </div>
+            </form>
+        </div>
+    </div>
+
+</header>
+
+{% if messages %}
+    {% for message in messages %}
+        <div id="pageMessages" class="alert alert-success alert-dismissible fade show" role="alert"
+             style="z-index: 10;"><span
+                class="fw-bold">پیغام: </span>
+            {{ message }}
+            <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+<form action="/logout/" method="post" id="logout_form">
+    {% csrf_token %}
+</form>
+<script>
+    function logout() {
+        document.getElementById('logout_form').submit();
+    }
+</script>

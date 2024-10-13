@@ -1,0 +1,38 @@
+{% load static %}
+<div class="tns-carousel-wrapper">
+  <div class="tns-carousel-inner" data-carousel-options='{"gutter": 16}'>
+        {% for slide in slides %}
+            {% if slide.is_origin_image %}
+                <img class="rounded rounded-3" src="{{ slide.original_image.url }}" alt="{{ slide.image_alt }}">
+            {% else %}
+                <img class="rounded rounded-3" src="{{ slide.image_webp.url }}" alt="{{ slide.image_alt }}">
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+<script>
+    const slider = tns({
+        container: '.my-slider',
+        loop: true,
+        items: 1,
+        slideBy: 'page',
+        nav: false,
+        autoplay: true,
+        speed: 400,
+        autoplayButtonOutput: false,
+        mouseDrag: true,
+        lazyload: true,
+        controlsContainer: "#customize-controls",
+        responsive: {
+            640: {
+                items: 2,
+            },
+
+            768: {
+                items: 3,
+            }
+        }
+
+    });
+
+</script>

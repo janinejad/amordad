@@ -1,0 +1,170 @@
+{% extends 'Shared/_MainLayout.html' %}
+{% load static %}
+{% load paginator_tags %}
+{% block content %}
+    <div class="container pt-5 pb-lg-4 my-5">
+        <!-- Breadcrumb-->
+        <nav class="mb-3 pb-md-1 pt-md-3" aria-label="Breadcrumb">
+            <ol class="breadcrumb breadcrumb-light m-0">
+                {% if page_cat %}
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">خانه</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'blog:blog' %}">اخبار و
+                        مقالات</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ page_cat.title }}</li>
+                {% else %}
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">خانه</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">اخبار و مقالات</li>
+                {% endif %}
+            </ol>
+        </nav>
+        <!-- Page title-->
+        <h1 class="text-light mb-4 h4 font-vazir">
+            {% if page_cat %}{{ page_cat.title }}{% else %}اخبار و مقالات{% endif %}</h1>
+        <!-- Sorting, filters and search-->
+        <form action="{% url 'blog:blog' %}" method="get">
+            <div class="d-lg-flex pt-1 pb-4 mb-3">
+                <div class="d-flex mb-3 mb-lg-0 pe-lg-2">
+                    <div class="d-flex flex-md-row flex-column align-items-md-center flex-grow-1 border-end-md border-light pe-md-4 me-md-4">
+                        <label class="d-inline-block text-light me-sm-2 mb-md-0 mb-2 text-nowrap" for="sortby"><i
+                                class="fi-arrows-sort mt-n1 me-2 align-middle opacity-70"></i>مرتب سازی براساس:</label>
+                        <select onchange="this.form.submit()" class="form-select form-select-light me-md-2" id="sortby" name="sort_by">
+                            <option {% if request.GET.sort_by == "1" %}selected {% endif %}value="1">جدیدترین</option>
+                            <option {% if request.GET.sort_by == "2" %}selected {% endif %}value="2">قدیمی ترین</option>
+                        </select>
+                    </div>
+                    <div class="d-flex flex-md-row flex-column align-items-md-center flex-grow-1 border-end-lg border-light ps-3 ps-md-2 pe-lg-4 me-lg-4">
+                        <label class="d-inline-block text-light me-sm-2 mb-md-0 mb-2 text-nowrap" for="categories"><i
+                                class="fi-align-left mt-n1 me-2 align-middle opacity-70"></i>دست بندی ها:</label>
+                        <select onchange="this.form.submit()" class="form-select form-select-light ms-lg-2"
+                                id="categories" name="c_slug">
+                            <option value="">همه</option>
+                            {% for cat in category %}
+                                <option {% if request.GET.c_slug == cat.slug %}selected {% endif %}value="{{ cat.slug }}">{{ cat.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="position-relative flex-grow-1">
+                    <input class="form-control form-control-light" name="qs" type="text" placeholder="جستجو..."><i
+                        class="fi-search position-absolute top-50 end-0 translate-middle-y text-light opacity-70 me-3"></i>
+                </div>
+
+            </div>
+        </form>
+        <!-- Latest articles (3 columns)-->
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 gx-3 gx-md-4 gy-md-5 gy-4 mb-lg-5 mb-4 blog-list">
+            {% for post in page_obj %}
+                <article class="col pb-2 pb-md-1"><a class="d-block position-relative mb-3"
+                                                     href="{{ post.get_abs_url }}"><img class="d-block rounded-3"
+                                                                                        src="{{ post.image.url }}"
+                                                                                        alt="Post image"></a><a
+                        class="fs-sm text-uppercase text-decoration-none"
+                        href="{{ post.category.get_abs_url }}">{{ post.category.title }}</a>
+                    <h3 class="fs-base text-light pt-1"><a class="nav-link"
+                                                           href="{{ post.get_abs_url }}">{{ post.title }}</a>
+                    </h3>
+                    <p>
+                        {{ post.Description|safe|truncatewords:25 }}
+                    </p>
+                    <a class="d-flex align-items-center text-decoration-none"
+                       href="#">
+                        <div class="d-flex fs-xs text-light opacity-70"><span class="me-2 pe-1"><i
+                                class="fi-calendar-alt opacity-70 mt-n1 me-1 align-middle"></i>{{ post.post_date }}</span><span><i
+                                class="fi-chat-circle opacity-70 mt-n1 me-1 align-middle"></i>{{ post.comment_counts }} نظر</span>
+                        </div>
+                    </a>
+                </article>
+            {% endfor %}
+        </div>
+        <!-- Pagination-->
+        <nav class="border-top border-light pt-4" aria-label="Reviews pagination">
+            <ul class="pagination pagination-light">
+                {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page=
+
+                            {{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
+                                             aria-label="Next"><i
+                            class="fi-chevron-left"></i></a></li>
+                {% endif %}
+                {% get_proper_elided_page_range paginator page_obj.number as page_range %}
+                {% for page in page_range %}
+                    {% if page == page_obj.number %}
+                        <li class="page-item active d-none d-sm-block" aria-current="page"><span
+                                class="page-link">{{ page }}<span
+                                class="visually-hidden">(current)</span></span>
+                        </li>
+                    {% else %}
+                        {% if page == paginator.ELLIPSIS %}
+                            <li class="page-item d-none d-sm-block">
+                                <span>{{ paginator.ELLIPSIS }}</span></li>
+                        {% else %}
+                            <li class="page-item d-none d-sm-block"><a class="page-link"
+                                                                       href="?page=
+
+                                                                               {{ page }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ page }}</a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page=
+
+                            {{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
+                                             aria-label="Next"><i
+                            class="fi-chevron-right"></i></a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="{% static 'vendor/jquery-3.6.0.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/simplebar/dist/simplebar.min.js' %}"></script>
+    <script src="{% static 'vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js' %}"></script>
+    <script src="{% static 'vendor/tiny-slider/dist/min/tiny-slider.js' %}"></script>
+    <script src="{% static 'js/cruds/auth.js' %}"></script>
+    <!-- Main theme script-->
+    <script src="{% static 'js/theme.min.js' %}"></script>
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/tiny-slider/dist/tiny-slider.css' %}"/>
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
+{% endblock %}
+
+{% block page_meta %}
+    {% if page_cat %}
+        <link rel="alternate" href="{{ st.siteUrl }}{{ page_cat.get_abs_url }}" hrefLang="fa-IR"/>
+        <title>{% if page_cat.meta_title %}{{ page_cat.meta_title }}{% else %}{{ page_cat.title }}{% endif %}</title>
+        <meta name="description" content="{% if page_cat.meta_description %}{{ page_cat.meta_description }}{% else %}{{ page_cat.title }}{% endif %}"/>
+        <meta name="keywords" content="{% if page_cat.keywords %}{{ page_cat.keywords }}{% else %}{{ page_cat.title }}{% endif %}"/>
+        <link rel="canonical" href="{% if page_cat.canonical %}{{ page_cat.canonical }}{% else %}{{ st.siteUrl }}{{ page_cat.get_abs_url }}{% endif %}"/>
+        {% if page_obj.has_next %}
+            <link rel="next" href="{{ st.siteUrl }}{{ request.path }}?page={{ page_obj.next_page_number }}"/>
+        {% endif %}
+        <meta property="og:locale" content="fa_IR"/>
+        <meta property="og:type" content="object"/>
+        <meta property="og:title"
+              content="{% if page_cat.meta_title %}{{ page_cat.meta_title }}{% else %}{{ page_cat.title }}{% endif %}"/>
+        <meta property="og:description" content="{% if page_cat.meta_description %}{{ page_cat.meta_description }}{% else %}{{ page_cat.title }}{% endif %}"/>
+        <meta property="og:url" content="{{ st.siteUrl }}{{ page_cat.get_abs_url }}"/>
+        <meta property="og:site_name" content="{{ st.brand_name }}"/>
+        {% if page_cat.image %}
+            <meta property="og:image" content="{{ page_cat.image }}"/>
+            <meta property="og:image:secure_url" content="{{ page_cat.image }}"/>
+            <meta property="og:image:width" content="960"/>
+            <meta property="og:image:height" content="400"/>
+        {% endif %}
+        <meta property="og:image:alt" content="{% if page_cat.meta_description %}{{ page_cat.meta_description }}{% else %}{{ page_cat.title }}{% endif %}"/>
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="twitter:description" content="{% if page_cat.meta_description %}{{ page_cat.meta_description }}{% else %}{{ page_cat.title }}{% endif %}"/>
+        <meta name="twitter:title"
+              content="{% if page_cat.meta_title %}{{ page_cat.meta_title }}{% else %}{{ page_cat.title }}{% endif %}"/>
+        {% if page_cat.image_webp %}
+            <meta name="twitter:image" content="{{ page_cat.image_webp }}"/>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+

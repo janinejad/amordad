@@ -1,0 +1,328 @@
+{% extends 'Shared/_MainLayout.html' %}
+{% load static %}
+{% load paginator_tags %}
+{% block content %}
+    <div class="container mt-5 mb-md-4 py-5">
+        <div class="row py-md-1">
+            <!-- Filers sidebar (Offcanvas on mobile)-->
+            <div class="col-lg-3 pe-xl-4">
+                <!-- Carousel inside card -->
+                {% if cat_obj %}
+                    <div class="card-light card-hover mb-3">
+                        <div class="tns-carousel-wrapper card-img-top card-img-hover">
+                            <div class="tns-carousel-inner car"
+                                 data-carousel-options="{&quot;autoplayTimeout&quot;: 5000,&quot;autoplay&quot;: true,&quot;nav&quot;:false}">
+                                {% for expert in cat_obj.cat.experts.all %}
+                                    <div class="card-body">
+                                        <img class="mb-3" src="{{ expert.image.url }}" alt="Image">
+                                        <h5 class="col-12 text-center text-white">{{ expert.name }}</h5>
+                                        <div class="row">
+                                            <div class="col-12 text-center"><span class="text-warning"><span
+                                                    class="text-warning text-center">{{ expert.position }}</span></span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 text-center"><span class="text-warning">شماره تماس واتس اپ</span>
+                                                <a target="_blank" href="https://wa.me/+{{ expert.whatsapp_number }}"
+                                                   class="btn btn-link fs-lg py-1 px-2">
+                                                    <i class="fi-whatsapp"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 text-center mb-3">
+                                                <span class="text-warning">شماره تماس : </span>
+                                                <span class="text-white">{{ expert.phone_number }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <form action="" id="filter-form">
+                    <div class="offcanvas-lg offcanvas-end bg-dark" id="filters-sidebar">
+                        <div class="offcanvas-header bg-transparent d-flex d-lg-none align-items-center">
+                            <h2 class="h5 text-light mb-0">فیلترها</h2>
+                            <button class="btn-close btn-close-white" type="button" data-bs-dismiss="offcanvas"
+                                    data-bs-target="#filters-sidebar"></button>
+                        </div>
+                        <div class="offcanvas-body py-lg-4">
+                            <div class="pb-3 mb-4 border-bottom border-light" id="filter-box">
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                    <h3 class="fs-base font-vazir text-light mb-0">انتخابی ها</h3>
+                                    <a class="btn btn-link btn-light fw-normal fs-sm p-0" href="{{ request.path }}">حذف
+                                        همه
+                                    </a>
+                                </div>
+                                <ul class="nav nav-pills nav-pills-light flex-row fs-sm mx-0" id="applied-filters">
+                                    {% for filter in filter_list %}
+                                        <li class="nav-item mb-2 me-2" id="{{ filter.value }}">
+                                            <button class="nav-link px-3 remove-filter" data-type="{{ filter.type }}"
+                                                    data-value="{{ filter.id }}" type="button"><i
+                                                    class="fi-x fs-xxs me-2"></i>{{ filter.text }}</button>
+                                            {% if filter.type == 'q' %}
+                                                <input type="hidden" class="filter-q" value="{{ filter.text }}"
+                                                       name="q">
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="pb-4 input-group flex-row-reverse mb-2">
+                                <button type="submit" id="btnSearch" class="btn btn-translucent-primary">
+                                    <i class="fi-search"></i>
+                                </button>
+                                <input class="form-control form-control-light"
+                                       {% if request.GET.q %}{% else %}name="q"{% endif %} id="text-input-light"
+                                       type="text"
+                                       placeholder="جستجو...">
+                            </div>
+                            <div>
+                                <h3 class="fs-base font-vazir text-light">فیلتر برند</h3>
+                                <div class="overflow-auto" data-simplebar data-simplebar-auto-hide="false"
+                                     data-simplebar-direction="rtl" data-simplebar-inverse style="height: 11rem;">
+                                    <div class="flex-row pl-5 pr-2">
+                                        <input class="form-control mb-3 w-95 mx-2px form-control-light filter-cats"
+                                               type="text" placeholder="جستجوی برند ...">
+                                    </div>
+                                    {% for brand in brand_list %}
+                                        <div class="form-check form-check-light">
+                                            <input class="form-check-input selected-brand" value="{{ brand.id }}"
+                                                   type="checkbox"
+                                                   id="brandCheckBox{{ brand.id }}" name="brand"
+                                                    {% if brand.id in brand_filters %} checked{% endif %}>
+                                            <label class="form-check-label fs-sm"
+                                                   for="brandCheckBox{{ brand.id }}">{{ brand.title }}</label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% if cat_obj %}
+                                {% for obj in cat_obj.attrs_list %}
+                                    <div>
+                                        <h3 class="fs-base font-vazir text-light">{{ obj.attr.title }}</h3>
+                                        <div class="overflow-auto" data-simplebar data-simplebar-auto-hide="false"
+                                             data-simplebar-direction="rtl" data-simplebar-inverse
+                                             style="height: 11rem;">
+                                            <div class="flex-row pl-5 pr-2">
+                                                <input class="form-control mb-3 w-95 mx-2px form-control-light filter-cats"
+                                                       type="text" placeholder="جستجو {{ obj.attr.title }}...">
+                                            </div>
+                                            {% for item in obj.items %}
+                                                <div class="form-check form-check-light">
+                                                    <input class="form-check-input selected-attribute"
+                                                           value="{{ item.id }}"
+                                                           type="checkbox"
+                                                           id="attrCheckBox{{ item.id }}" name="attr"
+                                                           {% if item.id in cat_obj.attribute_filters %}checked{% endif %}>
+                                                    <label class="form-check-label fs-sm"
+                                                           for="attrCheckBox{{ item.id }}">{{ item.item }}</label>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-9">
+                <!-- Breadcrumb-->
+                <nav class="mb-3 pt-md-2 pt-lg-4" aria-label="Breadcrumb">
+                    <ol class="breadcrumb breadcrumb-light">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">خانه</a></li>
+                        {% if cat_obj %}
+                            <li class="breadcrumb-item active" aria-current="page">{{ cat_obj.cat.title }}</li>
+                        {% else %}
+                            <li class="breadcrumb-item active" aria-current="page">جستجوی محصولات</li>
+                        {% endif %}
+                    </ol>
+                </nav>
+                <!-- Page title-->
+                <div class="d-flex align-items-center justify-content-between pb-4 mb-2">
+                    {% if cat_obj %}
+                        <h1 class="text-light me-3 mb-0 font-vazir h4">لیست قیمت انوع {{ cat_obj.cat.title }}</h1>
+                    {% else %}
+                        <h1 class="text-light me-3 mb-0 font-vazir h4">نتایج جستجو شده</h1>
+                    {% endif %}
+                    <div class="text-light"><i class="fi-search fs-lg me-2"></i><span
+                            class="align-middle">{{ page_obj.object_list.count }} نتیجه</span>
+                    </div>
+                </div>
+                <!-- Sorting + View-->
+                <div class="row d-lg-block d-none">
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover text-center">
+                            <thead>
+                            <tr>
+                                <th>نام محصول</th>
+                                <th>واحد</th>
+                                <th>برند</th>
+                                <th>قیمت بدون ارزش افزوده</th>
+                                <th>قیمت با ارزش افزوده</th>
+                                <th>عملیات</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for p in page_obj %}
+                                <tr>
+                                    <td><a class="link-light" target="_blank"
+                                           href="{{ p.products.get_full_abs_url }}">{{ p.dynamic_name }}</a></td>
+                                    <td>{{ p.products.unit }}</td>
+                                    <td>{{ p.products.brandId }}</td>
+                                    <td>{{ p.regular_price_ir }}</td>
+                                    <td>{{ p.product_amount_with_tax_ir }}</td>
+                                    <td><a target="_blank" class="btn btn-outline-primary"
+                                           href="{{ p.products.get_full_abs_url }}">ثبت سفارش</a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row d-lg-none d-md-block d-sm-block">
+                    {% for p in page_obj %}
+                        <div class="col-12 m-1">
+                            <div class="card card-light card-hover">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <a class="link-light text-decoration-none" target="_blank"
+                                                       href="{{ p.products.get_full_abs_url }}"><h6
+                                                            class="text-white-50">{{ p.dynamic_name }}</h6>
+                                                    </a>
+                                                </div>
+                                                <div class="col-12">
+                                                    <span class="text-warning">واحد</span> :
+                                                    <span>{{ p.products.unit }}</span>
+                                                </div>
+                                                <div class="col-12">
+                                                    <span class="text-warning">برند</span> :
+                                                    <span>{{ p.products.brandId }}</span>
+                                                </div>
+                                                <div class="col-12">
+                                                    <span class="text-warning">قیمت بدون ارزش افزوده</span> :
+                                                    <span>{{ p.regular_price_ir }}</span>
+                                                </div>
+                                                <div class="col-12">
+                                                    <span class="text-warning">قیمت با ارزش افزوده</span> :
+                                                    <span>{{ p.product_amount_with_tax_ir }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 mt-3">
+                                            <a target="_blank" class="btn btn-outline-primary float-left-custom"
+                                               href="{{ p.products.get_full_abs_url }}">ثبت سفارش</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <!-- Sorting + Pagination-->
+                <div class="d-flex align-items-center justify-content-between py-2 mt-2">
+                    <nav aria-label="Pagination">
+                        <ul class="pagination pagination-light">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item"><a class="page-link" href="?page=
+                                        {{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
+                                                         aria-label="Next"><i
+                                        class="fi-chevron-left"></i></a></li>
+                            {% endif %}
+                            {% get_proper_elided_page_range paginator page_obj.number as page_range %}
+                            {% for page in page_range %}
+                                {% if page == page_obj.number %}
+                                    <li class="page-item active d-none d-sm-block" aria-current="page"><span
+                                            class="page-link">{{ page }}<span
+                                            class="visually-hidden">(current)</span></span>
+                                    </li>
+                                {% else %}
+                                    {% if page == paginator.ELLIPSIS %}
+                                        <li class="page-item d-none d-sm-block">
+                                            <span>{{ paginator.ELLIPSIS }}</span></li>
+                                    {% else %}
+                                        <li class="page-item d-none d-sm-block"><a class="page-link"
+                                                                                   href="?page=
+                                                                                           {{ page }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ page }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                            {% if page_obj.has_next %}
+                                <li class="page-item"><a class="page-link" href="?page=
+                                        {{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
+                                                         aria-label="Next"><i
+                                        class="fi-chevron-right"></i></a></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-primary btn-sm w-100 rounded-0 fixed-bottom d-lg-none" type="button"
+            data-bs-toggle="offcanvas" data-bs-target="#filters-sidebar"><i class="fi-filter me-2"></i>فیلترها
+    </button>
+{% endblock %}
+
+
+{% block js %}
+    <script src="{% static 'vendor/jquery-3.6.0.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/simplebar/dist/simplebar.min.js' %}"></script>
+    <script src="{% static 'vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js' %}"></script>
+    <script src="{% static 'vendor/tiny-slider/dist/min/tiny-slider.js' %}"></script>
+    <script src="{% static 'vendor/nouislider/dist/nouislider.min.js' %}"></script>
+    <script src="{% static 'js/cruds/auth.js' %}"></script>
+    <script src="{% static 'js/cruds/filtering.js' %}"></script>
+    <!-- Main theme script-->
+    <script src="{% static 'js/theme.min.js' %}"></script>
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/tiny-slider/dist/tiny-slider.css' %}"/>
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/nouislider/dist/nouislider.min.css' %}"/>
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
+{% endblock %}
+{% block page_meta %}
+    {% if cat_obj %}
+        <link rel="alternate" href="{{ st.siteUrl }}{{ request.path }}" hrefLang="fa-IR"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0"/>
+        <title>{{ cat_obj.cat.meta_title }}</title>
+        <meta name="description" content="{{ cat_obj.cat.meta_description }}"/>
+        <meta name="keywords" content="{{ cat_obj.cat.keywords }}"/>
+        <link rel="canonical" href="
+                {% if cat_obj.cat.canonical %}{{ cat_obj.cat.canonical }}{% else %}{{ st.siteUrl }}{{ request.path }}{% endif %}"/>
+        {% if page_obj.has_next %}
+            <link rel="next" href="{{ st.siteUrl }}{{ request.path }}?page={{ page_obj.next_page_number }}"/>
+        {% endif %}
+        <meta property="og:locale" content="fa_IR"/>
+        <meta property="og:type" content="object"/>
+        <meta property="og:title" content="{{ cat_obj.cat.meta_title }}"/>
+        <meta property="og:description" content="{{ cat_obj.cat.meta_description }}"/>
+        <meta property="og:url" content="https://jimboshop.ir{{ request.get_full_path }}"/>
+        <meta property="og:site_name" content="{{ st.brand_name }}"/>
+        {% if cat_obj.cat.image %}
+            <meta property="og:image" content="{{ cat_obj.cat.image.url }}"/>
+            <meta property="og:image:secure_url" content="{{ cat_obj.cat.image.url }}"/>
+            <meta property="og:image:width" content="148"/>
+            <meta property="og:image:height" content="148"/>
+        {% endif %}
+        <meta property="og:image:alt" content="{{ cat_obj.cat.meta_description }}"/>
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="twitter:description" content="{{ cat_obj.cat.meta_description }}"/>
+        <meta name="twitter:title" content="{{ cat_obj.cat.meta_title }}"/>
+        {% if image_url %}
+            <meta name="twitter:image" content="{{ cat_obj.cat.image.url }}"/>
+        {% endif %}
+    {% endif %}
+{% endblock %}

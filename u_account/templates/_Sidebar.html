@@ -1,0 +1,44 @@
+<!-- Sidebar-->
+{% load static %}
+{% url 'account:orders' as orders_link %}
+{% url 'account:edit_personal_info' as edit_personal_info %}
+
+<aside class="col-lg-4 col-md-5 pe-xl-4 mb-5">
+    <!-- Account nav-->
+    <div class="card card-body card-light border-0 shadow-sm pb-1 me-lg-1">
+        <div class="d-flex d-md-block d-lg-flex align-items-start pt-lg-2 mb-4"><img class="rounded-circle"
+                                                                                     src="{% if user_model.image %}{{ user_model.image.url }}{% else %}{% static 'img/avatars/02.png' %}{% endif %}"
+                                                                                     width="48"
+                                                                                     alt="{{ user_model }}">
+            <div class="pt-md-2 pt-lg-0 ps-3 ps-md-0 ps-lg-3">
+                <h2 class="fs-lg text-light mb-0 fw-500">{{ user_model }}</h2>
+                <ul class="list-unstyled fs-sm mt-3 mb-0">
+                    {% if user_model.mobile %}
+                        <li><a class="nav-link-light fw-normal" href="tel:3025550107"><i
+                                class="fi-phone opacity-60 me-2"></i>{{ user_model.mobile }}</a></li>
+                    {% endif %}
+                    <li><a class="nav-link-light fw-normal" href="mailto:robert_fox@email.com"><i
+                            class="fi-mail opacity-60 me-2"></i>{{ user_model.email }}</a></li>
+                </ul>
+            </div>
+        </div>
+        <a class="btn btn-primary btn-lg w-100 mb-3" href="{% url 'account:orders' %}">
+            سفارشات من</a><a class="btn btn-outline-light d-block d-md-none w-100 mb-3" href="#account-nav"
+                        data-bs-toggle="collapse"><i class="fi-align-justify me-2"></i>منو</a>
+        <div class="collapse d-md-block mt-3" id="account-nav">
+            <div class="card-nav">
+                <a class="card-nav-link{% if request.path == edit_personal_info %} active{% endif %}"
+                   href="{% url 'account:edit_personal_info' %}"><i
+                        class="fi-user me-2"></i>اطلاعات فردی</a>
+{#                <a class="card-nav-link{% if request.path == personal_info %} active{% endif %}"#}
+{#                   href="car-finder-account-security.html"><i#}
+{#                        class="fi-lock me-2"></i>گذرواژه و امنیتی</a>#}
+                <a class="card-nav-link{% if request.path == orders_link %} active{% endif %}"
+                   href="{% url 'account:orders' %}"><i
+                        class="fi-car me-2"></i>سفارشات من</a>
+                <a class="card-nav-link" onclick="logout()"><i
+                        class="fi-logout me-2"></i>خروج</a>
+            </div>
+        </div>
+    </div>
+</aside>

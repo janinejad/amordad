@@ -1,0 +1,79 @@
+{% extends 'Shared/_MainLayout.html' %}
+{% load static %}
+{% block content %}
+    <div class="container mt-5 pt-5">
+        <!-- Breadcrumb-->
+        <nav class="mb-3 pt-md-3" aria-label="Breadcrumb">
+            <ol class="breadcrumb breadcrumb-light">
+                <li class="breadcrumb-item"><a href="car-finder-home.html">خانه</a></li>
+                <li class="breadcrumb-item active" aria-current="page">درباره ما</li>
+            </ol>
+        </nav>
+    </div>
+    {{ page.content|safe }}
+    <!-- Latest news (Blog)-->
+    <section class="container pb-4 pb-sm-5 mb-2 mb-md-4">
+        <div class="d-sm-flex align-items-center justify-content-between mb-3 mb-sm-4 pb-sm-2">
+            <h2 class="h4 font-vazir text-light mb-2 mb-sm-0">در مجله ما بخوانید</h2><a
+                class="btn btn-link btn-light fw-normal px-0" href="{% url 'blog:blog' %}">لیست اخبار و مقالات<i
+                class="fi-arrow-long-left fs-sm mt-0 ps-1 ms-2"></i></a>
+        </div>
+        <div class="tns-carousel-wrapper tns-nav-outside tns-carousel-light">
+            <div class="tns-carousel-inner"
+                 data-carousel-options="{&quot;items&quot;: 3, &quot;controls&quot;: false, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1, &quot;gutter&quot;: 16},&quot;500&quot;:{&quot;items&quot;:2, &quot;gutter&quot;: 18},&quot;900&quot;:{&quot;items&quot;:3, &quot;gutter&quot;: 20}, &quot;1100&quot;:{&quot;gutter&quot;: 24}}}">
+                {% for p in posts %}
+                    <div>
+                        <article><a class="d-block rounded-3 overflow-hidden" href="{{ p.get_abs_url }}"><img
+                                class="d-block" src="{{ p.image.url }}" alt="Image"></a>
+                            <div class="py-3"><a class="fs-sm text-uppercase text-decoration-none"
+                                                 href="{{ p.category.get_abs_url }}">{{ p.category }}</a>
+                                <h3 class="text-light fs-base pt-1"><a class="nav-link"
+                                                                       href="{{ p.get_abs_url }}">{{ p.title }}</a></h3>
+                                <div class="pe-2">
+                                    <div class="d-flex fs-xs text-light opacity-60"><span class="me-2 ps-1"> <i
+                                            class="fi-calendar-alt ms-1"></i> {{ p.post_date }}</span><span> <i
+                                            class="fi-chat-circle ms-1"></i> {{ p.comment_counts }} نظر </span></div>
+                                </div>
+                                </a>
+                            </div>
+                        </article>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block js %}
+    <script src="{% static 'vendor/jquery-3.6.0.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/simplebar/dist/simplebar.min.js' %}"></script>
+    <script src="{% static 'vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js' %}"></script>
+    <script src="{% static 'vendor/tiny-slider/dist/min/tiny-slider.js' %}"></script>
+    <script src="{% static 'js/cruds/auth.js' %}"></script>
+    <!-- Main theme script-->
+    <script src="{% static 'js/theme.min.js' %}"></script>
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/tiny-slider/dist/tiny-slider.css' %}"/>
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/lightgallery.js/dist/css/lightgallery.min.css' %}"/>
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
+{% endblock %}
+{% block page_meta %}
+    <link rel="alternate" href="{{ st.siteUrl }}{{ page.get_abs_url }}" hrefLang="fa-IR" />
+    <title>{% if page.meta_title %}{{ page.meta_title }}{% else %}{{ page.title }}{% endif %}</title>
+    <meta name="description" content="{% if page.meta_desc %}{{ page.meta_desc }}{% else %}{{ page.title }}{% endif %}" />
+    <meta name="keywords" content="{% if page.keywords %}{{ page.keywords }}{% else %}{{ page.title }}{% endif %}" />
+    <link rel="canonical" href="{% if page.canonical %}{{ page.canonical }}{% else %}{{ st.siteUrl }}{{ page.get_abs_url }}{% endif %}" />
+    <meta property="og:locale" content="fa_IR" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="{% if page.meta_desc %}{{ page.meta_desc }}{% else %}{{ page.title }}{% endif %}" />
+    <meta property="og:description" content="{% if page.meta_desc %}{{ page.meta_desc }}{% else %}{{ page.title }}{% endif %}" />
+    <meta property="og:url" content="{{ st.siteUrl }}{{ page.get_abs_url }}" />
+    <meta property="og:site_name" content="{{ st.brand_name }}" />
+    <meta property="article:published_time" content="{{ page.created_at }}" />
+    <meta property="article:modified_time" content="{{ page.updated_at }}" />
+    <meta name="twitter:description" content="{% if page.meta_desc %}{{ page.meta_desc }}{% else %}{{ page.title }}{% endif %}" />
+    <meta name="twitter:title" content="{% if page.meta_desc %}{{ page.meta_desc }}{% else %}{{ page.title }}{% endif %}" />
+{% endblock %}

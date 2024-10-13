@@ -1,0 +1,174 @@
+{% extends 'Shared/_MainLayout.html' %}
+{% load static %}
+{% load paginator_tags %}
+{% block content %}
+    <div class="container pt-5 pb-lg-4 mt-5 mb-sm-2">
+        <!-- Breadcrumb-->
+        <nav class="mb-4 pt-md-3" aria-label="Breadcrumb">
+            <ol class="breadcrumb breadcrumb-light">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">خانه</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'account:edit_personal_info' %}">اکانت من</a></li>
+                <li class="breadcrumb-item active" aria-current="page">سفارشات من</li>
+            </ol>
+        </nav>
+        <!-- Page content-->
+        <div class="row">
+            <!-- Sidebar-->
+            {% include '_Sidebar.html' with user_model=user %}
+            <div class="col-lg-8 col-md-7 mb-5">
+                <h1 class="h4 font-vazir text-light">سفارشات من</h1>
+                <p class="text-light pt-1 mb-4">سفارشات ثبت شما شما در اینجا قابل نمایش می باشد.
+                    مشاهده است.</p>
+                <!-- Nav tabs-->
+                <ul class="nav nav-tabs nav-tabs-light flex-column flex-sm-row align-items-stretch align-items-sm-start border-bottom border-light mb-4"
+                    role="tablist">
+                    <li class="nav-item me-sm-3 mb-3">
+                        <form action="{% url 'account:orders' %}"
+                              method="get">
+                            <div class="d-flex flex-md-row flex-column align-items-md-center flex-grow-1 border-end-lg border-light ps-3 ps-md-2 pe-lg-4 me-lg-4">
+
+                                <label class="d-inline-block text-light me-sm-2 mb-md-0 mb-2 text-nowrap"
+                                       for="categories"><i class="fi-align-left mt-n1 me-2 align-middle opacity-70"></i>فیلتر</label>
+                                <select onchange="this.form.submit()" name="status"
+                                        class="form-select form-select-light ms-lg-2" id="categories">
+                                    <option value="">-- انتخاب کنید --</option>
+                                    <option{% if request.GET.status == "1" %} selected{% endif %} value="1">در انتظار
+                                        پرداخت
+                                    </option>
+                                    <option{% if request.GET.status == "3" %} selected{% endif %} value="3">پیش پرداخت
+                                    </option>
+                                    <option{% if request.GET.status == "2" %} selected{% endif %} value="2">پرداخت شده
+                                    </option>
+                                    <option{% if request.GET.status == "4" %} selected{% endif %} value="4">لغو شده
+                                    </option>
+                                </select>
+                            </div>
+                        </form>
+                    </li>
+                </ul>
+                <!-- Tabs content-->
+                <div class="tab-content pt-2">
+                    <!-- Reviews about you tab-->
+                    {% if page_obj %}
+                        <div class="tab-pane fade show active" id="reviews-about-you" role="tabpanel">
+                            {% for order in page_obj %}
+                                <div class="mb-4 pb-4 border-bottom border-light">
+                                    <div class="row">
+                                        <div class="col-12"><span class="fs-base opacity-70 text-light mb-0 fw-500">ش
+                                            س {{ order.id }}
+                                            - {{ order.jalali_order_date }}</span></div>
+                                        <div class="col-md-6 col-lg-6 col-sm-12 mt-4">
+                                            <div class="row">
+                                                <div class="col-md-6 col-lg-6 col-sm-12">
+                                                    <span class="text-warning">وضعیت:</span><span
+                                                        class="fs-base text-light mb-0 fw-500 ms-2">{{ order.get_status }}</span>
+                                                </div>
+                                                <div class="col-md-6 col-lg-6 col-sm-12">
+                                                    <span class="text-warning">مبلغ فاکتور:</span><span
+                                                        class="fs-base text-light mb-0 fw-500 ms-2">{{ order.total_item_amount_with_tax_ir }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-lg-6 col-sm-12 mt-4">
+                                            <a href="{% url 'account:order-detail' pk=order.id %}"
+                                               class="btn btn-outline-primary"
+                                               style="float: left!important;">جزئیات
+                                            </a>
+                                            {% if order.status_id in allowed_values %}
+                                                <a href="{% url 'account:invoice' order_id=order.id %}" target="_blank" class="btn btn-outline-primary"
+                                                        style="float: left!important;margin-left: 10px!important;">
+                                                    {% if order.status_id == '2' %}دریافت
+                                                        فاکتور{% elif order.status_id == '3' or order.status_id == '1' %}دریافت پیش
+                                                        فاکتور{% endif %}</a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <!-- Pagination-->
+                            <nav class="mt-2" aria-label="Reviews pagination">
+                                <ul class="pagination pagination-light">
+                                    {% if page_obj.has_previous %}
+                                        <li class="page-item"><a class="page-link" href="?page=
+
+                                                {{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
+                                                                 aria-label="Next"><i
+                                                class="fi-chevron-left"></i></a></li>
+                                    {% endif %}
+                                    {% get_proper_elided_page_range paginator page_obj.number as page_range %}
+                                    {% for page in page_range %}
+                                        {% if page == page_obj.number %}
+                                            <li class="page-item active d-none d-sm-block" aria-current="page"><span
+                                                    class="page-link">{{ page }}<span
+                                                    class="visually-hidden">(current)</span></span>
+                                            </li>
+                                        {% else %}
+                                            {% if page == paginator.ELLIPSIS %}
+                                                <li class="page-item d-none d-sm-block">
+                                                    <span>{{ paginator.ELLIPSIS }}</span></li>
+                                            {% else %}
+                                                <li class="page-item d-none d-sm-block"><a class="page-link"
+                                                                                           href="?page=
+                                                                                                   {{ page }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ page }}</a>
+                                                </li>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if page_obj.has_next %}
+                                        <li class="page-item"><a class="page-link" href="?page=
+                                                {{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
+                                                                 aria-label="Next"><i
+                                                class="fi-chevron-right"></i></a></li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-warning mb-3">
+                            <p>سفارشی یافت نشد!</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'vendor/jquery-3.6.0.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/simplebar/dist/simplebar.min.js' %}"></script>
+    <script src="{% static 'vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js' %}"></script>
+    <script src="{% static 'vendor/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.min.js' %}"></script>
+    <script src="{% static 'vendor/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js' %}"></script>
+    <script src="{% static 'vendor/filepond-plugin-image-crop/dist/filepond-plugin-image-crop.min.js' %}"></script>
+    <script src="{% static 'vendor/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.min.js' %}"></script>
+    <script src="{% static 'vendor/filepond-plugin-image-transform/dist/filepond-plugin-image-transform.min.js' %}"></script>
+    <script src="{% static 'vendor/filepond/dist/filepond.min.js' %}"></script>
+    <script src="{% static 'js/cruds/auth.js' %}"></script>
+    <!-- Main theme script-->
+    <script src="{% static 'js/theme.min.js' %}"></script>
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>
+    <link rel="stylesheet" media="screen"
+          href="{% static 'vendor/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css' %}"/>
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/filepond/dist/filepond.min.css' %}"/>
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
+{% endblock %}
+
+{% block js_code %}
+    <script>
+        $(document).ready(function () {
+            $('#isOfficial').change(function () {
+                if (this.checked) {
+                    $("#officialPart").removeClass('d-none');
+                } else {
+                    $("#officialPart").addClass('d-none');
+                }
+            });
+        });
+    </script>
+{% endblock %}
+
