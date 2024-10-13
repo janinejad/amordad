@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-+^gegx2#cemj#o%@j_i8&d1g90x0=8z4z=2fqy3c2vhiqk-r86
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['amordadsteel.runflare.run']
+ALLOWED_HOSTS = ['amordadsteel.runflare.run','127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
@@ -92,7 +92,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
+#
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
@@ -118,7 +118,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'adOt4NwaCM64cWQesnOl',
         'HOST': 'amordad-fei-service',
-        'PORT': '31367',
+        'PORT': '5432',
     }
 }
 
