@@ -2,10 +2,10 @@ from background_task import background
 
 from settings.models import Setting
 
-# SETTING = Setting.objects.first()
+SETTING = Setting.objects.first()
 cancel_time = 3600
-# if SETTING:
-#     cancel_time = SETTING.order_cancel_time
+if SETTING:
+    cancel_time = SETTING.order_cancel_time
 
 
 def subtract_from_stock(items):

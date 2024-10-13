@@ -100,6 +100,17 @@ WSGI_APPLICATION = 'config.wsgi.application'
 #     }
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'amordadvlv_db',
+#         'USER': 'postgres',
+#         'PASSWORD': 'adOt4NwaCM64cWQesnOl',
+#         'HOST': 'remote-asiatech.runflare.com',
+#         'PORT': '31367',
+#     }
+# }
+#
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -107,7 +118,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'adOt4NwaCM64cWQesnOl',
         'HOST': 'amordad-fei-service',
-        'PORT': '5432',
+        'PORT': '31367',
     }
 }
 
