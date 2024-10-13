@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-+^gegx2#cemj#o%@j_i8&d1g90x0=8z4z=2fqy3c2vhiqk-r86
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['amordadsteel.runflare.run']
 # Application definition
 
 INSTALLED_APPS = [
@@ -107,7 +107,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'adOt4NwaCM64cWQesnOl',
         'HOST': 'amordad-fei-service',
-        'PORT': '32218',
+        'PORT': '5432',
     }
 }
 
