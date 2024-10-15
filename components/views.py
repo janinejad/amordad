@@ -8,8 +8,7 @@ def get_slider(request, *args, slug=None, **kwargs):
     slides = []
     if slider:
         slides = slider.sliderslide_set.all()
-    print(slides)
     context = {
         'slides': slides,
     }
-    return render(request, "shared/_Slider.html", context)
+    return render(request, "Shared/_Slider.html", context)

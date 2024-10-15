@@ -164,7 +164,7 @@ class ProductsCats(models.Model):
     parent_id = models.ForeignKey('ProductsCats', null=True, blank=True, related_name='children',
                                   on_delete=models.DO_NOTHING,
                                   verbose_name='دسته بندی مادر')
-    experts = models.ManyToManyField(ProductExperts, null=True, blank=True, verbose_name='کارشناسان این دسته بندی')
+    experts = models.ManyToManyField(ProductExperts, verbose_name='کارشناسان این دسته بندی')
     depth = models.IntegerField(verbose_name='عمق گروه', default=1, null=True)
     Display_order = models.IntegerField(verbose_name='ترتیب نمایش', default=1)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ثبت')
