@@ -73,6 +73,8 @@ def login_m(request):
             return JsonResponse(get_errors(form), status=401)
         else:
             return JsonResponse(get_errors(form), status=401)
+    else:
+        return JsonResponse({'errors':'فرم ایجکس نیست'}, status=401)
 
 
 class ActivateAccountView(View):
