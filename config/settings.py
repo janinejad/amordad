@@ -100,27 +100,27 @@ WSGI_APPLICATION = 'config.wsgi.application'
 #     }
 # }
 #
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'amordadvlv_db',
-#         'USER': 'postgres',
-#         'PASSWORD': 'adOt4NwaCM64cWQesnOl',
-#         'HOST': 'remote-asiatech.runflare.com',
-#         'PORT': '31367',
-#     }
-# }
-#
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'amordadvlv_db',
         'USER': 'postgres',
         'PASSWORD': 'adOt4NwaCM64cWQesnOl',
-        'HOST': 'amordad-fei-service',
-        'PORT': '5432',
+        'HOST': 'remote-asiatech.runflare.com',
+        'PORT': '31367',
     }
 }
+#
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'amordadvlv_db',
+#         'USER': 'postgres',
+#         'PASSWORD': 'adOt4NwaCM64cWQesnOl',
+#         'HOST': 'amordad-fei-service',
+#         'PORT': '5432',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -200,7 +200,6 @@ EMAIL_HOST_USER = 'jimbojet2024@gmail.com'
 EMAIL_HOST_PASSWORD = 'lobm juvb oyca odlx'
 EMAIL_PORT = 587
 
-CSRF_COOKIE_SECURE = True
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 
 CKEDITOR_CONFIGS = {
@@ -237,3 +236,10 @@ JALALI_DATE_DEFAULTS = {
         }
     },
 }
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+X_FRAME_OPTIONS = 'ALLOW-FROM'
+
+
