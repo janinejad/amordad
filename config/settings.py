@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-+^gegx2#cemj#o%@j_i8&d1g90x0=8z4z=2fqy3c2vhiqk-r86
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['https://amordadsteel.runflare.run/','amordadsteel.runflare.run','127.0.0.1']
+ALLOWED_HOSTS = ['https://amordadsteel.runflare.run/','asangozin.com','https://asangozin.com','amordadsteel.runflare.run','127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'menus',
     'blog',
     'background_task',
-    # 'django.contrib.sites',
     'social_django',
     'jalali_date',
     'product',
