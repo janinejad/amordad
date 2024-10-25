@@ -22,7 +22,7 @@
                 <!-- Post meta-->
                 <div class="d-flex flex-wrap border-bottom border-light pb-3 mb-4 mt-3"><a
                         class="text-uppercase text-decoration-none border-end border-light pe-3 me-3 mb-2"
-                        href="#">مطلب</a>
+                        href="{{ data.post.category.get_abs_url }}">{{ data.post.category.title }}</a>
                     <div class="d-flex align-items-center text-light border-end border-light pe-3 me-3 mb-2"><i
                             class="fi-calendar-alt opacity-70 me-2"></i><span>{{ data.post.post_date }}</span></div>
                     <div class="d-flex align-items-center text-light border-end border-light pe-3 me-3 mb-2"><i
