@@ -20,13 +20,12 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ['status']
     search_fields = ('title',)
     form = PostForm
-    exclude = ('image_webp',)
 
     class Meta:
         model = Post
 
     def add_view(self, request, form_url='', extra_context=None):
-        self.exclude = ('user', 'status', 'review_reason', 'active', 'image_webp',)
+        self.exclude = ('user', 'status', 'review_reason', 'active',)
         return super(PostAdmin, self).add_view(request, form_url, extra_context)
 
     def has_change_permission(self, request, obj=None):
@@ -38,33 +37,14 @@ class PostAdmin(admin.ModelAdmin):
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
         if request.user.is_superuser or request.user.is_content_manager:
-            self.exclude = ('user', 'image_webp',)
+            self.exclude = ('user',)
         else:
-            self.exclude = ('user', 'status', 'review_reason', 'active', 'image_webp',)
+            self.exclude = ('user', 'status', 'review_reason', 'active',)
         return super(PostAdmin, self).change_view(request, object_id, form_url, extra_context)
 
     def save_model(self, request, obj, form, change):
         if getattr(obj, 'user', None) is None:
             obj.user = request.user
-        if change and 'image' in form.changed_data:
-            post = Post.objects.get(pk=obj.pk)
-            old_image = post.image
-            old_image.delete()
-
-            old_image_webp = post.image_webp
-            old_image_webp.delete()
-
-        if obj.image:
-            obj.image.save(
-                obj.image.name,
-                obj.image.file,
-                save=False,
-            )
-            obj.image_webp.save(
-                obj.image.name.replace(".jpg", ".webp"),
-                obj.image.file,
-                save=False,
-            )
         obj.save()
         super().save_model(request, obj, form, change)
 
@@ -78,34 +58,9 @@ class PostAdmin(admin.ModelAdmin):
 class PostCategoryAdmin(admin.ModelAdmin):
     list_display = ['__str__']
     form = PostCategoryForm
-    exclude = ['image_webp']
 
     class Meta:
         model = PostCategory
-
-    def save_model(self, request, obj, form, change):
-        if change and 'image' in form.changed_data:
-            product_cat = PostCategory.objects.get(pk=obj.pk)
-            old_image = product_cat.image
-            old_image.delete()
-
-            old_image_webp = product_cat.image_webp
-            old_image_webp.delete()
-
-        if obj.image:
-            obj.image.save(
-                obj.image.name,
-                obj.image.file,
-                save=False,
-            )
-            obj.image_webp.save(
-                obj.image.name.replace(".jpg", ".webp"),
-                obj.image.file,
-                save=False,
-            )
-
-        obj.save()
-        super().save_model(request, obj, form, change)
 
 
 @admin.register(Comments)
