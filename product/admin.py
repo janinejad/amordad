@@ -32,8 +32,6 @@ class ProductMainFeatureInline(admin.TabularInline):
 @admin_thumbnails.thumbnail('image')
 class ProductGalleryInline(admin.TabularInline):
     model = ProductGallery
-    readonly_fields = ('get_id',)
-    exclude = ['image_webp']
     extra = 1
     show_change_link = True
 
@@ -161,18 +159,6 @@ class ProductsCatsAdmin(ExportMixin, admin.ModelAdmin):
 
     class Meta:
         model = ProductsCats
-
-    def save_model(self, request, obj, form, change):
-        if change and 'image' in form.changed_data:
-            product_cat = ProductsCats.objects.get(pk=obj.pk)
-            old_image = product_cat.image
-            old_image.delete()
-
-            old_image_webp = product_cat.image_webp
-            old_image_webp.delete()
-
-        obj.save()
-        super().save_model(request, obj, form, change)
 
 
 class AttributeAdminResource(resources.ModelResource):

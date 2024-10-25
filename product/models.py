@@ -434,11 +434,8 @@ class Product(models.Model):
 class ProductGallery(models.Model):
     title = models.CharField(max_length=150, verbose_name='عنوان')
     image = ProcessedImageField(upload_to=upload_image_path, processors=[ResizeToFill(1120, 630)],
-                                format='JPEG', options={'quality': 85}, verbose_name='لینک تصویر jpeg',
+                                format='WEBP', options={'quality': 85}, verbose_name='لینک تصویر jpeg',
                                 blank=True, null=True)
-    image_webp = ProcessedImageField(upload_to=upload_image_path, processors=[ResizeToFill(1120, 630)],
-                                     format='WEBP', options={'quality': 85}, verbose_name='لینک تصویر webp',
-                                     blank=True, null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='عنوان محصول')
 
     class Meta:
@@ -452,16 +449,6 @@ class ProductGallery(models.Model):
         return self.id
 
     get_id.short_description = 'شناسه تصویر'
-
-    def save(self, *args, **kwargs):
-        if not self._state.adding:
-            old_image = self.__class__.objects.get(pk=self.pk).image
-            if self.image != old_image:
-                self.image_webp.delete()
-                self.image_webp.save(self.image.name, self.image.file, save=False)
-        else:
-            self.image_webp.save(self.image.name, self.image.file, save=False)
-        super().save(*args, **kwargs)
 
 
 class ProductInventoryManager(models.Manager):
