@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-+^gegx2#cemj#o%@j_i8&d1g90x0=8z4z=2fqy3c2vhiqk-r86
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://amordadsteel.runflare.run','asangozin.com','https://asangozin.com','amordadsteel.runflare.run','127.0.0.1']
+ALLOWED_HOSTS = ['https://amordadsteel.com','amordadsteel.com','asangozin.com','https://asangozin.com']
 # Application definition
 
 INSTALLED_APPS = [
@@ -109,7 +109,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 #         'PORT': '31367',
 #     }
 # }
-#
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
