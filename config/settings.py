@@ -237,7 +237,7 @@ JALALI_DATE_DEFAULTS = {
 }
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://asangozin.com',
+    'https://amordadsteel.com/',
     'https://amordadsteel.runflare.run'
 ]
 CSRF_COOKIE_SECURE = True
