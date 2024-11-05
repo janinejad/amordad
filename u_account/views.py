@@ -52,6 +52,9 @@ def login_m(request):
             user_email = form.cleaned_data.get('email')
             user_pass = form.cleaned_data.get('password')
             user = User.objects.filter(email__iexact=user_email).first()
+            if not user:
+                form.add_error('email', 'نام کاربری یا رمز عبور اشتباه است!')
+                return JsonResponse(get_errors(form), status=401)
             user.backend = 'django.contrib.auth.backends.ModelBackend'
             if user is not None:
                 if not user.is_active:
