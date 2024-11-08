@@ -20,7 +20,7 @@ from django.contrib.auth.views import LogoutView
 from django.urls import path, include,re_path
 from ajax_select import urls as ajax_select_urls
 from config import settings
-from config.views import home, header, footer, handle_410_error
+from config.views import home, header, footer, handle_410_error, header_js_code, footer_js_code
 
 app_name = 'amor'
 urlpatterns = [
@@ -33,6 +33,8 @@ urlpatterns = [
     path('', include('u_account.urls', namespace='account')),
     path('', include('product.urls', namespace='products')),
     path('', include('orders.urls', namespace='orders')),
+    path('header-js-codes', header_js_code, name='header_js_code'),
+    path('footer-js-codes', footer_js_code, name='footer_js_code'),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     re_path(r'^ajax_select/', include(ajax_select_urls)),
     path('header/', header, name='header'),

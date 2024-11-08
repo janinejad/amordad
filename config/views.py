@@ -5,7 +5,7 @@ from django.core.mail import send_mail
 from blog.models import Post
 from menus.models import ProductCatMenu, Menu
 from product.models import Product, ProductsCats
-from settings.models import Setting
+from settings.models import Setting, JsCode
 from u_account.forms import RegisterForm, LoginForm, ForgotPasswordForm
 
 
@@ -60,3 +60,17 @@ def footer(request):
 
 def handle_410_error(request):
     return render(request, '404.html', status=410)
+def header_js_code(request):
+    codes = JsCode.objects.get_header_tag_codes()
+    context = {
+        'codes': codes
+    }
+    return render(request, 'shared/_HeaderJsCodes.html', context)
+
+
+def footer_js_code(request):
+    codes = JsCode.objects.get_footer_tag_codes()
+    context = {
+        'codes': codes
+    }
+    return render(request, 'shared/_FooterJsCode.html', context)

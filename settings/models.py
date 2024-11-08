@@ -117,3 +117,41 @@ class Setting(models.Model):
 
     def get_order_cancel_time(self):
         return math.trunc(self.order_cancel_time / 60)
+
+
+class JsCodeManager(models.Manager):
+    def all(self):
+        return self.get_queryset().filter(status=True)
+
+    def get_trusted_symbols(self):
+        return self.get_queryset().filter(type="symbol", status=True)
+
+    def get_header_tag_codes(self):
+        return self.get_queryset().filter(location="header", type="tag", status=True)
+
+    def get_footer_tag_codes(self):
+        return self.get_queryset().filter(location="footer", type="tag", status=True)
+class JsCode(models.Model):
+    TYPE = (
+        ('symbol', 'نماد'),
+        ('tag', 'تگ'),
+    )
+    LOCATION = (
+        ('header', 'هدر'),
+        ('footer', 'فوتر'),
+    )
+    title = models.CharField(max_length=250, verbose_name="عنوان")
+    slug = models.SlugField(null=True, verbose_name='نامک')
+    code = models.TextField(blank=True, null=True, verbose_name="اسکریپت")
+    type = models.CharField(max_length=50, blank=True, null=True, choices=TYPE, verbose_name='نوع')
+    status = models.BooleanField(default=False, verbose_name='وضعیت')
+    location = models.CharField(max_length=50, blank=True, null=True, choices=LOCATION, verbose_name='جانمایی کدک')
+    location_order = models.IntegerField(default=1, verbose_name='ترتیب قرار گرفتن')
+    objects = JsCodeManager()
+
+    class Meta:
+        verbose_name_plural = 'کدکها'
+        verbose_name = 'کدک'
+
+    def __str__(self):
+        return self.title

@@ -116,6 +116,7 @@
     {% endblock %}
     {% block schema %}
     {% endblock %}
+    {% render_partial 'header_js_code' %}
 </head>
 <!-- Body-->
 <body class="bg-dark" dir="rtl">
@@ -139,5 +140,6 @@
 {% endblock %}
 {% block js_code %}
 {% endblock %}
+{% render_partial 'footer_js_code' %}
 </body>
 </html>
