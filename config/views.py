@@ -65,7 +65,7 @@ def header_js_code(request):
     context = {
         'codes': codes
     }
-    return render(request, 'shared/_HeaderJsCodes.html', context)
+    return render(request, 'Shared/_HeaderJsCodes.html', context)
 
 
 def footer_js_code(request):
@@ -73,4 +73,4 @@ def footer_js_code(request):
     context = {
         'codes': codes
     }
-    return render(request, 'shared/_FooterJsCode.html', context)
+    return render(request, 'Shared/_FooterJsCode.html', context)
