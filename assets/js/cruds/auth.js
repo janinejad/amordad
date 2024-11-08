@@ -19,10 +19,7 @@ $(document).on('submit', '#registerForm', function (event) {
         contentType: false,
         data: data,
         success: function (data) {
-            register_form.reset();
-            $("#registerFormBtn").removeAttr('disabled')
-            $('#signup-modal').modal('hide');
-            $('#signin-modal').modal('show');
+            window.location.href = '/'
         },
         error: function (response) {
             if (response.status === 401) {
