@@ -102,6 +102,7 @@ class Setting(models.Model):
     first_page_description = models.TextField(max_length=500, null=True, blank=True, verbose_name="توضیحات صفحه اول")
     whatsapp_link = models.URLField(max_length=500, null=True, blank=True, verbose_name="لینک واتس اپ")
     telegram_link = models.URLField(max_length=500, null=True, blank=True, verbose_name="لینک تلگرام")
+    instagram_link = models.URLField(max_length=500, null=True, blank=True, verbose_name="لینک اینستاگرام")
     twitter_link = models.URLField(max_length=500, null=True, blank=True, verbose_name="لینک توییتر")
     facebook_link = models.URLField(max_length=500, null=True, blank=True, verbose_name="لینک فیسبوک")
     about_us_page = models.ForeignKey(Page,null=True,related_name='about_us_page',blank=True,on_delete=models.SET_NULL,verbose_name='صفحه تمام با ما')
