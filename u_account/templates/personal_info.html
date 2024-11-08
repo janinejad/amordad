@@ -223,7 +223,8 @@
                                                 href="#official_postal_code-collapse"
                                                 data-bs-toggle="collapse"><i class="fi-edit"></i></a></div>
                                     </div>
-                                    <div class="collapse" id="official_postal_code-collapse" data-bs-parent="#officialPart">
+                                    <div class="collapse" id="official_postal_code-collapse"
+                                         data-bs-parent="#officialPart">
                                         {{ form.official_postal_code }}
                                     </div>
                                 </div>
@@ -251,7 +252,12 @@
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-12 col-sm-4 mb-4">
-                            {{ form.image }}
+                            <input class="file-uploader border-light bg-faded-light" name="image" type="file"
+                                   accept="image/png, image/jpeg"
+                                   data-label-idle="&lt;i class=&quot;d-inline-block fi-camera-plus fs-2 text-light text-muted mb-2&quot;&gt;&lt;/i&gt;&lt;br&gt;&lt;span class=&quot;text-light opacity-70&quot;&gt;تغییر تصویر&lt;/span&gt;"
+                                   data-style-panel-layout="compact" data-image-preview-height="160"
+                                   data-image-crop-aspect-ratio="1:1" data-image-resize-target-width="200"
+                                   data-image-resize-target-height="200">
                             <div class="pt-4 pb-2 py-lg-5">
                                 <h6 class="text-light mb-2 fw-500">چه کسی می تواند مشخصات من را ببیند؟</h6>
                                 <p class="fs-sm text-light opacity-70 mb-0">مشخصات شما خصوصی است

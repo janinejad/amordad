@@ -11,7 +11,7 @@ from django.views.generic import DetailView
 from weasyprint import HTML
 
 from orders.models import Order
-from settings.models import CompanyInfo, Financials
+from settings.models import CompanyInfo, Financials, Setting
 from u_account.forms import RegisterForm, LoginForm, ForgotPasswordForm, ResetPasswordForm, EditInfoForm
 from u_account.models import User
 from django.contrib.auth import login, logout
@@ -35,7 +35,8 @@ def register(request):
             instance.username = instance.email
             instance.save()
             user = User.objects.filter(id=instance.id).first()
-            send_email_to_user('فعالسازی حساب کاربری', user.email, {'user': user}, 'emails/activate_account.html')
+            st: Setting = Setting.objects.first()
+            send_email_to_user('فعالسازی حساب کاربری', user.email, {'user': user, 'st': st}, 'emails/activate_account.html')
             messages.success(request,
                              'ثبت نام با موفقیت انجام شد. جهت فعال سازی حساب خود بر روی لینک فعال سازی ارسال شده به ایمیلتان مراجعه نمایید.')
             return JsonResponse({}, status=200)
@@ -77,7 +78,7 @@ def login_m(request):
         else:
             return JsonResponse(get_errors(form), status=401)
     else:
-        return JsonResponse({'errors':'فرم ایجکس نیست'}, status=401)
+        return JsonResponse({'errors': 'فرم ایجکس نیست'}, status=401)
 
 
 class ActivateAccountView(View):
@@ -133,7 +134,9 @@ class ForgetPasswordView(View):
                 if user is not None:
                     user.email_active_code = get_random_string(72)
                     user.save()
-                    send_email_to_user('بازیابی کلمه عبور', user.email, {'user': user}, 'emails/forgot_password.html')
+                    st: Setting = Setting.objects.first()
+                    send_email_to_user('بازیابی کلمه عبور', user.email, {'user': user, 'st': st},
+                                       'emails/forgot_password.html')
                     messages.success(request,
                                      'کاربر گرامی لینک بازیابی کلمه عبور به ایمل شما ارسال گردید.')
                     return JsonResponse({}, status=200)
