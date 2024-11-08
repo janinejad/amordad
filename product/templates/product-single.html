@@ -42,12 +42,10 @@
                     <button class="btn btn-icon btn-translucent-light btn-xs rounded-circle ms-2 mb-sm-2" type="button"
                             data-bs-toggle="dropdown"><i class="fi-share"></i></button>
                     <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end my-1">
-                        <button class="dropdown-item" type="button"><i class="fi-facebook fs-base opacity-75 me-2"></i>فیسبوک
-                        </button>
-                        <button class="dropdown-item" type="button"><i class="fi-twitter fs-base opacity-75 me-2"></i>توییتر
-                        </button>
-                        <button class="dropdown-item" type="button"><i class="fi-instagram fs-base opacity-75 me-2"></i>اینستاگرام
-                        </button>
+                        <a class="dropdown-item" href="https://t.me/share/url?url={{ product.get_full_sharing_url }}&text={{ product.title }}"><i class="fi-telegram fs-base opacity-75 me-2"></i>تلگرام
+                        </a>
+                        <a class="dropdown-item" href="https://api.whatsapp.com/send/?phone&text={{ product.get_full_sharing_url }}"><i class="fi-whatsapp fs-base opacity-75 me-2"></i>واتس اپ
+                        </a>
                     </div>
                 </div>
             </div>

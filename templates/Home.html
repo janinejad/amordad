@@ -8,8 +8,10 @@
             <div class="row pt-lg-4 pt-xl-5">
                 <div class="col-sm-12 d-lg-none d-xl-none d-sm-block d-md-block"><br></div>
                 <div class="col-lg-4 col-md-5 pt-3 pt-md-4 pt-lg-5">
-                    <h1 class="h3 text-light pb-2 mb-4 ms-md-n5">{{ st.first_page_tag_line }}</h1>
-                    <p class="fs-lg text-light opacity-70 line-h18">{{ st.first_page_description }}</p>
+                    <div class="w-95">
+                        <h1 class="h3 text-light pb-2 mb-4 ms-md-n5">{{ st.first_page_tag_line }}</h1>
+                        <p class="fs-lg text-light opacity-70 line-h18">{{ st.first_page_description }}</p>
+                    </div>
                 </div>
                 <div class="col-lg-8 col-md-7 pt-md-5">
                     {% render_partial 'components:slider' slug='main-page' %}
@@ -111,11 +113,11 @@
         </div>
     </section>
     {{ st.main_page.content|safe }}
-{#    <section class="container pt-sm-1 mb-md-4">#}
-{#        <div class="d-sm-flex text-white align-items-center justify-content-between pb-sm-2">#}
-{#            #}
-{#        </div>#}
-{#    </section>#}
+    {#    <section class="container pt-sm-1 mb-md-4">#}
+    {#        <div class="d-sm-flex text-white align-items-center justify-content-between pb-sm-2">#}
+    {#            #}
+    {#        </div>#}
+    {#    </section>#}
     <section class="container pt-sm-5 pt-4 pb-3">
         <div class="d-sm-flex align-items-center justify-content-between mb-3 mb-sm-4 pb-2">
             <h2 class="h4 text-light mb-3 mb-sm-0 font-vazir">اخبار و مقالات</h2>
