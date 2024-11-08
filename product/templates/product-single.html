@@ -61,7 +61,7 @@
                                 class="tns-total-slides fs-6"></span></div>
                     </div>
                     <div class="tns-carousel-inner"
-                         data-carousel-options="{&quot;navAsThumbnails&quot;: true, &quot;navContainer&quot;: &quot;#thumbnails&quot;, &quot;gutter&quot;: 12, &quot;responsive&quot;: {&quot;0&quot;:{&quot;controls&quot;: false},&quot;500&quot;:{&quot;controls&quot;: true}}}">
+                         data-carousel-options="{&quot;navAsThumbnails&quot;: true, &quot;navContainer&quot;: &quot;#thumbnails&quot;, &quot;gutter&quot;: 12, &quot;autoplayTimeout&quot;: 2000,&quot;autoplay&quot;: true, &quot;responsive&quot;: {&quot;0&quot;:{&quot;controls&quot;: false},&quot;500&quot;:{&quot;controls&quot;: true}}}">
                         <div><img class="rounded-3" src="{{ product.image.url }}"
                                   alt="{{ product.title }}"></div>
                         {% for image in product.productgallery_set.all %}
@@ -77,12 +77,14 @@
                         <li class="tns-thumbnail"><img src="{{ image.image.url }}"
                                                        alt="{{ image.title }}"></li>
                     {% endfor %}
-                    <li class="tns-thumbnail"><a
-                            class="d-flex flex-column align-items-center justify-content-center w-100 h-100 bg-faded-light rounded text-light text-decoration-none"
-                            href="{{ product.video_link }}"
-                            data-bs-toggle="lightbox"><i
-                            class="fi-play-circle fs-5"></i><span class="opacity-70 mt-1 fs-sm">مشاهده ویدئو</span></a>
-                    </li>
+                    {% if product.video_link %}
+                        <li class="tns-thumbnail"><a
+                                class="d-flex flex-column align-items-center justify-content-center w-100 h-100 bg-faded-light rounded text-light text-decoration-none"
+                                href="{{ product.video_link }}"
+                                data-bs-toggle="lightbox"><i
+                                class="fi-play-circle fs-5"></i><span class="opacity-70 mt-1 fs-sm">مشاهده ویدئو</span></a>
+                        </li>
+                    {% endif %}
                 </ul>
                 <!-- Specs-->
                 <div class="py-3 mb-3">
@@ -344,6 +346,7 @@
           content="{% if product.meta_title %}{{ product.meta_title }}{% else %}{{ product.title }}{% endif %}"/>
     <meta property="og:description" content="
 
+
             {% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{{ SST.setting.brand_name }}{% endif %}"/>
     <meta property="og:url" content="{{ product.get_full_sharing_url }}"/>
     <meta property="article:modified_time" content="{{ product.updated_at_f }}"/>
@@ -353,9 +356,11 @@
     <meta property="og:image:width" content="1120"/>
     <meta property="og:image:height" content="630"/>
     <meta property="og:image:alt" content="
+
             {% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{{ SST.setting.brand_name }}{% endif %}"/>
     <meta name="twitter:card" content="summary_large_image"/>
     <meta name="twitter:description" content="
+
             {% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{{ SST.setting.brand_name }}{% endif %}"/>
     <meta name="twitter:title"
           content="{% if product.meta_title %}{{ product.meta_title }}{% else %}{{ product.title }}{% endif %}"/>

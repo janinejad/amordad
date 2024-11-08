@@ -3,7 +3,7 @@
     <hr>
     <p>کاربر گرامی ، جهت فعالسازی حساب کاربری خود در سایت امرداد، روی لینک زیر کلیک نمایید.</p>
     <p>
-        <a href="http://localhost:8000{% url 'account:activate_account' activation_code=user.email_active_code %}">فعالسازی
+        <a href="{{st.siteUrl }}{% url 'account:activate_account' activation_code=user.email_active_code %}">فعالسازی
             حساب کاربری</a>
     </p>
 </div>
