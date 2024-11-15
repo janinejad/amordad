@@ -74,6 +74,44 @@
                                         {{ form.tel_no }}
                                     </div>
                                 </div>
+                              <!-- National code-->
+                                <div class="border-bottom border-light pb-3 mb-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="pe-2 opacity-70">
+                                            <label class="form-label fw-bold text-light">کد ملی<span
+                                                    class="text-danger">*</span></label>
+                                            <div id="edit_info_err_national_code" class="invalid-feedback"></div>
+                                            <div class="text-light" id="national_code-value">
+                                                {% if form.national_code.value %}{{ form.national_code.value }}{% else %}مشخص نشده
+                                                    است!{% endif %}</div>
+                                        </div>
+                                        <div class="me-n3" data-bs-toggle="tooltip" title="ویرایش"><a
+                                                class="nav-link nav-link-light py-0" href="#national_code-collapse"
+                                                data-bs-toggle="collapse"><i class="fi-edit"></i></a></div>
+                                    </div>
+                                    <div class="collapse" id="national_code-collapse" data-bs-parent="#personal-info">
+                                        {{ form.national_code }}
+                                    </div>
+                                </div>
+                                <!-- Postal code-->
+                                <div class="border-bottom border-light pb-3 mb-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="pe-2 opacity-70">
+                                            <label class="form-label fw-bold text-light">کد پستی<span
+                                                    class="text-danger">*</span></label>
+                                            <div id="edit_info_err_postal_code" class="invalid-feedback"></div>
+                                            <div class="text-light" id="postal_code-value">
+                                                {% if form.postal_code.value %}{{ form.postal_code.value }}{% else %}مشخص نشده
+                                                    است!{% endif %}</div>
+                                        </div>
+                                        <div class="me-n3" data-bs-toggle="tooltip" title="ویرایش"><a
+                                                class="nav-link nav-link-light py-0" href="#postal_code-collapse"
+                                                data-bs-toggle="collapse"><i class="fi-edit"></i></a></div>
+                                    </div>
+                                    <div class="collapse" id="postal_code-collapse" data-bs-parent="#personal-info">
+                                        {{ form.postal_code }}
+                                    </div>
+                                </div>
                                 <!-- Address-->
                                 <div>
                                     <div class="d-flex align-items-center justify-content-between">

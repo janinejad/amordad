@@ -105,8 +105,11 @@ class Setting(models.Model):
     instagram_link = models.URLField(max_length=500, null=True, blank=True, verbose_name="لینک اینستاگرام")
     twitter_link = models.URLField(max_length=500, null=True, blank=True, verbose_name="لینک توییتر")
     facebook_link = models.URLField(max_length=500, null=True, blank=True, verbose_name="لینک فیسبوک")
-    about_us_page = models.ForeignKey(Page,null=True,related_name='about_us_page',blank=True,on_delete=models.SET_NULL,verbose_name='صفحه تمام با ما')
+    about_us_page = models.ForeignKey(Page,null=True,related_name='about_us_page',blank=True,on_delete=models.SET_NULL,verbose_name='صفحه تماس با ما')
     main_page = models.ForeignKey(Page,null=True,related_name='main_page',blank=True,on_delete=models.SET_NULL,verbose_name='صفحه اصلی')
+    meta_title = models.CharField(max_length=600, null=True, blank=True, verbose_name='عنوان سئو صفحه اصلی')
+    meta_desc = models.CharField(max_length=600, null=True, blank=True, verbose_name='توضیحات سئو صفحه اصلی')
+    keywords = models.TextField(max_length=600, null=True, blank=True, verbose_name='کلمات کلیدی صفحه اصلی')
 
     def __str__(self):
         return "تنظیمات عمومی"

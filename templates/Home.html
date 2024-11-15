@@ -172,3 +172,16 @@
     <!-- Main Theme Styles + Bootstrap-->
     <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
 {% endblock %}
+{% block page_meta %}
+    <link rel="alternate" href="{{ st.siteUrl }}" hrefLang="fa-IR" />
+    <title>{{ st.meta_title }}</title>
+    <meta name="description" content="{{ st.meta_desc }}" />
+    <meta name="keywords" content="{{ st.keywords }}" />
+    <meta property="og:locale" content="fa_IR" />
+    <meta property="og:title" content="{{ st.meta_title }}" />
+    <meta property="og:description" content="{{ st.meta_desc }}" />
+    <meta property="og:url" content="{{ st.siteUrl }}" />
+    <meta property="og:site_name" content="{{ st.brand_name }}" />
+    <meta name="twitter:description" content="{{ st.meta_desc }}" />
+    <meta name="twitter:title" content="{{ st.meta_desc }}" />
+{% endblock %}

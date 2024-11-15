@@ -47,13 +47,23 @@
                                 class="opacity-70">{{ st.address }}</span></p>
                     </div>
                 </div>
+                <div class="d-flex align-items-start mb-4 pb-md-3"><img class="me-3 flex-shrink-0"
+                                                                        src="{% static 'img/car-finder/icons/flag.svg' %}"
+                                                                        width="32" alt="ساعت کاری">
+                    <div>
+                        <h3 class="h6 mb-2 pb-1 text-light fw-normal">ساعت کاری</h3>
+                        <p class="mb-0 text-light"><span
+                                class="opacity-70">{{ st.work_time_text }}</span></p>
+                    </div>
+                </div>
             </div>
             <div class="col-md-6 offset-lg-2">
                 <!-- Contact form-->
                 <form method="post" class="needs-validation" novalidate>
-                {% csrf_token %}
+                    {% csrf_token %}
                     <div class="mb-4">
-                        <label class="form-label text-light" for="c-name">نام و نام خانوادگی<span class="text-danger">*</span></label>
+                        <label class="form-label text-light" for="c-name">نام و نام خانوادگی<span
+                                class="text-danger">*</span></label>
                         {{ form.name }}
                         {% if form.name.errors %}
                             <div class="invalid-feedback d-block">
@@ -75,7 +85,8 @@
                         {% endif %}
                     </div>
                     <div class="mb-4">
-                        <label class="form-label text-light" for="c-subject">عنوان<span class="text-danger">*</span></label>
+                        <label class="form-label text-light" for="c-subject">عنوان<span
+                                class="text-danger">*</span></label>
                         {{ form.title }}
                         {% if form.title.errors %}
                             <div class="invalid-feedback d-block">
@@ -86,7 +97,8 @@
                         {% endif %}
                     </div>
                     <div class="mb-4">
-                        <label class="form-label text-light" for="c-message">متن درخواست<span class="text-danger">*</span></label>
+                        <label class="form-label text-light" for="c-message">متن درخواست<span
+                                class="text-danger">*</span></label>
                         {{ form.text }}
                         {% if form.text.errors %}
                             <div class="invalid-feedback d-block">
@@ -121,16 +133,22 @@
     <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
 {% endblock %}
 {% block page_meta %}
-    <link rel="alternate" href="{{ st.siteUrl }}/contact-us/" hrefLang="fa-IR" />
+    <link rel="alternate" href="{{ st.siteUrl }}/contact-us/" hrefLang="fa-IR"/>
     <title> {{ st.brand_name }}تماس با </title>
-    <meta name="description" content="شما عزیزان می توانید همه روزه با راه های ارتباطی مانند شماره تماس و ایمیل با ما در تماس باشید." />
-    <meta name="keywords" content="تماس با {{ st.brand_name }}, شماره تماس {{ st.brand_name }}, ایمیل {{ st.brand_name }}" />
-    <meta property="og:locale" content="fa_IR" />
-    <meta property="og:type" content="article" />
-    <meta property="og:title" content="شما عزیزان می توانید همه روزه با راه های ارتباطی مانند شماره تماس و ایمیل با ما در تماس باشید." />
-    <meta property="og:description" content="شما عزیزان می توانید همه روزه با راه های ارتباطی مانند شماره تماس و ایمیل با ما در تماس باشید." />
-    <meta property="og:url" content="{{ st.siteUrl }}/contact-us/" />
-    <meta property="og:site_name" content="{{ st.brand_name }}" />
-    <meta name="twitter:description" content="شما عزیزان می توانید همه روزه با راه های ارتباطی مانند شماره تماس و ایمیل با ما در تماس باشید." />
-    <meta name="twitter:title" content="شما عزیزان می توانید همه روزه با راه های ارتباطی مانند شماره تماس و ایمیل با ما در تماس باشید." />
+    <meta name="description"
+          content="شما عزیزان می توانید همه روزه با راه های ارتباطی مانند شماره تماس و ایمیل با ما در تماس باشید."/>
+    <meta name="keywords"
+          content="تماس با {{ st.brand_name }}, شماره تماس {{ st.brand_name }}, ایمیل {{ st.brand_name }}"/>
+    <meta property="og:locale" content="fa_IR"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:title"
+          content="شما عزیزان می توانید همه روزه با راه های ارتباطی مانند شماره تماس و ایمیل با ما در تماس باشید."/>
+    <meta property="og:description"
+          content="شما عزیزان می توانید همه روزه با راه های ارتباطی مانند شماره تماس و ایمیل با ما در تماس باشید."/>
+    <meta property="og:url" content="{{ st.siteUrl }}/contact-us/"/>
+    <meta property="og:site_name" content="{{ st.brand_name }}"/>
+    <meta name="twitter:description"
+          content="شما عزیزان می توانید همه روزه با راه های ارتباطی مانند شماره تماس و ایمیل با ما در تماس باشید."/>
+    <meta name="twitter:title"
+          content="شما عزیزان می توانید همه روزه با راه های ارتباطی مانند شماره تماس و ایمیل با ما در تماس باشید."/>
 {% endblock %}

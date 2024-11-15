@@ -76,9 +76,9 @@
                             <h2 class="h4 text-light mb-4 mb-sm-5">درسایت ما با اطمینان ثبت نام کنید.</h2>
                             <ul class="list-unstyled mb-4 mb-sm-5">
                                 <li class="d-flex mb-2"><i class="fi-check-circle text-primary mt-1 me-2"></i><span
-                                        class="text-light">ثبت و بروزرسانی آگهی</span></li>
+                                        class="text-light">ثبت سفارش</span></li>
                                 <li class="d-flex mb-2"><i class="fi-check-circle text-primary mt-1 me-2"></i><span
-                                        class="text-light">مدیریت لیست علاقه مندی ها</span></li>
+                                        class="text-light">اخبار و مقالات</span></li>
                                 <li class="d-flex mb-0"><i class="fi-check-circle text-primary mt-1 me-2"></i><span
                                         class="text-light">ثبت نظر</span></li>
                             </ul>
@@ -89,6 +89,10 @@
                                     class="text-light" href="#signin-modal" data-bs-toggle="modal"
                                     data-bs-dismiss="modal">ورود
                                 به حساب کاربری</a></div>
+                            <div class="d-sm-none d-md-block d-lg-block">
+                                <br>
+                            <br><br><br><br><br><br><br><br><br>
+                            </div>
                         </div>
                         <div class="col-md-6 px-4 pt-2 pb-4 px-sm-5 pb-sm-5 pt-md-5">
                             <form class="needs-validation" method="post" id="registerForm" autocomplete="off"
@@ -128,6 +132,12 @@
                                         آدرس پستی</label>
                                     {{ register_form.personal_address }}
                                     <div id="err_personal_address" class="invalid-feedback"></div>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label text-light" for="{{ register_form.postal_code.auto_id }}">
+                                        کد پستی</label>
+                                    {{ register_form.postal_code }}
+                                    <div id="err_postal_code" class="invalid-feedback"></div>
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label text-light" for="{{ register_form.password.auto_id }}">رمز

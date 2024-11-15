@@ -50,6 +50,11 @@
                 <div class="tab-content pt-2">
                     <!-- Reviews about you tab-->
                     {% if page_obj %}
+                        {% if not user.info_is_complete %}
+                            <div class="alert alert-danger mb-3">
+                             <p>جهت رویت فاکتور های فروش ابتدا اطلاعات حساب کاربری خود را کامل فرمایید!</p>
+                            </div>
+                        {% endif %}
                         <div class="tab-pane fade show active" id="reviews-about-you" role="tabpanel">
                             {% for order in page_obj %}
                                 <div class="mb-4 pb-4 border-bottom border-light">
@@ -74,7 +79,7 @@
                                                class="btn btn-outline-primary"
                                                style="float: left!important;">جزئیات
                                             </a>
-                                            {% if order.status_id in allowed_values %}
+                                            {% if order.status_id in allowed_values and user.info_is_complete %}
                                                 <a href="{% url 'account:invoice' order_id=order.id %}" target="_blank" class="btn btn-outline-primary"
                                                         style="float: left!important;margin-left: 10px!important;">
                                                     {% if order.status_id == '2' %}دریافت

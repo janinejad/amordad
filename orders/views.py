@@ -29,6 +29,9 @@ class AddToCartView(View):
         form = CartForm(request.POST)
         if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
             if form.is_valid():
+                if not request.user.info_is_complete():
+                    form.add_error('variant_count', 'جهت ادامه ثبت سفارش ابتدا اطلاعات فردی یا حقوقی را در پروفایل خود کامل نمایید!')
+                    return JsonResponse(get_errors(form), status=400)
                 order = Order.objects.filter(customer=request.user, status_id=0).first()
                 if order is None:
                     order = Order.objects.create(customer=request.user, status_id=0)
@@ -117,6 +120,7 @@ def complete_shopping(request):
         messages.error(request,
                        'شما می بایست ابتدا وارد حساب کاربری خود شوید!')
         return redirect(reverse('home'))
+
     user = User.objects.filter(id=user.id).first()
     order : Order = Order.objects.filter(customer=request.user, status_id=0).first()
     if order:

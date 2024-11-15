@@ -14,7 +14,7 @@ class RegisterForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email', 'password', 'password2', 'agree_to_terms', 'mobile',
-                  'national_code', 'personal_address']
+                  'national_code', 'personal_address', 'postal_code']
         widgets = {
             'first_name': forms.TextInput(
                 attrs={'class': 'form-control form-control-light', 'id': 'signup-name', 'required': 'required',
@@ -32,6 +32,9 @@ class RegisterForm(forms.ModelForm):
             'national_code': forms.TextInput(
                 attrs={'class': 'form-control form-control-light', 'required': 'required',
                        'placeholder': 'کد ملی'}),
+            'postal_code': forms.TextInput(
+                attrs={'class': 'form-control form-control-light', 'required': 'required',
+                       'placeholder': 'کد پستی'}),
             'personal_address': forms.Textarea(
                 attrs={'class': 'form-control form-control-light', 'required': 'required', 'rows': '5'}),
         }
@@ -55,6 +58,12 @@ class RegisterForm(forms.ModelForm):
         if len(first_name) == 0:
             raise forms.ValidationError('نام خود را وارد نمایید.')
         return first_name
+
+    def clean_postal_code(self):
+        postal_code = self.cleaned_data.get("postal_code")
+        if len(postal_code) == 0:
+            raise forms.ValidationError('کد پستی را وارد نمایید.')
+        return postal_code
 
     def clean_last_name(self):
         last_name = self.cleaned_data.get("last_name")
@@ -80,8 +89,7 @@ class EditInfoForm(forms.ModelForm):
         model = User
         fields = ['first_name', 'last_name', 'tel_no', 'personal_address', 'is_official', 'image',
                   'organization_name', 'firm_no', 'firm_national_id', 'firm_economical_no', 'official_address',
-                  'official_postal_code'
-            , 'firm_tel_no']
+                  'official_postal_code', 'national_code', 'firm_tel_no', 'postal_code']
         widgets = {
             'first_name': forms.TextInput(
                 attrs={'class': 'form-control form-control-light mt-3', 'data-bs-binded-element': '#name-value',
@@ -92,9 +100,16 @@ class EditInfoForm(forms.ModelForm):
             'tel_no': forms.TextInput(
                 attrs={'class': 'form-control form-control-light mt-3', 'data-bs-binded-element': '#phone-value',
                        'data-bs-unset-value': 'مشخص نشده است'}),
+            'postal_code': forms.TextInput(
+                attrs={'class': 'form-control form-control-light mt-3', 'data-bs-binded-element': '#postal_code-value',
+                       'data-bs-unset-value': 'مشخص نشده است'}),
             'personal_address': forms.Textarea(
                 attrs={'class': 'form-control form-control-light mt-3', 'data-bs-binded-element': '#address-value',
                        'data-bs-unset-value': 'مشخص نشده است', 'rows': '5'}),
+            'national_code': forms.TextInput(
+                attrs={'class': 'form-control form-control-light mt-3',
+                       'data-bs-binded-element': '#national_code-value',
+                       'data-bs-unset-value': 'مشخص نشده است'}),
             'organization_name': forms.TextInput(
                 attrs={'class': 'form-control form-control-light mt-3',
                        'data-bs-binded-element': '#organization-name-value',
@@ -186,6 +201,12 @@ class EditInfoForm(forms.ModelForm):
                 raise forms.ValidationError('شماره تماس را وارد نمایید.')
         return firm_tel_no
 
+    def clean_postal_code(self):
+        postal_code = self.cleaned_data.get("postal_code")
+        if len(postal_code) == 0:
+            raise forms.ValidationError('کد پستی را وارد نمایید.')
+        return postal_code
+
     def clean_firm_national_id(self):
         print("clean_firm_national_id")
         is_official = self.cleaned_data.get("is_official")
@@ -212,6 +233,12 @@ class EditInfoForm(forms.ModelForm):
             if image.file.size > 1024000:
                 raise forms.ValidationError('سایز تصویر نباید بیشت از یک مگا بایت باشد.')
         return image
+
+    def clean_national_code(self):
+        national_id = self.cleaned_data.get("national_code")
+        if not is_valid_national_code(national_id):
+            raise forms.ValidationError(message='کد ملی وارد شده معتبر نمی باشد.')
+        return self.cleaned_data['national_code']
 
 
 class LoginForm(forms.Form):
