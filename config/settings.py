@@ -98,17 +98,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-#
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'amordadvlv_db',
-#         'USER': 'postgres',
-#         'PASSWORD': 'adOt4NwaCM64cWQesnOl',
-#         'HOST': 'remote-asiatech.runflare.com',
-#         'PORT': '31367',
-#     }
-# }
 
 DATABASES = {
     'default': {
@@ -116,10 +105,21 @@ DATABASES = {
         'NAME': 'amordadvlv_db',
         'USER': 'postgres',
         'PASSWORD': 'adOt4NwaCM64cWQesnOl',
-        'HOST': 'amordad-fei-service',
-        'PORT': '5432',
+        'HOST': 'remote-asiatech.runflare.com',
+        'PORT': '31367',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'amordadvlv_db',
+#         'USER': 'postgres',
+#         'PASSWORD': 'adOt4NwaCM64cWQesnOl',
+#         'HOST': 'amordad-fei-service',
+#         'PORT': '5432',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

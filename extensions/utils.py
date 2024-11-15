@@ -32,3 +32,34 @@ def unique_slug_generator(instance, new_slug=None):
         )
         return unique_slug_generator(instance, new_slug=new_slug)
     return slug
+
+def is_valid_national_code(code):
+    national_code = ""
+    if not code:
+        return False
+    if not code.isnumeric():
+        return False
+    if len(code) == 10:
+        national_code = code
+    else:
+        return False
+    division = 0
+    for i in range(len(national_code) - 1):
+        division += int(national_code[i])
+    if division / 9 == int(national_code[9]):
+        return False
+    total = (int(national_code[8]) * 2) + (int(national_code[7]) * 3) + (int(national_code[6]) * 4) + (
+            int(national_code[5]) * 5) + (int(national_code[4]) * 6) + (int(national_code[3]) * 7) + (
+                    int(national_code[2]) * 8) + (
+                    int(national_code[1]) * 9) + (int(national_code[0]) * 10)
+    mod = total % 11
+    if mod < 2:
+        if mod == int(national_code[9]):
+            return True
+        else:
+            return False
+    elif mod >= 2:
+        if 11 - mod == int(national_code[9]):
+            return True
+        else:
+            return False

@@ -33,15 +33,16 @@ class User(AbstractUser):
     otp_create_time = models.DateTimeField(auto_now=True)
     tel_no = models.CharField(max_length=12, null=True, blank=True, verbose_name="شماره تلفن")
     send_news = models.BooleanField(default=True, verbose_name='دریافت خبر نامه')
-    personal_address = models.CharField(null=True, blank=True,max_length=1000, verbose_name='آدرس منزل')
+    personal_address = models.TextField(null=True, blank=True,max_length=1000, verbose_name='آدرس منزل')
     is_official = models.BooleanField(default=False,verbose_name='کاربر شخصیت حقوقی است')
+    national_code = models.CharField(max_length=10, null=True, blank=True, verbose_name="کد ملی")
     has_order_invoice = models.BooleanField(default=False,verbose_name='نمایش فاکتور مشتریان')
     organization_name = models.CharField(max_length=60, null=True, blank=True, verbose_name='نام سازمان')
     firm_national_id = models.CharField(max_length=11, null=True, blank=True, verbose_name='شناسه ملی شرکت')
     firm_economical_no = models.CharField(max_length=11, null=True, blank=True, verbose_name='شناسه ملی شرکت')
     firm_no = models.CharField(max_length=150, null=True, blank=True, verbose_name='شماره ثبت')
     official_postal_code = models.CharField(max_length=10, null=True, blank=True, verbose_name='کد پستی')
-    official_address = models.CharField(null=True, blank=True,max_length=1000, verbose_name='آدرس حقوقی')
+    official_address = models.TextField(null=True, blank=True,max_length=1000, verbose_name='آدرس حقوقی')
     firm_tel_no = models.CharField(max_length=12, null=True, blank=True, verbose_name="شماره تماس حقوقی")
 
     class Meta:
@@ -54,6 +55,11 @@ class User(AbstractUser):
             return self.get_full_name()
         else:
             return self.email
+    def info_is_complete(self):
+        if self.firm_national_id or self.national_code:
+            return True
+        else:
+            return False
 
 
 @receiver(pre_save, sender=UserSocialAuth)

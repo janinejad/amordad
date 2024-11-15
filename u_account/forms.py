@@ -1,4 +1,6 @@
 from django import forms
+
+from extensions.utils import is_valid_national_code
 from .models import User
 from django.core import validators
 
@@ -11,7 +13,8 @@ class RegisterForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email', 'password', 'password2', 'agree_to_terms', 'mobile']
+        fields = ['first_name', 'last_name', 'email', 'password', 'password2', 'agree_to_terms', 'mobile',
+                  'national_code', 'personal_address']
         widgets = {
             'first_name': forms.TextInput(
                 attrs={'class': 'form-control form-control-light', 'id': 'signup-name', 'required': 'required',
@@ -26,6 +29,11 @@ class RegisterForm(forms.ModelForm):
                 attrs={'class': 'form-control form-control-light', 'required': 'required', 'placeholder': 'ایمیل'}),
             'password': forms.PasswordInput(
                 attrs={'class': 'form-control form-control-light', 'required': 'required', 'minlength': '8'}),
+            'national_code': forms.TextInput(
+                attrs={'class': 'form-control form-control-light', 'required': 'required',
+                       'placeholder': 'کد ملی'}),
+            'personal_address': forms.Textarea(
+                attrs={'class': 'form-control form-control-light', 'required': 'required', 'rows': '5'}),
         }
 
     def clean_email(self):
@@ -59,6 +67,12 @@ class RegisterForm(forms.ModelForm):
         if not agree_to_terms:
             raise forms.ValidationError('لطفا جهت ثبت نام در سایت قوانین را بپذیرید.')
         return agree_to_terms
+
+    def clean_national_code(self):
+        national_id = self.cleaned_data.get("national_code")
+        if not is_valid_national_code(national_id):
+            raise forms.ValidationError(message='کد ملی وارد شده معتبر نمی باشد.')
+        return self.cleaned_data['national_code']
 
 
 class EditInfoForm(forms.ModelForm):

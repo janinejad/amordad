@@ -118,6 +118,18 @@
                                     <div id="err_email" class="invalid-feedback"></div>
                                 </div>
                                 <div class="mb-4">
+                                    <label class="form-label text-light" for="{{ register_form.national_code.auto_id }}">
+                                        کد ملی</label>
+                                    {{ register_form.national_code }}
+                                    <div id="err_last_name" class="invalid-feedback"></div>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label text-light" for="{{ register_form.personal_address.auto_id }}">
+                                        آدرس پستی</label>
+                                    {{ register_form.personal_address }}
+                                    <div id="err_last_name" class="invalid-feedback"></div>
+                                </div>
+                                <div class="mb-4">
                                     <label class="form-label text-light" for="{{ register_form.password.auto_id }}">رمز
                                         عبور <span
                                                 class='fs-sm opacity-50'>حداقل 8 کاراکتر</span></label>
