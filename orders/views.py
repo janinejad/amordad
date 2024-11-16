@@ -38,13 +38,13 @@ class AddToCartView(View):
                 cd = form.cleaned_data
                 item = order.orderitem.filter(variant=variant).first()
                 if item:
-                    if variant.in_basket >= cd['variant_count'] + item.product_count and variant.quantity >= cd['variant_count'] + item.product_count:
+                    if variant.in_basket >= cd['variant_count'] + item.product_count and variant.unit > 0 and variant.quantity >= cd['variant_count'] + item.product_count:
                         item.product_count += cd['variant_count']
+                        item.unit_qty = variant.unit
                     item.save()
                 else:
-                    if variant.in_basket >= cd['variant_count'] and variant.quantity >= cd['variant_count']:
-                        item = order.orderitem.create(variant=variant, product_price=variant.regular_price * variant.unit,
-                                               product_count=cd['variant_count'],item=variant.__str__())
+                    if variant.in_basket >= cd['variant_count'] and variant.quantity >= cd['variant_count'] and variant.unit > 0:
+                        item = order.orderitem.create(variant=variant,unit_qty=variant.unit, product_price=variant.price,supplement_price=variant.supplement_price,product_count=cd['variant_count'],item=variant.__str__())
                 return JsonResponse({}, status=200)
             else:
                 return JsonResponse(get_errors(form), status=400)
@@ -62,6 +62,7 @@ def update_cart(request, item_id):
         cd = cart_form.cleaned_data
         item = get_object_or_404(OrderItem, id=item_id)
         item.product_count = cd['variant_count']
+        item.unit_qty = item.variant.unit
         item.save()
     return redirect('orders:cart')
 
@@ -73,7 +74,7 @@ def cart_remove(request, variant_id):
         messages.error(request,
                        'شما می بایست ابتدا وارد حساب کاربری خود شوید!')
         return redirect(reverse('home'))
-    item = OrderItem.objects.filter(order__customer=user, id=variant_id,order__status_id=4).first()
+    item = OrderItem.objects.filter(order__customer=user, id=variant_id,order__status_id=0).first()
     order = item.order
     if item:
         item.delete()
@@ -126,6 +127,9 @@ def complete_shopping(request):
     if order:
         order.status_id = 1
         order.order_date = datetime.datetime.now()
+        for item in order.orderitem.all():
+            item.unit_qty = item.variant.unit
+            item.save()
 
         invoice : Invoice = Invoice.objects.filter(order=order).first()
         if not invoice:
@@ -146,7 +150,9 @@ def complete_shopping(request):
             invoice.first_name = user.first_name
             invoice.last_name = user.last_name
             invoice.mobile = user.mobile
-            invoice.national_code = user.firm_national_id
+            invoice.national_code = user.national_code
+            invoice.full_address = user.personal_address
+            invoice.postal_code = user.postal_code
         invoice.save()
         order.save()
         subtract_from_stock(order.orderitem.all())
@@ -178,10 +184,10 @@ def apply_order_changes(order):
             item.save()
             obj = f" تعداد آیتم  {item.variant} به دلیل بیشتر بودن از تعداد مجاز در سبد، به {item.product_count} عدد تغییر یافت."
             message.append(obj)
-        if item.variant.regular_price * item.variant.unit != item.product_price:
-            item.product_price = item.variant.regular_price * item.variant.unit
+        if item.variant.price != item.product_price:
+            item.product_price = item.variant.price * item.variant.unit
             item.save()
-            new_price = '{:,}'.format(math.trunc(item.variant.regular_price))
+            new_price = '{:,}'.format(math.trunc(item.variant.price))
             obj = f"قیمت {item.variant} شما در سبد به {new_price} تومان تغییر یافته است!"
             message.append(obj)
     return message

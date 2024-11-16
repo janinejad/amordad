@@ -159,8 +159,8 @@ def calculate_price(request, *args, id, qty, **kwargs):
             price = ''
             regular_price = ''
             if product:
-                price = '{:,} تومان'.format(math.trunc(product.regular_price * qty * product.unit))
-                regular_price = product.regular_price_ir()
+                price = '{:,} تومان'.format(math.trunc(product.price * qty * product.unit))
+                regular_price = product.price_ir()
             data = {
                 'unit_d': product.unit,
                 'unit': product.products.unit.title,

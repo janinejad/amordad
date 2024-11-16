@@ -145,9 +145,9 @@
                     <td style="padding: 5px 15px 5px 15px">
                         شماره تماس:
                         {% if order.invoice.is_official %}
-                            <span class="text-dark">{{ order.invoice.tel_no }}</span>
+                            <span class="text-dark">{% if order.invoice.tel_no  %}{{ order.invoice.tel_no }}{% endif %}</span>
                         {% else %}
-                            <span class="text-dark">{{ order.invoice.mobile }}</span>
+                            <span class="text-dark">{% if order.invoice.mobile %}{{ order.invoice.mobile }}{% endif %}</span>
                         {% endif %}
                     </td>
                     <td>
@@ -226,7 +226,7 @@
                             {{ i.variant }}
                         </td>
                         <td style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;">
-                            {{ i.product_count }}
+                            {{ i.p_count }}
                         </td>
                         <td style="border: 1px solid #202326;text-align: center;padding-top: 5px;padding-bottom: 5px;">
                             {{ i.variant.products.unit }}

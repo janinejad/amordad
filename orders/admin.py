@@ -50,7 +50,7 @@ class OrderAdmin(admin.ModelAdmin):
             )
         }),
     )
-    list_display = ['__str__', 'jalali_order_date']
+    list_display = ['__str__', 'jalali_order_date','get_order_invoice']
     readonly_fields = ['invoice_info',
                        'total_item_amount_before_discount_ir',
                        'total_discount_ir',

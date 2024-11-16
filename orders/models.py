@@ -46,7 +46,10 @@ class Order(models.Model):
 
     def __str__(self):
         return f"{self.customer.get_full_name()} - شماره سفارش {self.id}"
-
+    def get_order_invoice(self):
+        link = f"<a class='btn btn-default' href='{reverse('account:invoice', kwargs={'order_id': self.id})}'>" \
+               f"دریافت فاکتور </a>"
+        return mark_safe(link)
     class Meta:
         verbose_name_plural = "سفارشات"
         verbose_name = 'سفارش'
@@ -77,21 +80,21 @@ class Order(models.Model):
         return sum([i.amount for i in self.orderotherpayment_set.all()])
 
     def total_item_amount_before_discount(self):
-        return sum([(i.product_count * i.product_price) for i in self.orderitem.all_without_canceled()])
+        return sum([(i.product_count * i.unit_qty * i.product_price) for i in self.orderitem.all_without_canceled()])
 
     def total_item_amount_after_discount(self):
         return self.total_item_amount_before_discount() - sum(
-            [i.product_count * i.total_discount for i in self.orderitem.all_without_canceled()])
+            [i.product_count * i.total_discount * i.unit_qty for i in self.orderitem.all_without_canceled()])
 
     def total_discount(self):
         return sum(
-            [i.product_count * i.total_discount for i in self.orderitem.all_without_canceled()])
+            [i.product_count * i.unit_qty * i.total_discount for i in self.orderitem.all_without_canceled()])
 
     def total_item_amount_with_tax(self):
         return self.total_item_amount_after_discount() + self.total_tax()
 
     def total_tax(self):
-        return sum([(i.product_count * i.tax) for i in self.orderitem.all_without_canceled()])
+        return sum([(i.product_count * i.unit_qty * i.tax) for i in self.orderitem.all_without_canceled()])
 
     def get_unpaid(self):
         amount = self.total_item_amount_with_tax() - self.get_total_payed_amount()
@@ -149,6 +152,7 @@ class Order(models.Model):
     get_total_payed_amount_ir.short_description = "مبلغ پرداخت شده"
     get_unpaid_ir.short_description = "مانده فاکتور"
     jalali_order_date.short_description = "تاریخ سفارش"
+    get_order_invoice.short_description = "نمایش فاکتور"
 
 
 def order_pre_post_save_receiver(sender, instance, *args, **kwargs):
@@ -203,25 +207,29 @@ class OrderItem(models.Model):
     supplement_price = models.FloatField(default=0, verbose_name='قیمت تامین')
     tax = models.FloatField(default=0, verbose_name='مالیات بر ارزش افزوده')
     item = models.CharField(max_length=500, verbose_name='آیتم سفارش')
-    total_discount = models.FloatField(default=0, verbose_name='تخفیف')
+    total_discount = models.FloatField(default=0, verbose_name='تخفیف به هر واحد')
     product_count = models.PositiveIntegerField(verbose_name='تعداد')
+    unit_qty = models.PositiveIntegerField(default=0,verbose_name='تعداد واحد')
     is_not_canceled = models.BooleanField(default=True, verbose_name='وضعیت')
     objects = OrderItemManager()
 
+    def p_count(self):
+        return self.product_count * self.unit_qty
     def item_amount_before_discount(self):
-        return self.product_count * self.product_price
-
+        return self.p_count() * self.product_price
+    def unit_price_after_discount(self):
+        return self.product_price - self.total_discount
     def item_amount_after_discount(self):
-        return self.item_amount_before_discount() - (self.product_count * self.total_discount)
+        return self.item_amount_before_discount() - (self.p_count() * self.total_discount)
 
     def discount(self):
-        return self.product_count * self.total_discount
+        return self.p_count() * self.total_discount
 
     def item_amount_with_tax(self):
         return self.item_amount_after_discount() + self.item_tax()
 
     def item_tax(self):
-        return self.product_count * self.tax
+        return self.p_count() * self.tax
 
     def item_amount_before_discount_ir(self):
         return '{:,} تومان'.format(math.trunc(self.item_amount_before_discount()))
@@ -268,7 +276,7 @@ class OrderItem(models.Model):
         return str(self.variant)
 
     def item_price(self):
-        amount = self.product_count * self.product_price
+        amount = self.p_count() * self.product_price
         return amount
 
     def order_date_ir(self):
@@ -280,7 +288,9 @@ class OrderItem(models.Model):
 
 def order_item_pre_post_save_receiver(sender, instance, *args, **kwargs):
     instance.item = instance.variant.__str__()
-    instance.tax = (instance.variant.regular_price - instance.total_discount) * (instance.order.tax / 100)
+    if instance.product_price and instance.product_price > 0:
+        instance.tax = instance.unit_price_after_discount() * (instance.order.tax / 100)
+
     if instance.order.status_id == 0:
         instance.supplement_price = instance.variant.supplement_price
 

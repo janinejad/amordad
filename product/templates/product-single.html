@@ -20,7 +20,7 @@
                 <div class="d-md-none">
                     <div class="d-flex align-items-center mb-3">
                         <div class="h3 mb-0 text-light">قیمت <span
-                                class="regPrice">{{ product.get_default_variant.regular_price_ir }}</span></div>
+                                class="regPrice">{{ product.get_default_variant.price_ir }}</span></div>
                         <div class="text-nowrap ps-3"><span
                                 class="badge {{ product.is_available|yesno:'bg-success ,bg-warning ' }} me-2"
                                 data-bs-toggle="popover" data-bs-placement="bottom"
@@ -146,12 +146,12 @@
                                 data-bs-content="&lt;div class=&quot;d-flex&quot;&gt;&lt;i class=&quot;fi-award mt-1 me-2&quot;&gt;&lt;/i&gt;&lt;div&gt;{{ product.is_available|yesno:'این کالا در انبار موجود است!,این کالا در انبار ناموجود است!' }}&lt;/div&gt;&lt;/div&gt;">{{ product.is_available|yesno:'موجود در انبار,ناموجود' }}</span>
                         </div>
                         <div class="h4 fw-500 text-light font-nonBold">قیمت <span
-                                class="regPrice">{{ product.get_default_variant.regular_price_ir }}</span></div>
+                                class="regPrice">{{ product.get_default_variant.price_ir }}</span></div>
                     </div>
                     <div class="d-md-none">
                         <div class="d-flex align-items-center mb-3">
                             <div class="h3 mb-0 text-light">قیمت <span
-                                    class="regPrice">{{ product.get_default_variant.regular_price_ir }}</span></div>
+                                    class="regPrice">{{ product.get_default_variant.price_ir }}</span></div>
                             <div class="text-nowrap ps-3"><span
                                     class="badge {{ product.is_available|yesno:'bg-success ,bg-warning ' }} me-2"
                                     data-bs-toggle="popover" data-bs-placement="bottom"

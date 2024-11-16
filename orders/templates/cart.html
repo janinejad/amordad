@@ -60,7 +60,7 @@
                             <h3 class="fs-base mb-1 fw-500"><a class="nav-link-light"
                                                                href="{% url 'products:product' id=i.variant.products.id product_name=i.variant.products.title %}">{{ i.variant.products.title }}</a>
                             </h3>
-                            <div class="text-primary fw-bold mb-1">{{ i.variant.regular_price_ir }}</div>
+                            <div class="text-primary fw-bold mb-1">{{ i.variant.price_ir }}</div>
                             <div class="row">
                                 <div class="col-6">
                                     <form action="{% url 'orders:remove-from-cart' variant_id=i.id %}"

@@ -294,7 +294,7 @@ class ProductManager(models.Manager):
 
     def get_available_products(self):
         return self.get_queryset().all().filter(productinventory__quantity__gt=0,
-                                                productinventory__regular_price__gt=0).distinct()
+                                                productinventory__price__gt=0).distinct()
 
     def newest_products(self):
         return self.get_available_products().order_by('-id')
@@ -349,7 +349,7 @@ class Product(models.Model):
 
     def get_price(self):
         price = 0
-        lowest_price = self.productinventory_set.aggregate(min_value=Min('regular_price'))['min_value']
+        lowest_price = self.productinventory_set.aggregate(min_value=Min('price'))['min_value']
         if lowest_price:
             price = lowest_price
         return '{:,} تومان'.format(math.trunc(price))
@@ -417,7 +417,7 @@ class Product(models.Model):
 
     def get_default_variant(self):
         variant = self.productinventory_set.filter(regular_price__gt=0, status=True, quantity__gt=0).order_by(
-            'regular_price').distinct().first()
+            'price').distinct().first()
         return variant
 
     def get_full_sharing_url(self):
@@ -453,7 +453,7 @@ class ProductGallery(models.Model):
 
 class ProductInventoryManager(models.Manager):
     def all_availble(self):
-        return self.get_queryset().filter(quantity__gt=0, in_basket__gt=0).order_by('regular_price').distinct()
+        return self.get_queryset().filter(quantity__gt=0, in_basket__gt=0).order_by('price').distinct()
 
 
 class ProductInventory(models.Model):
@@ -465,8 +465,12 @@ class ProductInventory(models.Model):
     delivery_time = models.PositiveSmallIntegerField(default=1, verbose_name='زمان تحویل این محصول(روز)')
     unit = models.FloatField(default=0, verbose_name='هر واحد برابر است با')
     supplement_price = models.FloatField(default=0, verbose_name='قیمت تامین')
-    regular_price = models.FloatField(default=0, verbose_name='قیمت فروش')
+    regular_price = models.FloatField(default=0, verbose_name='قیمت عادی')
+    after_discount = models.FloatField(default=0, verbose_name='قیمت بعد از کسر تخفیف')
+    price = models.FloatField(default=0, verbose_name='قیمت اعمال شده')
     status = models.BooleanField(default=True, verbose_name='وضعیت نمایش')
+    on_sale_from = models.DateTimeField(default=timezone.now, null=True, verbose_name='ویژه از تاریخ')
+    on_sale_to = models.DateTimeField(default=timezone.now, null=True, verbose_name='ویژه تا تاریخ')
     objects = ProductInventoryManager()
 
     def __str__(self):
@@ -478,7 +482,7 @@ class ProductInventory(models.Model):
         tax = 0
         if st:
             tax = st.tax
-        return '{:,} تومان'.format(math.trunc((tax / 100 * self.regular_price) + self.regular_price))
+        return '{:,} تومان'.format(math.trunc((tax / 100 * self.price) + self.price))
 
     def variant_name(self):
         return f"{self.weight} - {self.products.unit}"
@@ -490,6 +494,9 @@ class ProductInventory(models.Model):
     def regular_price_ir(self):
         return '{:,} تومان'.format(math.trunc(self.regular_price))
 
+    def price_ir(self):
+        return '{:,} تومان'.format(math.trunc(self.price))
+
     def get_weight_ir(self):
         return '{:,} کیلوگرم'.format(math.trunc(self.weight))
 
@@ -500,6 +507,16 @@ class ProductInventory(models.Model):
         else:
             name = self.title
         return name
+
+
+def product_inventory_pre_post_save_receiver(sender, instance, *args, **kwargs):
+    if instance.after_discount > 0 and instance.regular_price > instance.after_discount and instance.on_sale_from <= timezone.now() <= instance.on_sale_to:
+        instance.price = instance.after_discount
+    else:
+        instance.price = instance.regular_price
+
+
+pre_save.connect(product_inventory_pre_post_save_receiver, sender=ProductInventory)
 
 
 class ProductFavorite(models.Model):

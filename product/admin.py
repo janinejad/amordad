@@ -197,9 +197,10 @@ class ProductInventoryResource(resources.ModelResource):
 
 @admin.register(ProductInventory)
 class ProductInventoryAdmin(ImportExportModelAdmin):
-    list_display = ['__str__', 'quantity', 'regular_price']
+    list_display = ['__str__', 'quantity', 'regular_price','after_discount']
     search_fields = ['products__title']
-    list_editable = ['regular_price', 'quantity']
+    exclude = ['price']
+    list_editable = ['regular_price','after_discount', 'quantity']
     list_filter = ['status', 'weight']
     resource_class = ProductInventoryResource
 
