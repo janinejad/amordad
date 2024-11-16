@@ -47,7 +47,7 @@ class Order(models.Model):
     def __str__(self):
         return f"{self.customer.get_full_name()} - شماره سفارش {self.id}"
     def get_order_invoice(self):
-        link = f"<a class='btn btn-default' href='{reverse('account:invoice', kwargs={'order_id': self.id})}'>" \
+        link = f"<a class='btn btn-default' target='_blank' href='{reverse('account:invoice', kwargs={'order_id': self.id})}'>" \
                f"دریافت فاکتور </a>"
         return mark_safe(link)
     class Meta:
