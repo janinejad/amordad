@@ -11,6 +11,7 @@ from django.urls import reverse
 from product.filters import SearchFilter
 from product.models import Product, ProductFavorite, ProductInventory, ProductsCats, AttributeFilter, Brand, \
     AttributeItem
+from settings.models import Setting
 
 
 def product_single(request, id=None, product_name=None):
@@ -84,6 +85,7 @@ def products(request, cat_s=None, *args, **kwargs):
             'attribute_filters': attribute_filters,
             'cat': cat,
         }
+
     filter_search_form = SearchFilter(request.GET, queryset=products)
     products_brands = Brand.objects.all().filter(product__productinventory__in=products).distinct().order_by('title')
     products = filter_search_form.qs
@@ -136,7 +138,7 @@ def add_favorite(request, *args, product_id, **kwargs):
     if not request.user.is_authenticated:
         messages.error(request,
                        'شما می بایست ابتدا وارد حساب کاربری خود شوید!')
-        url = reverse('products:product',kwargs={'id':product_id,'product_name':product.title})
+        url = reverse('products:product', kwargs={'id': product_id, 'product_name': product.title})
         return JsonResponse({'url': url}, status=401)
     if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest' and request.method == "POST":
         try:

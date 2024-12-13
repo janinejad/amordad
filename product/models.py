@@ -460,6 +460,7 @@ class ProductInventory(models.Model):
     title = models.CharField(max_length=150, null=True, blank=True, verbose_name='عنوان')
     products = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='محصول')
     weight = models.IntegerField(default=0, verbose_name='وزن')
+    thickness = models.FloatField(default=0, verbose_name='ضخامت')
     quantity = models.IntegerField(default=0, verbose_name='موجودی')
     in_basket = models.IntegerField(default=0, verbose_name='محدودیت تعداد در سبد')
     delivery_time = models.PositiveSmallIntegerField(default=1, verbose_name='زمان تحویل این محصول(روز)')
@@ -490,6 +491,7 @@ class ProductInventory(models.Model):
     class Meta:
         verbose_name_plural = "تنوع های محصول"
         verbose_name = "تنوع محصول"
+        ordering = ['thickness']
 
     def regular_price_ir(self):
         return '{:,} تومان'.format(math.trunc(self.regular_price))

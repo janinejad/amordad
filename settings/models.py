@@ -5,6 +5,7 @@ from django.utils import timezone
 
 from extensions.utils import get_filename_ext
 from pages.models import Page
+from product.models import Attribute
 
 
 # Create your models here.
@@ -110,7 +111,6 @@ class Setting(models.Model):
     meta_title = models.CharField(max_length=600, null=True, blank=True, verbose_name='عنوان سئو صفحه اصلی')
     meta_desc = models.CharField(max_length=600, null=True, blank=True, verbose_name='توضیحات سئو صفحه اصلی')
     keywords = models.TextField(max_length=600, null=True, blank=True, verbose_name='کلمات کلیدی صفحه اصلی')
-
     def __str__(self):
         return "تنظیمات عمومی"
 

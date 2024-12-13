@@ -94,7 +94,7 @@ def cart(request):
     if not order:
         messages.error(request,
                        'سبد خرید شما خالی است!')
-        return redirect('/')
+        return redirect(reverse('products:search'))
     else:
         cart_msgs = apply_order_changes(order)
     context = {
