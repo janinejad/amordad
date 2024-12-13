@@ -63,3 +63,9 @@ def is_valid_national_code(code):
             return True
         else:
             return False
+
+def delete_tasks(task_name):
+    from background_task.models import Task
+    tasks = Task.objects.filter(task_name=task_name)
+    for task in tasks:
+        task.delete()

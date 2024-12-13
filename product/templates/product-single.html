@@ -147,8 +147,14 @@
                         </div>
                         <div class="h4 fw-500 text-light font-nonBold">قیمت <span
                                 class="regPrice">{{ product.get_default_variant.price_ir }}</span></div>
+                        <div class="mb-3">
+                            <p>تاریخ بروزرسانی : {{ product.update_at_ir }}</p>
+                        </div>
                     </div>
                     <div class="d-md-none">
+                        <div class="mb-3">
+                            <p>تاریخ بروزرسانی : {{ product.update_at_ir }}</p>
+                        </div>
                         <div class="d-flex align-items-center mb-3">
                             <div class="h3 mb-0 text-light">قیمت <span
                                     class="regPrice">{{ product.get_default_variant.price_ir }}</span></div>

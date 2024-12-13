@@ -1,9 +1,10 @@
 import math
 
 from django.db import models
+from django.db.models.signals import post_save
 from django.utils import timezone
 
-from extensions.utils import get_filename_ext
+from extensions.utils import get_filename_ext, delete_tasks
 from pages.models import Page
 from product.models import Attribute
 
@@ -53,14 +54,15 @@ class SMSSettingManager(models.Manager):
     def all(self):
         return self.get_queryset().filter(is_active=True)
 
+
 class SMSSetting(models.Model):
     APIS = (
         ('MELIPAYAMAR', 'ملی پیامک'),
         ('RAZPAYAMAK', 'راز پیامک'),
         ('None', 'تنظیم نشده'),
     )
-    title = models.CharField(max_length=150,verbose_name='عنوان وب سرویس')
-    api_type = models.CharField(max_length=50,default='None',choices=APIS,verbose_name='وب سرویس')
+    title = models.CharField(max_length=150, verbose_name='عنوان وب سرویس')
+    api_type = models.CharField(max_length=50, default='None', choices=APIS, verbose_name='وب سرویس')
     is_active = models.BooleanField(default=False, verbose_name='وضعیت')
     code_cancel = models.IntegerField(default=1, verbose_name='کد متن مهلت پرداخت سفارش')
     cancel_order_is_active = models.BooleanField(default=True, verbose_name='وضعیت ارسال پیامک مهلت پرداخت')
@@ -72,17 +74,19 @@ class SMSSetting(models.Model):
                                                       verbose_name='وضعیت ارسال پیامک در تکمیل شدن پرداخت')
     code_deposit_completed_payment = models.IntegerField(default=1, verbose_name='کد متن پیامک در تکمیل شدن پیش پرداخت')
     deposit_completed_payment_is_active = models.BooleanField(default=True,
-                                                      verbose_name='وضعیت ارسال پیامک در تکمیل شدن  پیش پرداخت')
-    username = models.CharField(max_length=250,null=True,blank=True,verbose_name='نام کاربری')
-    password = models.CharField(max_length=250,null=True,blank=True,verbose_name='رمز عبور')
-    api_link = models.URLField(null=True,blank=True,verbose_name='لینک وب سرویس')
+                                                              verbose_name='وضعیت ارسال پیامک در تکمیل شدن  پیش پرداخت')
+    username = models.CharField(max_length=250, null=True, blank=True, verbose_name='نام کاربری')
+    password = models.CharField(max_length=250, null=True, blank=True, verbose_name='رمز عبور')
+    api_link = models.URLField(null=True, blank=True, verbose_name='لینک وب سرویس')
     objects = SMSSettingManager()
+
     class Meta:
         verbose_name_plural = 'تنظیمات پیامک'
         verbose_name = 'تنظیمات پیامک'
 
     def __str__(self):
         return self.title
+
 
 class Setting(models.Model):
     site_title = models.CharField(max_length=150, verbose_name="عنوان فروشگاه")
@@ -99,18 +103,21 @@ class Setting(models.Model):
     address = models.TextField(max_length=500, null=True, verbose_name="آدرس")
     tel_no = models.CharField(max_length=150, verbose_name='شماره تماس', null=True)
     email_address = models.EmailField(max_length=254, null=True, blank=True, verbose_name='آدرس ایمیل')
-    first_page_tag_line = models.CharField(max_length=250,null=True, blank=True,verbose_name='شعار صفحه اول')
+    first_page_tag_line = models.CharField(max_length=250, null=True, blank=True, verbose_name='شعار صفحه اول')
     first_page_description = models.TextField(max_length=500, null=True, blank=True, verbose_name="توضیحات صفحه اول")
     whatsapp_link = models.URLField(max_length=500, null=True, blank=True, verbose_name="لینک واتس اپ")
     telegram_link = models.URLField(max_length=500, null=True, blank=True, verbose_name="لینک تلگرام")
     instagram_link = models.URLField(max_length=500, null=True, blank=True, verbose_name="لینک اینستاگرام")
     twitter_link = models.URLField(max_length=500, null=True, blank=True, verbose_name="لینک توییتر")
     facebook_link = models.URLField(max_length=500, null=True, blank=True, verbose_name="لینک فیسبوک")
-    about_us_page = models.ForeignKey(Page,null=True,related_name='about_us_page',blank=True,on_delete=models.SET_NULL,verbose_name='صفحه تماس با ما')
-    main_page = models.ForeignKey(Page,null=True,related_name='main_page',blank=True,on_delete=models.SET_NULL,verbose_name='صفحه اصلی')
+    about_us_page = models.ForeignKey(Page, null=True, related_name='about_us_page', blank=True,
+                                      on_delete=models.SET_NULL, verbose_name='صفحه تماس با ما')
+    main_page = models.ForeignKey(Page, null=True, related_name='main_page', blank=True, on_delete=models.SET_NULL,
+                                  verbose_name='صفحه اصلی')
     meta_title = models.CharField(max_length=600, null=True, blank=True, verbose_name='عنوان سئو صفحه اصلی')
     meta_desc = models.CharField(max_length=600, null=True, blank=True, verbose_name='توضیحات سئو صفحه اصلی')
     keywords = models.TextField(max_length=600, null=True, blank=True, verbose_name='کلمات کلیدی صفحه اصلی')
+
     def __str__(self):
         return "تنظیمات عمومی"
 
@@ -120,6 +127,15 @@ class Setting(models.Model):
 
     def get_order_cancel_time(self):
         return math.trunc(self.order_cancel_time / 60)
+
+
+def setting_post_save_save_receiver(sender, instance, *args, **kwargs):
+    from orders.Tasks import automatic_update
+    delete_tasks('orders.Tasks.automatic_update')
+    automatic_update()
+
+
+post_save.connect(setting_post_save_save_receiver, sender=Setting)
 
 
 class JsCodeManager(models.Manager):
@@ -134,6 +150,8 @@ class JsCodeManager(models.Manager):
 
     def get_footer_tag_codes(self):
         return self.get_queryset().filter(location="footer", type="tag", status=True)
+
+
 class JsCode(models.Model):
     TYPE = (
         ('symbol', 'نماد'),

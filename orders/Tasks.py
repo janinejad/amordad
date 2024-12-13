@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from background_task import background
 
 from settings.models import Setting
@@ -29,3 +31,18 @@ def cancel_order(order_id):
             order.is_canceled = True
             order.save()
             add_to_stock(order.orderitem.all())
+
+@background(schedule=1500)
+def automatic_update():
+    from product.models import Product,ProductInventory
+    current_time = datetime.now()
+    if current_time.hour == 11:
+        products = Product.objects.all()
+        product_inventories = ProductInventory.objects.all()
+        for product in products:
+            product.save()
+        for inv in product_inventories:
+            inv.save()
+    automatic_update()
+
+
