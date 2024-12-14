@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from background_task import background
+from django.utils import timezone
 
 from settings.models import Setting
 
@@ -38,11 +39,9 @@ def automatic_update():
     current_time = datetime.now()
     if current_time.hour == 11:
         products = Product.objects.all()
-        product_inventories = ProductInventory.objects.all()
         for product in products:
+            product.updated_at = timezone.now()
             product.save()
-        for inv in product_inventories:
-            inv.save()
     automatic_update()
 
 
