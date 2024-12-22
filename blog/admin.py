@@ -28,15 +28,8 @@ class PostAdmin(admin.ModelAdmin):
         self.exclude = ('user', 'status', 'review_reason', 'active',)
         return super(PostAdmin, self).add_view(request, form_url, extra_context)
 
-    def has_change_permission(self, request, obj=None):
-        if obj:
-            if obj.status == 4 or obj.status == 3:
-                if not (request.user.is_superuser or request.user.is_content_manager):
-                    return False
-        return True
-
     def change_view(self, request, object_id, form_url='', extra_context=None):
-        if request.user.is_superuser or request.user.is_content_manager:
+        if request.user.is_superuser:
             self.exclude = ('user',)
         else:
             self.exclude = ('user', 'status', 'review_reason', 'active',)
@@ -47,12 +40,6 @@ class PostAdmin(admin.ModelAdmin):
             obj.user = request.user
         obj.save()
         super().save_model(request, obj, form, change)
-
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        if request.user.is_superuser or request.user.is_content_manager:
-            return qs
-        return qs.filter(user=request.user)
 
 
 class PostCategoryAdmin(admin.ModelAdmin):

@@ -85,11 +85,7 @@ class ProductAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
         self.inlines = [ProductAttrInline, ProductGalleryInline, ProductMainFeatureInline]
-        if request.user.is_superuser or request.user.is_content_manager:
-            self.exclude = (
-                'user',)
-        else:
-            self.exclude = ('user', 'active', 'review_reason',)
+        self.exclude = ('user',)
         return super(ProductAdmin, self).change_view(request, object_id, form_url, extra_context)
 
     def save_model(self, request, obj, form, change):
@@ -118,10 +114,7 @@ class BrandAdmin(admin.ModelAdmin):
         return super(BrandAdmin, self).add_view(request, form_url, extra_context)
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
-        if request.user.is_superuser or request.user.is_content_manager:
-            self.exclude = ('user',)
-        else:
-            self.exclude = ('user', 'review_reason', 'is_active',)
+        self.exclude = ('user',)
         return super(BrandAdmin, self).change_view(request, object_id, form_url, extra_context)
 
     def save_model(self, request, obj, form, change):
@@ -129,12 +122,6 @@ class BrandAdmin(admin.ModelAdmin):
             obj.user = request.user
         obj.save()
         super().save_model(request, obj, form, change)
-
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        if request.user.is_superuser or request.user.is_content_manager:
-            return qs
-        return qs.filter(user=request.user)
 
 
 class ProductsCatResource(resources.ModelResource):
