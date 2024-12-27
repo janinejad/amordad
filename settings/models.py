@@ -102,6 +102,7 @@ class Setting(models.Model):
     copy_right_text = models.TextField(max_length=500, null=True, verbose_name="متن کپی رایت ")
     address = models.TextField(max_length=500, null=True, verbose_name="آدرس")
     tel_no = models.CharField(max_length=150, verbose_name='شماره تماس', null=True)
+    whatsapp_num = models.CharField(max_length=150, verbose_name='شماره واتس اپ', null=True)
     email_address = models.EmailField(max_length=254, null=True, blank=True, verbose_name='آدرس ایمیل')
     first_page_tag_line = models.CharField(max_length=250, null=True, blank=True, verbose_name='شعار صفحه اول')
     first_page_description = models.TextField(max_length=500, null=True, blank=True, verbose_name="توضیحات صفحه اول")
