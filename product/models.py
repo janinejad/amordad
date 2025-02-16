@@ -454,6 +454,8 @@ class ProductGallery(models.Model):
 class ProductInventoryManager(models.Manager):
     def all_availble(self):
         return self.get_queryset().filter(quantity__gt=0, in_basket__gt=0).order_by('price').distinct()
+    def all(self):
+        return self.get_queryset().order_by('-quantity').distinct()
 
 
 class ProductInventory(models.Model):
@@ -509,6 +511,11 @@ class ProductInventory(models.Model):
         else:
             name = self.title
         return name
+    def variant_is_availble(self):
+        if self.quantity > 0:
+            return True
+        else:
+            return False
 
 
 def product_inventory_pre_post_save_receiver(sender, instance, *args, **kwargs):

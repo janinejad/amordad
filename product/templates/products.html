@@ -173,10 +173,10 @@
                                            href="{{ p.products.get_full_abs_url }}">{{ p.dynamic_name }}</a></td>
                                     <td>{{ p.products.unit }}</td>
                                     <td>{{ p.products.brandId }}</td>
-                                    <td>{{ p.price_ir }}</td>
-                                    <td>{{ p.product_amount_with_tax_ir }}</td>
+                                    <td>{% if p.variant_is_availble %}{{ p.price_ir }}{% else %}ناموجود{% endif %}</td>
+                                    <td>{% if p.variant_is_availble %}{{ p.product_amount_with_tax_ir }}{% else %}-{% endif %}</td>
                                     <td><a target="_blank" class="btn btn-outline-primary"
-                                           href="{{ p.products.get_full_abs_url }}">ثبت سفارش</a></td>
+                                           href="{{ p.products.get_full_abs_url }}">{% if p.variant_is_availble %}ثبت سفارش{% else %}مشاهده محصول{% endif %}</a></td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -207,11 +207,11 @@
                                                 </div>
                                                 <div class="col-12">
                                                     <span class="text-warning">قیمت بدون ارزش افزوده</span> :
-                                                    <span>{{ p.price_ir }}</span>
+                                                    <span>{% if p.variant_is_availble %}{{ p.price_ir }}{% else %}ناموجود{% endif %}</span>
                                                 </div>
                                                 <div class="col-12">
                                                     <span class="text-warning">قیمت با ارزش افزوده</span> :
-                                                    <span>{{ p.product_amount_with_tax_ir }}</span>
+                                                    <span>{% if p.variant_is_availble %}{{ p.product_amount_with_tax_ir }}{% else %}-{% endif %}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -219,7 +219,7 @@
                                     <div class="row">
                                         <div class="col-12 mt-3">
                                             <a target="_blank" class="btn btn-outline-primary float-left-custom"
-                                               href="{{ p.products.get_full_abs_url }}">ثبت سفارش</a>
+                                               href="{{ p.products.get_full_abs_url }}">{% if p.variant_is_availble %}ثبت سفارش{% else %}مشاهده محصول{% endif %}</a>
                                         </div>
                                     </div>
                                 </div>
