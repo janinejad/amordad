@@ -251,9 +251,9 @@ SECURE_CONTENT_TYPE_NOSNIFF = True  # جلوگیری از MIME sniffing
 SECURE_HSTS_SECONDS = 31536000  # فعال کردن HSTS برای HTTPS
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
-SECURE_SSL_REDIRECT = True  # همه درخواست‌ها را به HTTPS هدایت کن
-SESSION_COOKIE_SECURE = True  # جلوگیری از ارسال کوکی‌ها از طریق HTTP
-CSRF_COOKIE_SECURE = True  # جلوگیری از ارسال CSRF از طریق HTTP
+# SECURE_SSL_REDIRECT = True  # همه درخواست‌ها را به HTTPS هدایت کن
+# SESSION_COOKIE_SECURE = True  # جلوگیری از ارسال کوکی‌ها از طریق HTTP
+# CSRF_COOKIE_SECURE = True  # جلوگیری از ارسال CSRF از طریق HTTP
 CSRF_COOKIE_HTTPONLY = True
 
 
