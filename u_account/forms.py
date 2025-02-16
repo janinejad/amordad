@@ -46,8 +46,11 @@ class RegisterForm(forms.ModelForm):
             raise forms.ValidationError('کاربر با این ایمیل از قبل وجود دارد.')
         return email
 
-    def clean_password(self):
+    def clean_password2(self):
+        password2 = self.cleaned_data.get("password2")
         password = self.cleaned_data.get("password")
+        if not password == password2:
+            raise forms.ValidationError('تایید رمز عبور اشتباه است.')
         if len(password) < 8:
             raise forms.ValidationError("رمز عبور باید حداقل ۸ کاراکتر باشد.")
         if not any(char.isdigit() for char in password):
@@ -56,13 +59,6 @@ class RegisterForm(forms.ModelForm):
             raise forms.ValidationError("رمز عبور باید حداقل شامل یک حرف باشد.")
         if not any(char in "@$!%*?&" for char in password):
             raise forms.ValidationError("رمز عبور باید حداقل یک کاراکتر خاص (@$!%*?&) داشته باشد.")
-        return password
-
-    def clean_password2(self):
-        password2 = self.cleaned_data.get("password2")
-        password = self.cleaned_data.get("password")
-        if not password == password2:
-            raise forms.ValidationError('تایید رمز عبور اشتباه است.')
         return password2
 
     def clean_first_name(self):

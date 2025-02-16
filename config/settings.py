@@ -20,10 +20,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-+^gegx2#cemj#o%@j_i8&d1g90x0=8z4z=2fqy3c2vhiqk-r86'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
 DEBUG = False
+
 
 ALLOWED_HOSTS = ['https://amordadsteel.com','amordadsteel.com','http://amordadsteel.com']
 # Application definition
@@ -240,9 +242,18 @@ CSRF_TRUSTED_ORIGINS = [
     'https://amordadsteel.com',
     'https://amordadsteel.runflare.run'
 ]
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
 SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
 X_FRAME_OPTIONS = 'ALLOW-FROM'
+
+
+SECURE_BROWSER_XSS_FILTER = True  # جلوگیری از XSS
+SECURE_CONTENT_TYPE_NOSNIFF = True  # جلوگیری از MIME sniffing
+SECURE_HSTS_SECONDS = 31536000  # فعال کردن HSTS برای HTTPS
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+SECURE_SSL_REDIRECT = True  # همه درخواست‌ها را به HTTPS هدایت کن
+SESSION_COOKIE_SECURE = True  # جلوگیری از ارسال کوکی‌ها از طریق HTTP
+CSRF_COOKIE_SECURE = True  # جلوگیری از ارسال CSRF از طریق HTTP
+CSRF_COOKIE_HTTPONLY = True
 
 
