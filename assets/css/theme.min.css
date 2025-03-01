@@ -9009,8 +9009,33 @@ textarea.form-control-lg {
     color: #f23c49 !important;
 }
 
-.text-light {
+/*custom*/
+.page-content .text-light, .page-content h1, .page-content h2, .page-content h3, .page-content h4, .page-content h5, .page-content h6, .page-content p, .page-content th, .page-content td {
     color: #fff !important;
+}
+
+.page-content img {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.page-content table,.page-content img {
+    margin: auto;
+}
+
+.page-content table {
+    border-collapse: collapse;
+}
+
+.page-content table,
+.page-content th,
+.page-content td {
+    border: 0.5px solid #efecf3;
+}
+
+.page-content td, .page-content th {
+    text-align: center;
+    padding: 5px;
 }
 
 .text-dark {
@@ -19577,7 +19602,8 @@ ul.pr-5 {
     float: left;
 !important;
 }
-.white-custom{
+
+.white-custom {
     color: white;
 }
 

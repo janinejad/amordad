@@ -174,9 +174,11 @@
                                     <td>{{ p.products.unit }}</td>
                                     <td>{{ p.products.brandId }}</td>
                                     <td>{% if p.variant_is_availble %}{{ p.price_ir }}{% else %}ناموجود{% endif %}</td>
-                                    <td>{% if p.variant_is_availble %}{{ p.product_amount_with_tax_ir }}{% else %}-{% endif %}</td>
+                                    <td>{% if p.variant_is_availble %}{{ p.product_amount_with_tax_ir }}{% else %}
+                                        -{% endif %}</td>
                                     <td><a target="_blank" class="btn btn-outline-primary"
-                                           href="{{ p.products.get_full_abs_url }}">{% if p.variant_is_availble %}ثبت سفارش{% else %}مشاهده محصول{% endif %}</a></td>
+                                           href="{{ p.products.get_full_abs_url }}">{% if p.variant_is_availble %}ثبت
+                                        سفارش{% else %}مشاهده محصول{% endif %}</a></td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -207,11 +209,13 @@
                                                 </div>
                                                 <div class="col-12">
                                                     <span class="text-warning">قیمت بدون ارزش افزوده</span> :
-                                                    <span>{% if p.variant_is_availble %}{{ p.price_ir }}{% else %}ناموجود{% endif %}</span>
+                                                    <span>{% if p.variant_is_availble %}{{ p.price_ir }}{% else %}
+                                                        ناموجود{% endif %}</span>
                                                 </div>
                                                 <div class="col-12">
                                                     <span class="text-warning">قیمت با ارزش افزوده</span> :
-                                                    <span>{% if p.variant_is_availble %}{{ p.product_amount_with_tax_ir }}{% else %}-{% endif %}</span>
+                                                    <span>{% if p.variant_is_availble %}
+                                                        {{ p.product_amount_with_tax_ir }}{% else %}-{% endif %}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -219,7 +223,8 @@
                                     <div class="row">
                                         <div class="col-12 mt-3">
                                             <a target="_blank" class="btn btn-outline-primary float-left-custom"
-                                               href="{{ p.products.get_full_abs_url }}">{% if p.variant_is_availble %}ثبت سفارش{% else %}مشاهده محصول{% endif %}</a>
+                                               href="{{ p.products.get_full_abs_url }}">{% if p.variant_is_availble %}
+                                                ثبت سفارش{% else %}مشاهده محصول{% endif %}</a>
                                         </div>
                                     </div>
                                 </div>
@@ -233,6 +238,10 @@
                         <ul class="pagination pagination-light">
                             {% if page_obj.has_previous %}
                                 <li class="page-item"><a class="page-link" href="?page=
+
+
+
+
                                         {{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
                                                          aria-label="Next"><i
                                         class="fi-chevron-left"></i></a></li>
@@ -251,6 +260,10 @@
                                     {% else %}
                                         <li class="page-item d-none d-sm-block"><a class="page-link"
                                                                                    href="?page=
+
+
+
+
                                                                                            {{ page }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ page }}</a>
                                         </li>
                                     {% endif %}
@@ -258,6 +271,10 @@
                             {% endfor %}
                             {% if page_obj.has_next %}
                                 <li class="page-item"><a class="page-link" href="?page=
+
+
+
+
                                         {{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
                                                          aria-label="Next"><i
                                         class="fi-chevron-right"></i></a></li>
@@ -265,6 +282,10 @@
                         </ul>
                     </nav>
                 </div>
+                <div class="row page-content">
+                    {{ cat_obj.cat.description|safe }}
+                </div>
+
             </div>
         </div>
     </div>
@@ -301,6 +322,9 @@
         <meta name="description" content="{{ cat_obj.cat.meta_description }}"/>
         <meta name="keywords" content="{{ cat_obj.cat.keywords }}"/>
         <link rel="canonical" href="
+
+
+
                 {% if cat_obj.cat.canonical %}{{ cat_obj.cat.canonical }}{% else %}{{ st.siteUrl }}{{ request.path }}{% endif %}"/>
         {% if page_obj.has_next %}
             <link rel="next" href="{{ st.siteUrl }}{{ request.path }}?page={{ page_obj.next_page_number }}"/>
