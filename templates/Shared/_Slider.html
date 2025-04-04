@@ -4,12 +4,12 @@
         {% for slide in slides %}
             {% if slide.is_origin_image %}
                 <a href="{{ slide.link }}">
-                    <img class="rounded rounded-3 w-95" src="{{ slide.original_image.url }}"
+                    <img class="rounded rounded-3 w-100" src="{{ slide.original_image.url }}"
                          alt="{{ slide.image_alt }}">
                 </a>
             {% else %}
                 <a href="{{ slide.link }}">
-                    <img class="rounded rounded-3 w-95" src="{{ slide.image_webp.url }}" alt="{{ slide.image_alt }}">
+                    <img class="rounded rounded-3 w-100" src="{{ slide.image_webp.url }}" alt="{{ slide.image_alt }}">
                 </a>
             {% endif %}
         {% endfor %}
