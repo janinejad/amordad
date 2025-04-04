@@ -144,7 +144,7 @@
                 <!-- Page title-->
                 <div class="d-flex align-items-center justify-content-between pb-4 mb-2">
                     {% if cat_obj %}
-                        <h1 class="text-light me-3 mb-0 font-vazir h4">لیست قیمت انوع {{ cat_obj.cat.title }}</h1>
+                        <h1 class="text-light me-3 mb-0 font-vazir h4">لیست قیمت انواع {{ cat_obj.cat.title }}</h1>
                     {% else %}
                         <h1 class="text-light me-3 mb-0 font-vazir h4">نتایج جستجو شده</h1>
                     {% endif %}
@@ -233,59 +233,65 @@
                     {% endfor %}
                 </div>
                 <!-- Sorting + Pagination-->
-                <div class="d-flex align-items-center justify-content-between py-2 mt-2">
-                    <nav aria-label="Pagination">
-                        <ul class="pagination pagination-light">
-                            {% if page_obj.has_previous %}
-                                <li class="page-item"><a class="page-link" href="?page=
+                {% if page_obj %}
+                    <div class="d-flex align-items-center justify-content-between py-2 mt-2">
+                        <nav aria-label="Pagination">
+                            <ul class="pagination pagination-light">
+                                {% if page_obj.has_previous %}
+                                    <li class="page-item"><a class="page-link" href="?page=
 
 
 
 
-                                        {{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
-                                                         aria-label="Next"><i
-                                        class="fi-chevron-left"></i></a></li>
-                            {% endif %}
-                            {% get_proper_elided_page_range paginator page_obj.number as page_range %}
-                            {% for page in page_range %}
-                                {% if page == page_obj.number %}
-                                    <li class="page-item active d-none d-sm-block" aria-current="page"><span
-                                            class="page-link">{{ page }}<span
-                                            class="visually-hidden">(current)</span></span>
-                                    </li>
-                                {% else %}
-                                    {% if page == paginator.ELLIPSIS %}
-                                        <li class="page-item d-none d-sm-block">
-                                            <span>{{ paginator.ELLIPSIS }}</span></li>
-                                    {% else %}
-                                        <li class="page-item d-none d-sm-block"><a class="page-link"
-                                                                                   href="?page=
 
-
-
-
-                                                                                           {{ page }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ page }}</a>
-                                        </li>
-                                    {% endif %}
+                                            {{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
+                                                             aria-label="Next"><i
+                                            class="fi-chevron-left"></i></a></li>
                                 {% endif %}
-                            {% endfor %}
-                            {% if page_obj.has_next %}
-                                <li class="page-item"><a class="page-link" href="?page=
+                                {% get_proper_elided_page_range paginator page_obj.number as page_range %}
+                                {% for page in page_range %}
+                                    {% if page == page_obj.number %}
+                                        <li class="page-item active d-none d-sm-block" aria-current="page"><span
+                                                class="page-link">{{ page }}<span
+                                                class="visually-hidden">(current)</span></span>
+                                        </li>
+                                    {% else %}
+                                        {% if page == paginator.ELLIPSIS %}
+                                            <li class="page-item d-none d-sm-block">
+                                                <span>{{ paginator.ELLIPSIS }}</span></li>
+                                        {% else %}
+                                            <li class="page-item d-none d-sm-block"><a class="page-link"
+                                                                                       href="?page=
 
 
 
 
-                                        {{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
-                                                         aria-label="Next"><i
-                                        class="fi-chevron-right"></i></a></li>
-                            {% endif %}
-                        </ul>
-                    </nav>
-                </div>
+
+                                                                                               {{ page }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ page }}</a>
+                                            </li>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if page_obj.has_next %}
+                                    <li class="page-item"><a class="page-link" href="?page=
+
+
+
+
+
+                                            {{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
+                                                             aria-label="Next"><i
+                                            class="fi-chevron-right"></i></a></li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                {% else %}
+                    <p class="text-center">موردی یافت نشد!</p>
+                {% endif %}
                 <div class="row page-content">
                     {{ cat_obj.cat.description|safe }}
                 </div>
-
             </div>
         </div>
     </div>
@@ -322,6 +328,12 @@
         <meta name="description" content="{{ cat_obj.cat.meta_description }}"/>
         <meta name="keywords" content="{{ cat_obj.cat.keywords }}"/>
         <link rel="canonical" href="
+
+
+
+
+
+
 
 
 

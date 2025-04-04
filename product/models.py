@@ -464,7 +464,7 @@ class ProductInventory(models.Model):
     weight = models.IntegerField(default=0, verbose_name='وزن')
     thickness = models.FloatField(default=0, verbose_name='ضخامت')
     quantity = models.IntegerField(default=0, verbose_name='موجودی')
-    in_basket = models.IntegerField(default=0, verbose_name='محدودیت تعداد در سبد')
+    in_basket = models.IntegerField(default=1, verbose_name='محدودیت تعداد در سبد')
     delivery_time = models.PositiveSmallIntegerField(default=1, verbose_name='زمان تحویل این محصول(روز)')
     unit = models.FloatField(default=0, verbose_name='هر واحد برابر است با')
     supplement_price = models.FloatField(default=0, verbose_name='قیمت تامین')
