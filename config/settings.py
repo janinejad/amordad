@@ -24,7 +24,7 @@ SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['https://amordadsteel.com', 'amordadsteel.com', 'http://amordadsteel.com']
 # Application definition
