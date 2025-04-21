@@ -51,7 +51,7 @@ urlpatterns = [
     path('sitemap-tags.xml', TagsView.as_view(), name='sitemap'),
     path('sitemap-posts.xml', PostView.as_view(), name='sitemap'),
     path('sitemap-post-categories.xml', PostCategoryView.as_view(), name='sitemap'),
-    path("robots.txt", TemplateView.as_view(template_name="shared/robots.txt", content_type="text/plain")),
+    path("robots.txt", TemplateView.as_view(template_name="Shared/robots.txt", content_type="text/plain")),
 ]
 
 if settings.DEBUG:
