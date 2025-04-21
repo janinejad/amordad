@@ -108,7 +108,7 @@
                         <!-- Recent posts widget-->
                         <div class="card card-flush bg-transparent border-light mb-4">
                             <div class="card-body blog-list">
-                                <h3 class="h5 text-light pt-3 pt-lg-0">آخرین اخبار</h3>
+                                <h3 class="h5 text-light pt-3 pt-lg-0">آخرین مقالات</h3>
                                 {% for p in other_post %}
                                     <div class="d-flex align-items-start border-bottom border-light pb-3 mb-3"><a
                                             class="flex-shrink-0" href="{{ p.get_abs_url }}"><img class="rounded-3"
@@ -163,9 +163,9 @@
     <script src="{% static 'js/theme.min.js' %}"></script>
 {% endblock %}
 {% block css %}
-    <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>
-    <link rel="stylesheet" media="screen" href="{% static 'vendor/tiny-slider/dist/tiny-slider.css' %}"/>
-    <link rel="stylesheet" media="screen" href="{% static 'vendor/lightgallery.js/dist/css/lightgallery.min.css' %}"/>
+{#    <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>#}
+{#    <link rel="stylesheet" media="screen" href="{% static 'vendor/tiny-slider/dist/tiny-slider.css' %}"/>#}
+{#    <link rel="stylesheet" media="screen" href="{% static 'vendor/lightgallery.js/dist/css/lightgallery.min.css' %}"/>#}
     <!-- Main Theme Styles + Bootstrap-->
     <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
 {% endblock %}

@@ -37,7 +37,7 @@
                         <div class="card card-light card-hover h-100">
                             <div class="card-img-top card-img-hover"><a class="img-overlay"
                                                                         href="{{ cat.get_abs_url }}"></a>
-                                <img src="{{ cat.image.url }}" alt="Image">
+                                <img loading="lazy" src="{{ cat.image.url }}" alt="Image">
                             </div>
                             <div class="card-body">
                                 <h2 class="h6 mb-1 text-center"><a class="nav-link-light"
@@ -113,11 +113,6 @@
         </div>
     </section>
     {{ st.main_page.content|safe }}
-    {#    <section class="container pt-sm-1 mb-md-4">#}
-    {#        <div class="d-sm-flex text-white align-items-center justify-content-between pb-sm-2">#}
-    {#            #}
-    {#        </div>#}
-    {#    </section>#}
     <section class="container pt-sm-5 pt-4 pb-3">
         <div class="d-sm-flex align-items-center justify-content-between mb-3 mb-sm-4 pb-2">
             <h2 class="h4 text-light mb-3 mb-sm-0 font-vazir">اخبار و مقالات</h2>
@@ -132,7 +127,7 @@
                 {% for p in posts %}
                     <div>
                         <article><a class="d-block rounded-3 overflow-hidden" href="{{ p.get_abs_url }}"><img
-                                class="d-block" src="{{ p.image.url }}" alt="Image"></a>
+                                class="d-block" loading="lazy" src="{{ p.image.url }}" alt="{{ p.title }}"></a>
                             <div class="py-3"><a class="fs-sm text-uppercase text-decoration-none"
                                                  href="{{ p.category.get_abs_url }}">{{ p.category }}</a>
                                 <h3 class="text-light fs-base pt-1"><a class="nav-link"
@@ -142,7 +137,6 @@
                                             class="fi-calendar-alt ms-1"></i> {{ p.post_date }}</span><span> <i
                                             class="fi-chat-circle ms-1"></i> {{ p.comment_counts }} نظر </span></div>
                                 </div>
-                                </a>
                             </div>
                         </article>
                     </div>
@@ -166,8 +160,8 @@
 {% endblock %}
 {% block css %}
     <!-- Vendor Styles-->
-    <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>
-    <link rel="stylesheet" media="screen" href="{% static 'vendor/leaflet/dist/leaflet.css' %}"/>
+{#    <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>#}
+{#    <link rel="stylesheet" media="screen" href="{% static 'vendor/leaflet/dist/leaflet.css' %}"/>#}
     <link rel="stylesheet" media="screen" href="{% static 'vendor/tiny-slider/dist/tiny-slider.css' %}"/>
     <!-- Main Theme Styles + Bootstrap-->
     <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
