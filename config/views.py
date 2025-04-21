@@ -94,7 +94,6 @@ class SitemapIndexView(TemplateView):
             {'location':'https://amordadsteel.com/sitemap-post-categories.xml'},
             {'location':'https://amordadsteel.com/sitemap-tags.xml'},
             {'location':'https://amordadsteel.com/sitemap-product-category.xml'},
-            {'location':'https://amordadsteel.com/sitemap-product-brand.xml'},
         ]
         context = {
             'sitemaps': sitemaps
@@ -148,15 +147,6 @@ class PostCategoryView(TemplateView):
         return context
 
 
-class BrandView(TemplateView):
-    content_type = 'application/xml'
-    template_name = 'Shared/custom-sitemap.xml'
-
-    def get_context_data(self, **kwargs):
-        context = {
-            'locations': Brand.objects.all()
-        }
-        return context
 class ProductsCatsteeView(TemplateView):
     content_type = 'application/xml'
     template_name = 'Shared/custom-sitemap.xml'
