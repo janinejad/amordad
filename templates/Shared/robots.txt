@@ -5,6 +5,10 @@ Allow: /
 Allow: /*
 Disallow: */?*
 Allow: */?page*
+Disallow: /apanel/
+Disallow: /login/
+Disallow: /cart/
+Disallow: /search/
 # Host
 Host: https://amordadsteel.com/
 
