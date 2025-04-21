@@ -105,7 +105,7 @@ class SitemapIndexView(TemplateView):
 
 class ProductSitemapView(TemplateView):
     content_type = 'application/xml'
-    template_name = 'shared/custom-sitemap.xml'
+    template_name = 'Shared/custom-sitemap.xml'
 
     def get_context_data(self, **kwargs):
         context = {
@@ -117,7 +117,7 @@ class ProductSitemapView(TemplateView):
 
 class TagsView(TemplateView):
     content_type = 'application/xml'
-    template_name = 'shared/custom-sitemap.xml'
+    template_name = 'Shared/custom-sitemap.xml'
 
     def get_context_data(self, **kwargs):
         context = {
@@ -128,7 +128,7 @@ class TagsView(TemplateView):
 
 class PostView(TemplateView):
     content_type = 'application/xml'
-    template_name = 'shared/custom-sitemap.xml'
+    template_name = 'Shared/custom-sitemap.xml'
 
     def get_context_data(self, **kwargs):
         context = {
@@ -139,7 +139,7 @@ class PostView(TemplateView):
 
 class PostCategoryView(TemplateView):
     content_type = 'application/xml'
-    template_name = 'shared/custom-sitemap.xml'
+    template_name = 'Shared/custom-sitemap.xml'
 
     def get_context_data(self, **kwargs):
         context = {
@@ -150,7 +150,7 @@ class PostCategoryView(TemplateView):
 
 class BrandView(TemplateView):
     content_type = 'application/xml'
-    template_name = 'shared/custom-sitemap.xml'
+    template_name = 'Shared/custom-sitemap.xml'
 
     def get_context_data(self, **kwargs):
         context = {
@@ -159,7 +159,7 @@ class BrandView(TemplateView):
         return context
 class ProductsCatsteeView(TemplateView):
     content_type = 'application/xml'
-    template_name = 'shared/custom-sitemap.xml'
+    template_name = 'Shared/custom-sitemap.xml'
 
     def get_context_data(self, **kwargs):
         context = {
@@ -170,7 +170,7 @@ class ProductsCatsteeView(TemplateView):
 
 class PageView(TemplateView):
     content_type = 'application/xml'
-    template_name = 'shared/custom-sitemap.xml'
+    template_name = 'Shared/custom-sitemap.xml'
 
     def get_context_data(self, **kwargs):
         context = {
