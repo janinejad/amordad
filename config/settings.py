@@ -26,8 +26,7 @@ SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = False
 
-
-ALLOWED_HOSTS = ['https://amordadsteel.com','amordadsteel.com','http://amordadsteel.com']
+ALLOWED_HOSTS = ['https://amordadsteel.com', 'amordadsteel.com', 'http://amordadsteel.com']
 # Application definition
 
 INSTALLED_APPS = [
@@ -39,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_render_partial',
     'django.contrib.sites',
+    'django.contrib.sitemaps',
     'django.contrib.redirects',
     'components',
     'u_account',
@@ -245,7 +245,6 @@ CSRF_TRUSTED_ORIGINS = [
 SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
 X_FRAME_OPTIONS = 'ALLOW-FROM'
 
-
 SECURE_BROWSER_XSS_FILTER = True  # جلوگیری از XSS
 SECURE_CONTENT_TYPE_NOSNIFF = True  # جلوگیری از MIME sniffing
 SECURE_HSTS_SECONDS = 31536000  # فعال کردن HSTS برای HTTPS
@@ -257,5 +256,3 @@ SECURE_HSTS_PRELOAD = True
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 CSRF_COOKIE_HTTPONLY = True
-
-

@@ -17,10 +17,13 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.views import LogoutView
-from django.urls import path, include,re_path
+from django.urls import path, include, re_path
 from ajax_select import urls as ajax_select_urls
+from django.views.generic import TemplateView
+
 from config import settings
-from config.views import home, header, footer, handle_410_error, header_js_code, footer_js_code
+from config.views import home, header, footer, handle_410_error, header_js_code, footer_js_code, SitemapIndexView, \
+    PageView, ProductsCatsteeView, BrandView, ProductSitemapView, TagsView, PostView, PostCategoryView
 
 app_name = 'amor'
 urlpatterns = [
@@ -40,6 +43,15 @@ urlpatterns = [
     path('header/', header, name='header'),
     path('footer/', footer, name='footer'),
     path('410/', handle_410_error, name='handle_410_error'),
+    path('sitemap.xml', SitemapIndexView.as_view(), name='sitemap-index'),
+    path('sitemap-pages.xml', PageView.as_view(), name='sitemap'),
+    path('sitemap-product-category.xml', ProductsCatsteeView.as_view(), name='sitemap'),
+    path('sitemap-product-brand.xml', BrandView.as_view(), name='sitemap'),
+    path('sitemap-products-1.xml', ProductSitemapView.as_view(), name='sitemap'),
+    path('sitemap-tags.xml', TagsView.as_view(), name='sitemap'),
+    path('sitemap-posts.xml', PostView.as_view(), name='sitemap'),
+    path('sitemap-post-categories.xml', PostCategoryView.as_view(), name='sitemap'),
+    path("robots.txt", TemplateView.as_view(template_name="shared/robots.txt", content_type="text/plain")),
 ]
 
 if settings.DEBUG:

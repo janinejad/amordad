@@ -37,7 +37,7 @@
                         <div class="card card-light card-hover h-100">
                             <div class="card-img-top card-img-hover"><a class="img-overlay"
                                                                         href="{{ cat.get_abs_url }}"></a>
-                                <img loading="lazy" src="{{ cat.image.url }}" alt="Image">
+                                <img loading="lazy" src="{{ cat.image.url }}" alt="{{ cat.title }}">
                             </div>
                             <div class="card-body">
                                 <h2 class="h6 mb-1 text-center"><a class="nav-link-light"
@@ -148,7 +148,7 @@
 {% endblock %}
 
 {% block js %}
-    <script src="{% static 'vendor/jquery-3.6.0.js' %}"></script>
+    <script src="{% static 'vendor/jquery-3.6.0.min.js' %}"></script>
     <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'vendor/simplebar/dist/simplebar.min.js' %}"></script>
     <script src="{% static 'vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js' %}"></script>

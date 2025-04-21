@@ -1,0 +1,25 @@
+
+# *
+User-agent: *
+Allow: /
+Allow: /*
+Disallow: */?*
+Allow: */?page*
+# Host
+Host: https://amordadsteel.com/
+
+# Sitemaps
+Sitemap: https://amordadsteel.com/sitemap.xml
+Sitemap: https://amordadsteel.com/sitemap-pages.xml
+Sitemap: https://amordadsteel.com/sitemap-posts.xml
+Sitemap: https://amordadsteel.com/sitemap-post-categories.xml
+Sitemap: https://amordadsteel.com/sitemap-products-1.xml
+Sitemap: https://amordadsteel.com/sitemap-products-2.xml
+Sitemap: https://amordadsteel.com/sitemap-products-3.xml
+Sitemap: https://amordadsteel.com/sitemap-product-category.xml
+Sitemap: https://amordadsteel.com/sitemap-product-brand.xml
+Sitemap: https://amordadsteel.com/sitemap-product-brand-category.xml
+Sitemap: https://amordadsteel.com/sitemap-guarantee.xml
+
+
+

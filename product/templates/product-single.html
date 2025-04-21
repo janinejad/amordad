@@ -283,9 +283,9 @@
     <script src="{% static 'js/theme.min.js' %}"></script>
 {% endblock %}
 {% block css %}
-    <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>
+{#    <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>#}
     <link rel="stylesheet" media="screen" href="{% static 'vendor/tiny-slider/dist/tiny-slider.css' %}"/>
-    <link rel="stylesheet" media="screen" href="{% static 'vendor/lightgallery.js/dist/css/lightgallery.min.css' %}"/>
+{#    <link rel="stylesheet" media="screen" href="{% static 'vendor/lightgallery.js/dist/css/lightgallery.min.css' %}"/>#}
     <!-- Main Theme Styles + Bootstrap-->
     <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
 {% endblock %}
@@ -338,20 +338,15 @@
 {% block page_meta %}
     <link rel="alternate" href="{{ product.get_full_sharing_url }}" hrefLang="fa-IR"/>
     <title>{% if product.meta_title %}{{ product.meta_title }}{% else %}{{ product.title }}{% endif %}</title>
-    <meta name="description" content="
-            {% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{% endif %}"/>
+    <meta name="description" content="{% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{% endif %}"/>
     <meta name="keywords"
           content="{% if product.keywords %}{{ product.keywords }}{% else %}{{ product.title }}{% endif %}"/>
-    <link rel="canonical" href="
-            {% if product.canonical %}{{ product.canonical }}{% else %}{{ product.get_full_sharing_url }}{% endif %}"/>
+    <link rel="canonical" href="{% if product.canonical %}{{ product.canonical }}{% else %}{{ product.get_full_sharing_url }}{% endif %}"/>
     <meta property="og:locale" content="fa_IR"/>
     <meta property="og:type" content="article"/>
     <meta property="og:title"
           content="{% if product.meta_title %}{{ product.meta_title }}{% else %}{{ product.title }}{% endif %}"/>
-    <meta property="og:description" content="
-
-
-            {% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{{ SST.setting.brand_name }}{% endif %}"/>
+    <meta property="og:description" content="{% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{{ SST.setting.brand_name }}{% endif %}"/>
     <meta property="og:url" content="{{ product.get_full_sharing_url }}"/>
     <meta property="article:modified_time" content="{{ product.updated_at_f }}"/>
     <meta property="og:updated_time" content="{{ product.updated_at_f }}"/>
@@ -359,13 +354,9 @@
     <meta property="og:image:secure_url" content="{{ product.image.url }}"/>
     <meta property="og:image:width" content="1120"/>
     <meta property="og:image:height" content="630"/>
-    <meta property="og:image:alt" content="
-
-            {% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{{ SST.setting.brand_name }}{% endif %}"/>
+    <meta property="og:image:alt" content="{% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{{ SST.setting.brand_name }}{% endif %}"/>
     <meta name="twitter:card" content="summary_large_image"/>
-    <meta name="twitter:description" content="
-
-            {% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{{ SST.setting.brand_name }}{% endif %}"/>
+    <meta name="twitter:description" content="{% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{{ SST.setting.brand_name }}{% endif %}"/>
     <meta name="twitter:title"
           content="{% if product.meta_title %}{{ product.meta_title }}{% else %}{{ product.title }}{% endif %}"/>
     <meta name="twitter:image" content="{{ product.image.url }}"/>

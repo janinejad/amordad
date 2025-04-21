@@ -1,10 +1,13 @@
+import math
+
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.core.mail import send_mail
 
-from blog.models import Post
+from blog.models import Post, Tag, PostCategory
 from menus.models import ProductCatMenu, Menu
-from product.models import Product, ProductsCats
+from pages.models import Page
+from product.models import Product, ProductsCats, Brand
 from settings.models import Setting, JsCode
 from u_account.forms import RegisterForm, LoginForm, ForgotPasswordForm
 
@@ -74,3 +77,105 @@ def footer_js_code(request):
         'codes': codes
     }
     return render(request, 'Shared/_FooterJsCode.html', context)
+
+
+
+
+
+class SitemapIndexView(TemplateView):
+    content_type = 'application/xml'
+    template_name = 'sitemap_index.xml'
+
+    def get_context_data(self, **kwargs):
+        sitemaps = [
+            'https://jimboshop.ir/sitemap-products.xml',
+            'https://jimboshop.ir/sitemap-pages.xml',
+            'https://jimboshop.ir/sitemap-posts.xml',
+            'https://jimboshop.ir/sitemap-post-categories.xml',
+            'https://jimboshop.ir/sitemap-tags.xml',
+            'https://jimboshop.ir/sitemap-product-category.xml',
+            'https://jimboshop.ir/sitemap-product-brand.xml',
+        ]
+        context = {
+            'sitemaps': sitemaps
+        }
+        return context
+
+
+products = Product.objects.all()
+product_count = products.count()
+
+class ProductSitemapView(TemplateView):
+    content_type = 'application/xml'
+    template_name = 'shared/custom-sitemap.xml'
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'locations': Product.objects.all()
+        }
+        return context
+
+
+
+class TagsView(TemplateView):
+    content_type = 'application/xml'
+    template_name = 'shared/custom-sitemap.xml'
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'locations': Tag.objects.all()
+        }
+        return context
+
+
+class PostView(TemplateView):
+    content_type = 'application/xml'
+    template_name = 'shared/custom-sitemap.xml'
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'locations': Post.objects.all()
+        }
+        return context
+
+
+class PostCategoryView(TemplateView):
+    content_type = 'application/xml'
+    template_name = 'shared/custom-sitemap.xml'
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'locations': PostCategory.objects.all()
+        }
+        return context
+
+
+class BrandView(TemplateView):
+    content_type = 'application/xml'
+    template_name = 'shared/custom-sitemap.xml'
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'locations': Brand.objects.all()
+        }
+        return context
+class ProductsCatsteeView(TemplateView):
+    content_type = 'application/xml'
+    template_name = 'shared/custom-sitemap.xml'
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'locations': ProductsCats.objects.all()
+        }
+        return context
+
+
+class PageView(TemplateView):
+    content_type = 'application/xml'
+    template_name = 'shared/custom-sitemap.xml'
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'locations': Page.objects.all()
+        }
+        return context

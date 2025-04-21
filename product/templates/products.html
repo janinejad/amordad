@@ -302,7 +302,8 @@
 
 
 {% block js %}
-    <script src="{% static 'vendor/jquery-3.6.0.js' %}"></script>
+{#    changed#}
+    <script src="{% static 'vendor/jquery-3.6.0.min.js' %}"></script>
     <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'vendor/simplebar/dist/simplebar.min.js' %}"></script>
     <script src="{% static 'vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js' %}"></script>
@@ -316,7 +317,7 @@
 {% block css %}
     <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>
     <link rel="stylesheet" media="screen" href="{% static 'vendor/tiny-slider/dist/tiny-slider.css' %}"/>
-    <link rel="stylesheet" media="screen" href="{% static 'vendor/nouislider/dist/nouislider.min.css' %}"/>
+{#    <link rel="stylesheet" media="screen" href="{% static 'vendor/nouislider/dist/nouislider.min.css' %}"/>#}
     <!-- Main Theme Styles + Bootstrap-->
     <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
 {% endblock %}
@@ -327,17 +328,7 @@
         <title>{{ cat_obj.cat.meta_title }}</title>
         <meta name="description" content="{{ cat_obj.cat.meta_description }}"/>
         <meta name="keywords" content="{{ cat_obj.cat.keywords }}"/>
-        <link rel="canonical" href="
-
-
-
-
-
-
-
-
-
-                {% if cat_obj.cat.canonical %}{{ cat_obj.cat.canonical }}{% else %}{{ st.siteUrl }}{{ request.path }}{% endif %}"/>
+        <link rel="canonical" href="{% if cat_obj.cat.canonical %}{{ cat_obj.cat.canonical }}{% else %}{{ st.siteUrl }}{{ request.path }}{% endif %}"/>
         {% if page_obj.has_next %}
             <link rel="next" href="{{ st.siteUrl }}{{ request.path }}?page={{ page_obj.next_page_number }}"/>
         {% endif %}
