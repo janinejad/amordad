@@ -88,13 +88,13 @@ class SitemapIndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         sitemaps = [
-            'https://jimboshop.ir/sitemap-products.xml',
-            'https://jimboshop.ir/sitemap-pages.xml',
-            'https://jimboshop.ir/sitemap-posts.xml',
-            'https://jimboshop.ir/sitemap-post-categories.xml',
-            'https://jimboshop.ir/sitemap-tags.xml',
-            'https://jimboshop.ir/sitemap-product-category.xml',
-            'https://jimboshop.ir/sitemap-product-brand.xml',
+            {'location':'https://amordadsteel.com/sitemap-products.xml'},
+            {'location':'https://amordadsteel.com/sitemap-pages.xml'},
+            {'location':'https://amordadsteel.com/sitemap-posts.xml'},
+            {'location':'https://amordadsteel.com/sitemap-post-categories.xml'},
+            {'location':'https://amordadsteel.com/sitemap-tags.xml'},
+            {'location':'https://amordadsteel.com/sitemap-product-category.xml'},
+            {'location':'https://amordadsteel.com/sitemap-product-brand.xml'},
         ]
         context = {
             'sitemaps': sitemaps
@@ -102,8 +102,6 @@ class SitemapIndexView(TemplateView):
         return context
 
 
-products = Product.objects.all()
-product_count = products.count()
 
 class ProductSitemapView(TemplateView):
     content_type = 'application/xml'
