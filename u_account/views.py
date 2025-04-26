@@ -25,10 +25,8 @@ from utils.email_service import send_email_to_user
 
 
 def register(request):
-    if request.user.is_authenticated:
-        return redirect('/')
-    form = RegisterForm(request.POST or None)
-    if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
+    if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest' and request.method == "POST":
+        form = RegisterForm(request.POST or None)
         if form.is_valid():
             instance = form.save(commit=False)
             instance.email_active_code = get_random_string(72)
