@@ -28,7 +28,6 @@ def register(request):
     if request.user.is_authenticated:
         return redirect('/')
     form = RegisterForm(request.POST or None)
-    print(request.META,"-------------------------------------")
     if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest' and request.method == "POST":
         if form.is_valid():
             instance = form.save(commit=False)
