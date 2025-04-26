@@ -25,6 +25,8 @@ from utils.email_service import send_email_to_user
 
 
 def register(request):
+    if request.user.is_authenticated:
+        return redirect('/')
     if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest' and request.method == "POST":
         form = RegisterForm(request.POST or None)
         if form.is_valid():
@@ -107,7 +109,7 @@ class ActivateAccountView(View):
                     return redirect(reverse('home'))
             else:
                 messages.success(request,
-                                 'کابر گرامی حساب شما از قبل فعال بوده است.')
+                                 'کابر گرامی حساب شما فعال شده است.')
                 return redirect('/')
 
         raise Http404

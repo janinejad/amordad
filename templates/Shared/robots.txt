@@ -1,26 +1,25 @@
 
-# *
-User-agent: *
 Allow: /
-Allow: /*
-Disallow: */?*
-Allow: */?page*
-Disallow: /apanel/
+User-agent: *
+Disallow: /admin/
 Disallow: /login/
 Disallow: /cart/
+Disallow: /checkout/
 Disallow: /search/
-# Host
-Host: https://amordadsteel.com/
+Disallow: /user-profile/
+
+Disallow: /search?
+Disallow: /backend/
+Disallow: /tmp/
+Disallow: /cgi-bin/
+Disallow: /private/
+Allow: /images/
+Allow: /css/
+Allow: /js/
+Allow: /static/
 
 # Sitemaps
 Sitemap: https://amordadsteel.com/sitemap.xml
-Sitemap: https://amordadsteel.com/sitemap-pages.xml
-Sitemap: https://amordadsteel.com/sitemap-posts.xml
-Sitemap: https://amordadsteel.com/sitemap-post-categories.xml
-Sitemap: https://amordadsteel.com/sitemap-products.xml
-Sitemap: https://amordadsteel.com/sitemap-product-category.xml
-Sitemap: https://amordadsteel.com/sitemap-product-brand.xml
-
 
 
 
