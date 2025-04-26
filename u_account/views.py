@@ -1,3 +1,5 @@
+import logging
+
 from cryptography.hazmat.backends.openssl import backend
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
@@ -29,7 +31,6 @@ def register(request):
     if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest' and request.method == "POST":
         if form.is_valid():
             instance = form.save(commit=False)
-            from django.utils import timezone
             instance.email_active_code = get_random_string(72)
             instance.set_password(instance.password)
             instance.username = instance.email
@@ -42,6 +43,9 @@ def register(request):
             return JsonResponse({}, status=200)
         else:
             return JsonResponse(get_errors(form), status=401)
+    else:
+        logging.critical("this is not ajax or post method!")
+        return JsonResponse({}, status=401)
 
 
 def login_m(request):
