@@ -43,10 +43,10 @@ class SliderSlide(models.Model):
     image_tooltip = models.CharField(max_length=250, null=True, verbose_name="نام تصویر")
     link = models.URLField(max_length=250, null=True, blank=True, verbose_name="لینک صفحه فرود")
     original_image = ProcessedImageField(upload_to=upload_original_image_web_path, processors=[ResizeToFill(1600, 912)],
-                                         options={'quality': 85}, verbose_name='لینک تصویر webp')
+                                         format='WEBP', verbose_name='لینک تصویر webp')
     image_webp = ProcessedImageField(upload_to=upload_image_web_path, blank=True, null=True,
                                      processors=[ResizeToFill(1600, 912)],
-                                     format='WEBP', options={'quality': 85}, verbose_name='لینک تصویر webp')
+                                     format='WEBP', verbose_name='لینک تصویر webp')
     slider = models.ForeignKey(Slider, blank=True, on_delete=models.CASCADE, verbose_name='اسلایدر')
     is_origin_image = models.BooleanField(default=False, verbose_name='از تصویر اصلی استفاده شود')
     is_active = models.BooleanField(default=True, verbose_name='وضعیت')
