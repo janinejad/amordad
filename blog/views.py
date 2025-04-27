@@ -65,19 +65,12 @@ def single_post(request, *args, post_slug=None, **kwargs):
     form = CommentForm(request.POST or None)
     url = reverse('blog:single_post', kwargs={'post_slug': post.slug})
     if request.method == "POST":
-        if not request.user.is_authenticated:
-            messages.error(request,
-                           'شما می بایست ابتدا وارد حساب کاربری خود شوید!')
-            return redirect(url)
-        if post.user_has_comment(request.user):
-            messages.error(request,
-                           'شما مجاز به ثبت 5 نظر روی این پست هستید!')
-            return redirect(url)
         if form.is_valid():
             instance = form.save(commit=False)
             instance.post_type = 2
             instance.post = post
-            instance.user = request.user
+            if request.user.is_authenticated:
+                instance.user = request.user
             instance.save()
             messages.error(request,
                            'نظر شما با موفقیت ثبت گردید!')

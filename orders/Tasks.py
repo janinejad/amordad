@@ -5,7 +5,7 @@ from django.utils import timezone
 
 from settings.models import Setting
 
-SETTING = Setting.objects.first()
+SETTING = []
 cancel_time = 3600
 if SETTING:
     cancel_time = SETTING.order_cancel_time

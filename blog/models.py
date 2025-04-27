@@ -12,6 +12,7 @@ from jalali_date import datetime2jalali
 from extensions.utils import get_filename_ext, unique_slug_generator
 from django.db import models
 
+from product.models import Product
 # Create your models here.
 from u_account.models import User
 
@@ -33,7 +34,7 @@ class PostCategory(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name='تاریخ به روز رسانی')
     image = ProcessedImageField(upload_to=upload_image_path, processors=[ResizeToFill(1284, 600)],
                                 format='WEBP', verbose_name='تصویر شاخص',
-                                blank=True, null=True,help_text="طول 1284 و عرض 600 پیکسل باشد")
+                                blank=True, null=True, help_text="طول 1284 و عرض 600 پیکسل باشد")
     canonical = models.URLField(verbose_name='لینک کنونیکال', null=True, blank=True)
     is_noindex = models.BooleanField(default=False, verbose_name='صفحه noindex شود')
     http_response_gone = models.BooleanField(default=False, verbose_name='410 شود')
@@ -118,8 +119,11 @@ class Post(models.Model):
     slug = models.SlugField(unique=True, verbose_name='نام در url')
     Description = RichTextUploadingField(blank=True, null=True, verbose_name='توضیحات اصلی')
     image = ProcessedImageField(upload_to=upload_image_path, processors=[ResizeToFill(1284, 600)],
-                                format='WEBP',verbose_name='تصویر شاخص',
+                                format='WEBP', verbose_name='تصویر شاخص',
                                 blank=True, null=True)
+    thumb_image = ProcessedImageField(upload_to=upload_image_path, processors=[ResizeToFill(80, 80)],
+                                      format='WEBP', verbose_name='تصویر بند انگشتی',
+                                      blank=True, null=True)
     tags = models.ManyToManyField(Tag, blank=True, verbose_name='برچسبها')
     category = models.ForeignKey(PostCategory, on_delete=models.PROTECT, verbose_name='دسته بندی')
     date = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ')
@@ -136,6 +140,11 @@ class Post(models.Model):
         verbose_name_plural = 'نوشته ها'
         verbose_name = 'نوشته'
         ordering = ['-id']
+
+    def get_thumb_image(self):
+        if self.thumb_image:
+            return self.thumb_image
+        return self.image
 
     def __str__(self):
         return self.title
@@ -192,12 +201,15 @@ class CommentManagement(models.Manager):
 class Comments(models.Model):
     POST_TYPE = (
         ('2', 'نوشته ها'),
+        ('3', 'محصولات'),
     )
     comment = models.TextField(max_length=500, verbose_name='متن نظرسنجی')
     post_type = models.CharField(max_length=2, choices=POST_TYPE, verbose_name='نوع پست')
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True, blank=True, verbose_name='عنوان پست')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True, verbose_name='عنوان محصول')
     date = models.DateTimeField(auto_now_add=timezone.now, verbose_name='تاریخ نظرسنجی')
     is_confirmed = models.BooleanField(default=False, verbose_name='وضعیت تایید')
+    name = models.CharField(max_length=250,verbose_name='نام و نام خانوادگی')
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name='عنوان کاربر')
     objects = CommentManagement()
 
@@ -207,7 +219,9 @@ class Comments(models.Model):
         ordering = ['-id']
 
     def __str__(self):
-        return self.user.get_full_name()
+        if self.name:
+            return self.name
+        return f"ناشناس {self.id}"
 
     def comment_date(self):
         jalalidate = datetime2jalali(self.date).strftime('%Y/%m/%d در ساعت %H:%M')
@@ -215,3 +229,25 @@ class Comments(models.Model):
 
     def get_user_full_name(self):
         return self.user.get_full_name()
+    def get_image_url(self):
+        if self.user:
+            if self.user.image:
+                return self.user.image.url
+        from django.templatetags.static import static
+        return static('img/avatars/02.png')
+
+
+
+class CommentReply(models.Model):
+    comment = models.ForeignKey(Comments, on_delete=models.CASCADE, null=True, blank=True, verbose_name='پاسخ')
+    text = models.TextField(max_length=500, verbose_name='متن پاسخ')
+    date = models.DateTimeField(auto_now_add=timezone.now, verbose_name='تاریخ نظرسنجی')
+
+    class Meta:
+        verbose_name_plural = 'پاسخ ها'
+        verbose_name = 'پاسخ'
+        ordering = ['-id']
+
+    def comment_date(self):
+        jalalidate = datetime2jalali(self.date).strftime('%Y/%m/%d در ساعت %H:%M')
+        return jalalidate

@@ -1,11 +1,14 @@
 from django.contrib import admin
 from easy_select2 import select2_modelform
-from .models import Tag, PostCategory, Post, Comments
+from .models import Tag, PostCategory, Post, Comments,CommentReply
 
 TagForm = select2_modelform(Tag, attrs={'width': '300px'})
 PostCategoryForm = select2_modelform(PostCategory, attrs={'width': '100px'})
 PostForm = select2_modelform(Post, attrs={'width': '300px'})
 
+class CommentReplyInline(admin.TabularInline):
+    model = CommentReply
+    extra = 1
 
 class TagAdmin(admin.ModelAdmin):
     list_display = ['__str__']
@@ -53,6 +56,7 @@ class PostCategoryAdmin(admin.ModelAdmin):
 @admin.register(Comments)
 class CommentsAdmin(admin.ModelAdmin):
     list_display = ['__str__']
+    inlines = [CommentReplyInline]
 
     class Meta:
         model = Comments

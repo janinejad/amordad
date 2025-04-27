@@ -115,6 +115,8 @@ class Setting(models.Model):
                                       on_delete=models.SET_NULL, verbose_name='صفحه تماس با ما')
     main_page = models.ForeignKey(Page, null=True, related_name='main_page', blank=True, on_delete=models.SET_NULL,
                                   verbose_name='صفحه اصلی')
+    terms_conditions = models.ForeignKey(Page, null=True, related_name='terms_condition_page', blank=True, on_delete=models.SET_NULL,
+                                  verbose_name='صفحه قوانین')
     meta_title = models.CharField(max_length=600, null=True, blank=True, verbose_name='عنوان سئو صفحه اصلی')
     meta_desc = models.CharField(max_length=600, null=True, blank=True, verbose_name='توضیحات سئو صفحه اصلی')
     keywords = models.TextField(max_length=600, null=True, blank=True, verbose_name='کلمات کلیدی صفحه اصلی')

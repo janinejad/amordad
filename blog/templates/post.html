@@ -28,7 +28,8 @@
                     <div class="d-flex align-items-center text-light border-end border-light pe-3 me-3 mb-2"><i
                             class="fi-clock opacity-70 me-2"></i><span>2 دقیقه زمان مطالعه</span></div>
                     <a class="d-flex align-items-center text-light text-decoration-none ms-3 mb-2" href="#comments"
-                       data-scroll><i class="fi-chat-circle opacity-70 me-2"></i><span>{{ data.post.comment_counts }} نظر</span></a>
+                       data-scroll><i
+                            class="fi-chat-circle opacity-70 me-2"></i><span>{{ data.post.comment_counts }} نظر</span></a>
                 </div>
                 <div class="row white-custom page-content">
                     {{ data.post.Description|safe }}
@@ -49,10 +50,16 @@
                         <div class="d-flex align-items-center">
                             <div class="text-light text-nowrap pe-1 mb-2">اشتراک گذاری:</div>
                             <div class="d-flex"><a
-                                    class="btn btn-icon btn-translucent-light btn-xs rounded-circle mb-2 ms-2" href="https://t.me/share/url?url={{st.siteUrl }}{{ data.post.get_abs_url }}&text={{ data.post.title }}"
-                                    data-bs-toggle="tooltip" title="با تلگرام به اشتراک بزارش"><i class="fi-telegram"></i></a><a
-                                    class="btn btn-icon btn-translucent-light btn-xs rounded-circle mb-2 ms-2" href="https://api.whatsapp.com/send/?phone&text={{st.siteUrl }}{{ data.post.get_abs_url }}"
-                                    data-bs-toggle="tooltip" title="با واتس اپ به اشتراک بزارش"><i class="fi-whatsapp"></i></a>
+                                    class="btn btn-icon btn-translucent-light btn-xs rounded-circle mb-2 ms-2"
+                                    href="https://t.me/share/url?url=
+                                            {{ st.siteUrl }}{{ data.post.get_abs_url }}&text={{ data.post.title }}"
+                                    data-bs-toggle="tooltip" title="با تلگرام به اشتراک بزارش"><i
+                                    class="fi-telegram"></i></a><a
+                                    class="btn btn-icon btn-translucent-light btn-xs rounded-circle mb-2 ms-2"
+                                    href="https://api.whatsapp.com/send/?phone&text=
+                                            {{ st.siteUrl }}{{ data.post.get_abs_url }}"
+                                    data-bs-toggle="tooltip" title="با واتس اپ به اشتراک بزارش"><i
+                                    class="fi-whatsapp"></i></a>
                             </div>
                         </div>
                     </div>
@@ -63,15 +70,35 @@
                     <!-- Comment-->
                     {% for comment in data.post.comments_set.all %}
                         <div class="border-bottom border-light pb-4 mb-4">
-                            <p class="text-light white-70">{{ comment.comment }}</p>
-                            <h6 class="text-light opacity-50 fs-base mb-0 white-70 fw-500">{{ comment }}</h6>
-                            <div class="d-flex mt-2 justify-content-between align-items-center">
-                                <div class="d-flex align-items-center pe-2">
+                            <p class="text-light opacity-70">{{ comment.comment }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center pe-2"><img class="rounded-circle me-1"
+                                                                                 src="{{ comment.get_image_url }}"
+                                                                                 width="48"
+                                                                                 alt="{{ comment }}">
                                     <div class="ps-2">
-                                        <span class="text-light opacity-50 fs-sm">{{ comment.comment_date }}</span>
+                                        <h6 class="text-light fs-base mb-0 fw-500">{{ comment }}</h6><span
+                                            class="text-light opacity-50 fs-sm">{{ comment.comment_date }}</span>
                                     </div>
                                 </div>
                             </div>
+                            <!-- Reply to comment-->
+                            {% for r in comment.commentreply_set.all %}
+                                <div class="border-start border-4 border-light ps-4 ms-4 mt-4">
+                                    <p class="text-light opacity-70">{{ r.text }}</p>
+                                    <div class="d-flex align-items-center pe-2"><img class="rounded-circle me-1"
+                                                                                     src="{% static 'img/avatars/02.png' %}"
+                                                                                     width="48"
+                                                                                     alt="نویسنده">
+                                        <div class="ps-2">
+                                            <h6 class="text-light fs-base mb-0 fw-500">امرداد<span
+                                                    class="badge bg-info rounded-pill fs-xs ms-2">نویسنده</span></h6>
+                                            <span
+                                                    class="text-light opacity-50 fs-sm">{{ r.comment_date }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
                     {% endfor %}
                 </div>
@@ -79,8 +106,14 @@
                 <h3 class="text-light mb-4 pb-sm-2 h5 font-vazir">ثبت نظر</h3>
                 <form class="needs-validation row gy-md-4 gy-3 pb-sm-2" method="post" novalidate>
                     {% csrf_token %}
+                    <div class="col-sm-6">
+                        <label class="form-label text-light" for="comment-name">نام و نام خانوادگی</label>
+                        {{ data.form.name }}
+                        <div class="invalid-feedback">نام خود را وارد کنید</div>
+                    </div>
                     <div class="col-12">
-                        {{ data.form }}
+                        <label class="form-label text-light" for="comment-text">متن نظر</label>
+                        {{ data.form.comment }}
                         <div class="invalid-feedback">لطفا نظر خود را بنویسید</div>
                     </div>
                     <div class="col-12 py-2">
@@ -112,13 +145,15 @@
                                 {% for p in other_post %}
                                     <div class="d-flex align-items-start border-bottom border-light pb-3 mb-3"><a
                                             class="flex-shrink-0" href="{{ p.get_abs_url }}"><img class="rounded-3"
-                                                                                src="{{ p.image.url }}"
-                                                                                width="80"
-                                                                                alt="Image"></a>
+                                                                                                  src="{{ p.get_thumb_image.url }}"
+                                                                                                  width="80"
+                                                                                                  alt="Image"></a>
                                         <div class="ps-3"><a
                                                 class="fs-sm text-uppercase text-primary text-decoration-none"
                                                 href="{{ p.category.get_abs_url }}">{{ p.category }}</a>
-                                            <h4 class="fs-base text-light pt-1 mb-2"><a class="nav-link" href="{{ p.get_abs_url }}">{{ p.title }}</a></h4>
+                                            <h4 class="fs-base text-light pt-1 mb-2"><a class="nav-link"
+                                                                                        href="{{ p.get_abs_url }}">{{ p.title }}</a>
+                                            </h4>
                                             <div class="d-flex fs-xs text-light opacity-70"><span class="me-2 pe-1"><i
                                                     class="fi-calendar-alt opacity-70 mt-n1 me-1 align-middle"></i>{{ p.post_date }}</span><span><i
                                                     class="fi-chat-circle opacity-70 mt-n1 me-1 align-middle"></i>{{ p.comment_counts }} نظر</span>
@@ -142,7 +177,8 @@
                                     <button class="btn btn-primary btn-sm" type="button">عضویت</button>
                                 </form>
                                 <p class="fs-sm pt-3 mb-0"><span
-                                        class="text-light opacity-70">* با ثبت نام در خبرنامه </span><a href="#">شرایط و
+                                        class="text-light opacity-70">* با ثبت نام در خبرنامه </span><a
+                                        href="{{ st.terms_conditions.get_abs_url }}">شرایط و
                                     قوانین </a> سایت را میپذیرم.</p>
                             </div>
                         </div>
@@ -163,9 +199,9 @@
     <script src="{% static 'js/theme.min.js' %}"></script>
 {% endblock %}
 {% block css %}
-{#    <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>#}
-{#    <link rel="stylesheet" media="screen" href="{% static 'vendor/tiny-slider/dist/tiny-slider.css' %}"/>#}
-{#    <link rel="stylesheet" media="screen" href="{% static 'vendor/lightgallery.js/dist/css/lightgallery.min.css' %}"/>#}
+    {#    <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>#}
+    {#    <link rel="stylesheet" media="screen" href="{% static 'vendor/tiny-slider/dist/tiny-slider.css' %}"/>#}
+    {#    <link rel="stylesheet" media="screen" href="{% static 'vendor/lightgallery.js/dist/css/lightgallery.min.css' %}"/>#}
     <!-- Main Theme Styles + Bootstrap-->
     <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
 {% endblock %}
@@ -184,7 +220,7 @@
             "author": {
               "@type": "Person",
               "name": "{{ st.brand_name }}",
-              "url": "{{st.siteUrl }}/blog/"
+              "url": "{{ st.siteUrl }}/blog/"
             },
             "publisher": {
               "@type": "Organization",
@@ -200,20 +236,21 @@
     </script>
 {% endblock %}
 {% block page_meta %}
-    <link rel="alternate" href="{{st.siteUrl }}{{ data.post.get_abs_url }}" hrefLang="fa-IR"/>
+    <link rel="alternate" href="{{ st.siteUrl }}{{ data.post.get_abs_url }}" hrefLang="fa-IR"/>
     <title>{% if data.post.meta_title %}{{ data.post.meta_title }}{% else %}{{ data.post.title }}{% endif %}</title>
     <meta name="description"
           content="{% if data.post.meta_desc %}{{ data.post.meta_desc }}{% else %} {{ data.post.title }}{% endif %}"/>
     <meta name="keywords"
           content="{% if data.post.keywords %}{{ data.post.keywords }}{% else %}{{ data.post.title }}{% endif %}"/>
-    <link rel="canonical" href="{% if data.post.canonical %}{{ data.post.canonical }}{% else %}{{st.siteUrl }}{{ data.post.get_abs_url }}{% endif %}"/>
+    <link rel="canonical" href="
+            {% if data.post.canonical %}{{ data.post.canonical }}{% else %}{{ st.siteUrl }}{{ data.post.get_abs_url }}{% endif %}"/>
     <meta property="og:locale" content="fa_IR"/>
     <meta property="og:type" content="object"/>
     <meta property="og:title"
           content="{% if data.post.meta_title %}{{ data.post.meta_title }}{% else %}{{ data.post.title }}{% endif %}"/>
     <meta property="og:description"
           content="{% if data.post.meta_desc %}{{ data.post.meta_desc }}{% else %} {{ data.post.title }}{% endif %}"/>
-    <meta property="og:url" content="{{st.siteUrl }}{{ data.post.get_abs_url }}"/>
+    <meta property="og:url" content="{{ st.siteUrl }}{{ data.post.get_abs_url }}"/>
     <meta property="og:site_name" content="{{ st.brand_name }}"/>
     {% for tag in tags %}
         <meta key="meta-article-tag-{{ forloop.counter0 }}" property="article:tag" content="{{ tag.title }}"/>
@@ -222,7 +259,7 @@
     <meta property="article:published_time" content="{{ data.post.create_date_f }}"/>
     <meta property="article:modified_time" content="{{ data.post.updated_at_f }}"/>
     <meta property="og:updated_time" content="{{ data.post.updated_at_f }}"/>
-{#    <meta name="twitter:creator" content="@https://twitter.com/jimboshopir"/>#}
+    {#    <meta name="twitter:creator" content="@https://twitter.com/jimboshopir"/>#}
     {#<meta name="twitter:site" content="@jimboshopir"/>#}
     <meta name="twitter:label1" content="نوشته شده توسط"/>
     <meta name="twitter:data1" content="{{ st.brand_name }}"/>

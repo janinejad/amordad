@@ -93,7 +93,7 @@ class ContactUs(models.Model):
 
 
 class Emails(models.Model):
-    email = models.EmailField(max_length=250, blank=True, null=True, verbose_name='آدرس ایمیل')
+    email = models.EmailField(max_length=250,verbose_name='آدرس ایمیل')
     date = models.DateTimeField(auto_now=True, verbose_name='زمان ثبت تماس')
 
     class Meta:
@@ -101,4 +101,6 @@ class Emails(models.Model):
         verbose_name = 'ایمیل'
 
     def __str__(self):
-        return self.email
+        if self.email:
+            return self.email
+        return f"{self.id}"

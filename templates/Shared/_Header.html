@@ -168,8 +168,7 @@
                                     {{ register_form.agree_to_terms }}
                                     <label class="form-check-label"
                                            for="{{ register_form.agree_to_terms.auto_id }}"><span class='opacity-70'>با ثبت نام در این سایت </span>
-                                        <a href='#' class='text-light'>شرایط </a> <span class='opacity-70'> و </span> <a
-                                                href='#' class='text-light'>قوانین </a> سایت را میپذیرم.</label>
+                                        <a href='{{ st.terms_conditions.get_abs_url }}' class='text-light'>شرایط و قوانین </a> سایت را میپذیرم.</label>
                                     <div id="err_agree_to_terms" class="invalid-feedback"></div>
                                 </div>
                                 <button class="btn btn-primary btn-lg w-100" id="registerFormBtn" type="submit">ثبت
