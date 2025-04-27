@@ -212,24 +212,24 @@
             },
             "headline": "{% if data.post.meta_title %}{{ data.post.meta_title }}{% else %}
         {{ data.post.title }}{% endif %}",
-            "image": ["{{ data.post.image.url }}"],
+            "image": ["{{ st.siteUrl }}{{ data.post.image.url }}"],
             "author": {
               "@type": "Person",
               "name": "{{ st.brand_name }}",
-              "url": "{{ st.siteUrl }}/blog/"
+              "url": "{{ st.siteUrl }}{{ data.post.get_abs_url }}"
             },
             "publisher": {
               "@type": "Organization",
               "name": "{{ st.brand_name }}",
               "logo": {
                 "@type": "ImageObject",
-                "url": "{{ st.brand_logo.url }}"
+                "url": "{{ st.siteUrl }}{{ st.brand_logo.url }}"
               }
             },
             "datePublished": "{{ data.post.published_at_f_s }}",
             "dateModified": "{{ data.post.updated_at_f_s }}",
             "keywords": "{{ data.post.keywords }}",
-            "articleSection": "{{ data.post.category.title }}",
+            "articleSection": "{{ data.post.category.title }}"
         }
     </script>
 {% endblock %}
