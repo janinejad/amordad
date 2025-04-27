@@ -120,10 +120,10 @@ class Post(models.Model):
     Description = RichTextUploadingField(blank=True, null=True, verbose_name='توضیحات اصلی')
     image = ProcessedImageField(upload_to=upload_image_path, processors=[ResizeToFill(1284, 600)],
                                 format='WEBP', verbose_name='تصویر شاخص',
-                                blank=True, null=True)
+                                blank=True, null=True,help_text='ابعاد تصویر 1284 عرض در 600 ارتفاع')
     thumb_image = ProcessedImageField(upload_to=upload_image_path, processors=[ResizeToFill(80, 80)],
                                       format='WEBP', verbose_name='تصویر بند انگشتی',
-                                      blank=True, null=True)
+                                      blank=True, null=True,help_text='ابعاد تصویر 80 در 80 ')
     tags = models.ManyToManyField(Tag, blank=True, verbose_name='برچسبها')
     category = models.ForeignKey(PostCategory, on_delete=models.PROTECT, verbose_name='دسته بندی')
     date = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ')
