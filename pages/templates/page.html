@@ -56,7 +56,7 @@
         "name": "{{ st.site_title }}",
         "alternateName": "{{ st.site_title }}",
         "url": "{{ st.siteUrl }}",
-        "logo": "{{ st.brand_logo.url }}",
+        "logo": "{{ st.siteUrl }}{{ st.brand_logo.url }}",
         "contactPoint": {
         "@type": "ContactPoint",
         "telephone": "+98{{ st.tel_no }}",
@@ -65,7 +65,7 @@
         "availableLanguage": "Persian"
         },
         "sameAs": [
-        "{{ st.instagram_link }}",
+        "{{ st.instagram_link }}"
         ]
         }
     </script>
