@@ -63,7 +63,6 @@ def single_post(request, *args, post_slug=None, **kwargs):
     if post.http_response_gone:
         return redirect(reverse('handle_410_error'))
     form = CommentForm(request.POST or None)
-    url = reverse('blog:single_post', kwargs={'post_slug': post.slug})
     if request.method == "POST":
         if form.is_valid():
             instance = form.save(commit=False)
@@ -72,9 +71,8 @@ def single_post(request, *args, post_slug=None, **kwargs):
             if request.user.is_authenticated:
                 instance.user = request.user
             instance.save()
-            messages.error(request,
+            messages.success(request,
                            'نظر شما با موفقیت ثبت گردید!')
-            return redirect(url)
         else:
             messages.error(request,
                            form)

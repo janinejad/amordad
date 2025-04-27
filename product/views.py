@@ -8,6 +8,7 @@ from django.http import JsonResponse, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
+from blog.forms import CommentForm
 from product.filters import SearchFilter
 from product.models import Product, ProductFavorite, ProductInventory, ProductsCats, AttributeFilter, Brand, \
     AttributeItem
@@ -36,9 +37,24 @@ def product_single(request, id=None, product_name=None):
         user_favorite = product.productfavorite_set.filter(user=request.user).first()
         if user_favorite:
             is_favorite = True
+    form = CommentForm(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.post_type = 3
+            instance.product = product
+            if request.user.is_authenticated:
+                instance.user = request.user
+            instance.save()
+            messages.success(request,
+                           'نظر شما با موفقیت ثبت گردید!')
+        else:
+            messages.error(request,
+                           form)
     context = {
         'is_favorite': is_favorite,
         'product': product,
+        'form':form,
     }
     return render(request, 'product-single.html', context)
 
@@ -103,9 +119,7 @@ def products(request, cat_s=None, *args, **kwargs):
                'text': s}
         filter_list.append(obj)
     paginator = Paginator(products, 40)
-    page_number = request.GET.get("page")
-    if not page_number:
-        page_number = 1
+    page_number = request.GET.get("page",1)
     page_obj = paginator.get_page(page_number)
     context = {
         'filter_list': filter_list,

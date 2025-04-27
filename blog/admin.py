@@ -55,6 +55,7 @@ class PostCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Comments)
 class CommentsAdmin(admin.ModelAdmin):
+    list_filter = ['post_type','is_confirmed']
     list_display = ['__str__']
     inlines = [CommentReplyInline]
 

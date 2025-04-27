@@ -42,9 +42,13 @@
                     <button class="btn btn-icon btn-translucent-light btn-xs rounded-circle ms-2 mb-sm-2" type="button"
                             data-bs-toggle="dropdown"><i class="fi-share"></i></button>
                     <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end my-1">
-                        <a class="dropdown-item" href="https://t.me/share/url?url={{ product.get_full_sharing_url }}&text={{ product.title }}"><i class="fi-telegram fs-base opacity-75 me-2"></i>تلگرام
+                        <a class="dropdown-item"
+                           href="https://t.me/share/url?url={{ product.get_full_sharing_url }}&text={{ product.title }}"><i
+                                class="fi-telegram fs-base opacity-75 me-2"></i>تلگرام
                         </a>
-                        <a class="dropdown-item" href="https://api.whatsapp.com/send/?phone&text={{ product.get_full_sharing_url }}"><i class="fi-whatsapp fs-base opacity-75 me-2"></i>واتس اپ
+                        <a class="dropdown-item"
+                           href="https://api.whatsapp.com/send/?phone&text={{ product.get_full_sharing_url }}"><i
+                                class="fi-whatsapp fs-base opacity-75 me-2"></i>واتس اپ
                         </a>
                     </div>
                 </div>
@@ -134,6 +138,61 @@
                     <h2 class="h5 fw-500 font-nonBold text-light pt-4 mt-3">توضیحات محصول</h2>
                     {{ product.Description|safe }}
                 </div>
+                <div class="mb-4 mb-md-5" id="comments">
+                    <h3 class="text-light mb-4 pb-2 font-vazir h5">{{ product.comments_set.all.count }} نظر ثبت شده</h3>
+                    <!-- Comment-->
+                    {% for comment in product.comments_set.all %}
+                        <div class="border-bottom border-light pb-4 mb-4">
+                            <p class="text-light opacity-70">{{ comment.comment }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center pe-2"><img class="rounded-circle me-1"
+                                                                                 src="{{ comment.get_image_url }}"
+                                                                                 width="48"
+                                                                                 alt="{{ comment }}">
+                                    <div class="ps-2">
+                                        <h6 class="text-light fs-base mb-0 fw-500">{{ comment }}</h6><span
+                                            class="text-light opacity-50 fs-sm">{{ comment.comment_date }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Reply to comment-->
+                            {% for r in comment.commentreply_set.all %}
+                                <div class="border-start border-4 border-light ps-4 ms-4 mt-4">
+                                    <p class="text-light opacity-70">{{ r.text }}</p>
+                                    <div class="d-flex align-items-center pe-2"><img class="rounded-circle me-1"
+                                                                                     src="{% static 'img/avatars/02.png' %}"
+                                                                                     width="48"
+                                                                                     alt="نویسنده">
+                                        <div class="ps-2">
+                                            <h6 class="text-light fs-base mb-0 fw-500">امرداد<span
+                                                    class="badge bg-info rounded-pill fs-xs ms-2">نویسنده</span></h6>
+                                            <span
+                                                    class="text-light opacity-50 fs-sm">{{ r.comment_date }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <!-- Comment form-->
+                <h3 class="text-light mb-4 pb-sm-2 h5 font-vazir">ثبت نظر</h3>
+                <form class="needs-validation row gy-md-4 gy-3 pb-sm-2" method="post" novalidate>
+                    {% csrf_token %}
+                    <div class="col-sm-6">
+                        <label class="form-label text-light" for="comment-name">نام و نام خانوادگی</label>
+                        {{ form.name }}
+                        <div class="invalid-feedback">نام خود را وارد کنید</div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label text-light" for="comment-text">متن نظر</label>
+                        {{ form.comment }}
+                        <div class="invalid-feedback">لطفا نظر خود را بنویسید</div>
+                    </div>
+                    <div class="col-12 py-2">
+                        <button class="btn btn-lg btn-primary" type="submit">ثبت</button>
+                    </div>
+                </form>
             </div>
             <!-- Sidebar-->
             <div class="col-md-5 pt-5 pt-md-0" style="margin-top: -6rem;">
@@ -206,6 +265,7 @@
                 </div>
             </div>
         </div>
+
         <!-- Related posts (Carousel)-->
         {% if product.similar_products.get_available_products.count > 0 %}
             <h2 class="h4 font-nonBold text-light pt-5 pb-3 mt-md-4">کالاهای مشابه</h2>
@@ -283,9 +343,9 @@
     <script src="{% static 'js/theme.min.js' %}"></script>
 {% endblock %}
 {% block css %}
-{#    <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>#}
+    {#    <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>#}
     <link rel="stylesheet" media="screen" href="{% static 'vendor/tiny-slider/dist/tiny-slider.css' %}"/>
-{#    <link rel="stylesheet" media="screen" href="{% static 'vendor/lightgallery.js/dist/css/lightgallery.min.css' %}"/>#}
+    {#    <link rel="stylesheet" media="screen" href="{% static 'vendor/lightgallery.js/dist/css/lightgallery.min.css' %}"/>#}
     <!-- Main Theme Styles + Bootstrap-->
     <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
 {% endblock %}
@@ -338,15 +398,18 @@
 {% block page_meta %}
     <link rel="alternate" href="{{ product.get_full_sharing_url }}" hrefLang="fa-IR"/>
     <title>{% if product.meta_title %}{{ product.meta_title }}{% else %}{{ product.title }}{% endif %}</title>
-    <meta name="description" content="{% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{% endif %}"/>
+    <meta name="description"
+          content="{% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{% endif %}"/>
     <meta name="keywords"
           content="{% if product.keywords %}{{ product.keywords }}{% else %}{{ product.title }}{% endif %}"/>
-    <link rel="canonical" href="{% if product.canonical %}{{ product.canonical }}{% else %}{{ product.get_full_sharing_url }}{% endif %}"/>
+    <link rel="canonical" href="
+            {% if product.canonical %}{{ product.canonical }}{% else %}{{ product.get_full_sharing_url }}{% endif %}"/>
     <meta property="og:locale" content="fa_IR"/>
     <meta property="og:type" content="article"/>
     <meta property="og:title"
           content="{% if product.meta_title %}{{ product.meta_title }}{% else %}{{ product.title }}{% endif %}"/>
-    <meta property="og:description" content="{% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{{ SST.setting.brand_name }}{% endif %}"/>
+    <meta property="og:description" content="
+            {% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{{ SST.setting.brand_name }}{% endif %}"/>
     <meta property="og:url" content="{{ product.get_full_sharing_url }}"/>
     <meta property="article:modified_time" content="{{ product.updated_at_f }}"/>
     <meta property="og:updated_time" content="{{ product.updated_at_f }}"/>
@@ -354,9 +417,11 @@
     <meta property="og:image:secure_url" content="{{ product.image.url }}"/>
     <meta property="og:image:width" content="1120"/>
     <meta property="og:image:height" content="630"/>
-    <meta property="og:image:alt" content="{% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{{ SST.setting.brand_name }}{% endif %}"/>
+    <meta property="og:image:alt" content="
+            {% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{{ SST.setting.brand_name }}{% endif %}"/>
     <meta name="twitter:card" content="summary_large_image"/>
-    <meta name="twitter:description" content="{% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{{ SST.setting.brand_name }}{% endif %}"/>
+    <meta name="twitter:description" content="
+            {% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{{ SST.setting.brand_name }}{% endif %}"/>
     <meta name="twitter:title"
           content="{% if product.meta_title %}{{ product.meta_title }}{% else %}{{ product.title }}{% endif %}"/>
     <meta name="twitter:image" content="{{ product.image.url }}"/>
