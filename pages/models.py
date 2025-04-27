@@ -86,7 +86,10 @@ class ContactUs(models.Model):
         verbose_name = 'تماس'
 
     def __str__(self):
-        return self.name
+        if self.name:
+            return self.name
+        else:
+            return f"{self.id}"
 
 
 class Emails(models.Model):
