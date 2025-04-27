@@ -81,6 +81,8 @@ def products(request, cat_s=None, *args, **kwargs):
         cat = ProductsCats.objects.all().filter(slug=cat_s).first()
         if not cat:
             return Http404
+        if cat.http_response_gone:
+            return redirect(reverse('handle_410_error'))
         products = products.filter(products__RootCategoryId__in=get_category_children(cat))
         attrs = AttributeFilter.objects.filter(category__slug=cat_s).distinct()
         attrs_list = []
