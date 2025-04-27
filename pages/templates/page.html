@@ -1,12 +1,17 @@
 {% extends 'Shared/_MainLayout.html' %}
 {% load static %}
+{% block noindex %}
+    {% if page.is_noindex %}
+        <meta name="robots" content="noindex">
+    {% endif %}
+{% endblock %}
 {% block content %}
     <div class="container mt-5 pt-5">
         <!-- Breadcrumb-->
         <nav class="mb-3 pt-md-3" aria-label="Breadcrumb">
             <ol class="breadcrumb breadcrumb-light">
                 <li class="breadcrumb-item"><a href="{% url 'home' %}">خانه</a></li>
-                <li class="breadcrumb-item active" aria-current="page">درباره ما</li>
+                <li class="breadcrumb-item active" aria-current="page">{{ page.title }}</li>
             </ol>
         </nav>
     </div>

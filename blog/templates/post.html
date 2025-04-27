@@ -235,6 +235,11 @@
         }
     </script>
 {% endblock %}
+{% block noindex %}
+    {% if data.post.is_noindex %}
+        <meta name="robots" content="noindex">
+    {% endif %}
+{% endblock %}
 {% block page_meta %}
     <link rel="alternate" href="{{ st.siteUrl }}{{ data.post.get_abs_url }}" hrefLang="fa-IR"/>
     <title>{% if data.post.meta_title %}{{ data.post.meta_title }}{% else %}{{ data.post.title }}{% endif %}</title>

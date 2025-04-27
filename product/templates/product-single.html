@@ -1,5 +1,10 @@
 {% extends 'Shared/_MainLayout.html' %}
 {% load static %}
+{% block noindex %}
+    {% if product.is_noindex %}
+        <meta name="robots" content="noindex">
+    {% endif %}
+{% endblock %}
 {% block content %}
     <div class="container mt-5 mb-md-4 py-5">
         <!-- Breadcrumb-->
