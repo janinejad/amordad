@@ -43,8 +43,8 @@ admin.site.register(Page,PageAdmin)
 
 @admin.register(ContactUs)
 class ContactUsAdmin(admin.ModelAdmin):
-    list_display = ['__str__']
-    list_filter = ['status']
+    list_display = ['__str__','title__title']
+    list_filter = ['status','title']
 
 @admin.register(ContactSubject)
 class ContactUsAdmin(admin.ModelAdmin):

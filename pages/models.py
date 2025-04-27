@@ -86,7 +86,7 @@ class ContactUs(models.Model):
         verbose_name = 'تماس'
 
     def __str__(self):
-        return self.title
+        return self.name
 
 
 class Emails(models.Model):
