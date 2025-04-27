@@ -68,7 +68,7 @@ class ProductResource(resources.ModelResource):
 class ProductAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     search_fields = ['slug', 'title']
     list_display = ['__str__', 'slug', 'image_tag', 'review_reason', 'active',
-                    'RootCategoryId', 'created_at']
+                    'RootCategoryId', 'created_at','url_tag']
     list_filter = [('user', admin.RelatedOnlyFieldListFilter), 'active', 'brandId', 'RootCategoryId']
     form = ProductForm
     filter_horizontal = ('similar_products',)
