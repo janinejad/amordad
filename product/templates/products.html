@@ -3,9 +3,9 @@
 {% load paginator_tags %}
 {% block noindex %}
     {% if cat_obj %}
-      {% if cat_obj.cat.is_noindex %}
-        <meta name="robots" content="noindex">
-      {% endif %}
+        {% if cat_obj.cat.is_noindex %}
+            <meta name="robots" content="noindex,nofollow">
+        {% endif %}
     {% endif %}
 {% endblock %}
 {% block content %}
@@ -246,11 +246,6 @@
                             <ul class="pagination pagination-light">
                                 {% if page_obj.has_previous %}
                                     <li class="page-item"><a class="page-link" href="?page=
-
-
-
-
-
                                             {{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
                                                              aria-label="Next"><i
                                             class="fi-chevron-left"></i></a></li>
@@ -269,11 +264,6 @@
                                         {% else %}
                                             <li class="page-item d-none d-sm-block"><a class="page-link"
                                                                                        href="?page=
-
-
-
-
-
                                                                                                {{ page }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ page }}</a>
                                             </li>
                                         {% endif %}
@@ -281,11 +271,6 @@
                                 {% endfor %}
                                 {% if page_obj.has_next %}
                                     <li class="page-item"><a class="page-link" href="?page=
-
-
-
-
-
                                             {{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
                                                              aria-label="Next"><i
                                             class="fi-chevron-right"></i></a></li>
@@ -306,10 +291,18 @@
             data-bs-toggle="offcanvas" data-bs-target="#filters-sidebar"><i class="fi-filter me-2"></i>فیلترها
     </button>
 {% endblock %}
-
-
+{% block schema %}
+    <script type="application/ld+json">
+        {
+        @context ": "https://schema.org",
+        @type ": "SiteNavigationElement",
+        "name": "{% if cat_obj %}{{ cat_obj.cat.title }}{% else %}لیست محصولات{% endif %}",
+        "url": "{{ st.siteUrl }}{{ request.path }}"
+        }
+    </script>
+{% endblock %}
 {% block js %}
-{#    changed#}
+    {#    changed#}
     <script src="{% static 'vendor/jquery-3.6.0.min.js' %}"></script>
     <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'vendor/simplebar/dist/simplebar.min.js' %}"></script>
@@ -324,8 +317,6 @@
 {% block css %}
     <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>
     <link rel="stylesheet" media="screen" href="{% static 'vendor/tiny-slider/dist/tiny-slider.css' %}"/>
-{#    <link rel="stylesheet" media="screen" href="{% static 'vendor/nouislider/dist/nouislider.min.css' %}"/>#}
-    <!-- Main Theme Styles + Bootstrap-->
     <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
 {% endblock %}
 {% block page_meta %}

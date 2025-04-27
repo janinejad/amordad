@@ -199,10 +199,6 @@
     <script src="{% static 'js/theme.min.js' %}"></script>
 {% endblock %}
 {% block css %}
-    {#    <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>#}
-    {#    <link rel="stylesheet" media="screen" href="{% static 'vendor/tiny-slider/dist/tiny-slider.css' %}"/>#}
-    {#    <link rel="stylesheet" media="screen" href="{% static 'vendor/lightgallery.js/dist/css/lightgallery.min.css' %}"/>#}
-    <!-- Main Theme Styles + Bootstrap-->
     <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
 {% endblock %}
 {% block schema %}
@@ -231,13 +227,15 @@
               }
             },
             "datePublished": "{{ data.post.published_at_f_s }}",
-            "dateModified": "{{ data.post.updated_at_f_s }}"
+            "dateModified": "{{ data.post.updated_at_f_s }}",
+            "keywords": "{{ data.post.keywords }}",
+            "articleSection": "{{ data.post.category.title }}",
         }
     </script>
 {% endblock %}
 {% block noindex %}
     {% if data.post.is_noindex %}
-        <meta name="robots" content="noindex">
+        <meta name="robots" content="noindex,nofollow">
     {% endif %}
 {% endblock %}
 {% block page_meta %}

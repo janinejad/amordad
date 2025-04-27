@@ -2,7 +2,7 @@
 {% load static %}
 {% block noindex %}
     {% if product.is_noindex %}
-        <meta name="robots" content="noindex">
+        <meta name="robots" content="noindex,nofollow">
     {% endif %}
 {% endblock %}
 {% block content %}
@@ -390,13 +390,6 @@
             "availability": "https://schema.org/InStock",
             "itemCondition": "https://schema.org/NewCondition"
           },
-        {#          "aggregateRating": {#}
-{#            "@type": "AggregateRating",#}
-{#            "ratingValue": "{{ product.get_product_point }}",#}
-{#            "bestRating": "{{ product.get_max_product_point }}",#}
-{#            "worstRating": "{{ product.get_min_product_point }}",#}
-{#            "ratingCount": "{{ product.get_count_product_point }}"#}
-{#          }#}
         }
     </script>
 {% endblock %}

@@ -144,9 +144,29 @@
             </div>
         </div>
     </section>
-
 {% endblock %}
-
+{% block schema %}
+    <script type="application/ld+json">
+        {
+        @context ": "https://schema.org",
+        @type ": "Corporation",
+        "name": "{{ st.site_title }}",
+        "alternateName": "{{ st.site_title }}",
+        "url": "{{ st.siteUrl }}",
+        "logo": "{{ st.brand_logo.url }}",
+        "contactPoint": {
+        @type ": "sales",
+        "telephone": "{{ st.tel_no }}",
+        "contactType": "sales",
+        "areaServed": "IR",
+        "availableLanguage": "Persian"
+        },
+        "sameAs": [
+        "{{ st.instagram_link }}",
+        ]
+        }
+    </script>
+{% endblock %}
 {% block js %}
     <script src="{% static 'vendor/jquery-3.6.0.min.js' %}"></script>
     <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
@@ -159,23 +179,19 @@
     <script src="{% static 'js/theme.min.js' %}"></script>
 {% endblock %}
 {% block css %}
-    <!-- Vendor Styles-->
-{#    <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>#}
-{#    <link rel="stylesheet" media="screen" href="{% static 'vendor/leaflet/dist/leaflet.css' %}"/>#}
     <link rel="stylesheet" media="screen" href="{% static 'vendor/tiny-slider/dist/tiny-slider.css' %}"/>
-    <!-- Main Theme Styles + Bootstrap-->
     <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
 {% endblock %}
 {% block page_meta %}
-    <link rel="alternate" href="{{ st.siteUrl }}" hrefLang="fa-IR" />
+    <link rel="alternate" href="{{ st.siteUrl }}" hrefLang="fa-IR"/>
     <title>{{ st.meta_title }}</title>
-    <meta name="description" content="{{ st.meta_desc }}" />
-    <meta name="keywords" content="{{ st.keywords }}" />
-    <meta property="og:locale" content="fa_IR" />
-    <meta property="og:title" content="{{ st.meta_title }}" />
-    <meta property="og:description" content="{{ st.meta_desc }}" />
-    <meta property="og:url" content="{{ st.siteUrl }}" />
-    <meta property="og:site_name" content="{{ st.brand_name }}" />
-    <meta name="twitter:description" content="{{ st.meta_desc }}" />
-    <meta name="twitter:title" content="{{ st.meta_desc }}" />
+    <meta name="description" content="{{ st.meta_desc }}"/>
+    <meta name="keywords" content="{{ st.keywords }}"/>
+    <meta property="og:locale" content="fa_IR"/>
+    <meta property="og:title" content="{{ st.meta_title }}"/>
+    <meta property="og:description" content="{{ st.meta_desc }}"/>
+    <meta property="og:url" content="{{ st.siteUrl }}"/>
+    <meta property="og:site_name" content="{{ st.brand_name }}"/>
+    <meta name="twitter:description" content="{{ st.meta_desc }}"/>
+    <meta name="twitter:title" content="{{ st.meta_desc }}"/>
 {% endblock %}
