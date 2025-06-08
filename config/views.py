@@ -72,7 +72,7 @@ def header_js_code(request):
 
 
 def footer_js_code(request):
-    codes = JsCode.objects.get_footer_tag_codes()
+    codes = JsCode.objects.get_trusted_symbols()
     context = {
         'codes': codes
     }
