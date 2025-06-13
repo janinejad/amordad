@@ -41,6 +41,17 @@ class PostAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if getattr(obj, 'user', None) is None:
             obj.user = request.user
+        from seo.models import JuiceLink
+        if obj.Description and obj.create_link_allowed:
+            links = JuiceLink.objects.all_sorted_by_prirority().filter(apply_for_posts=True)
+            from extensions.seo import create_link_in_content, remove_link
+            content = remove_link(obj.Description)
+            for link in links:
+                if link.title in obj.Description:
+                    authorized_tags_list = link.authorized_tags.split(",")
+                    content = create_link_in_content(link.title, content, link.link,
+                                                     authorized_tags_list)
+            obj.Description = content
         obj.save()
         super().save_model(request, obj, form, change)
 

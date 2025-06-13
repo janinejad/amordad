@@ -115,11 +115,22 @@ class Setting(models.Model):
                                       on_delete=models.SET_NULL, verbose_name='صفحه تماس با ما')
     main_page = models.ForeignKey(Page, null=True, related_name='main_page', blank=True, on_delete=models.SET_NULL,
                                   verbose_name='صفحه اصلی')
-    terms_conditions = models.ForeignKey(Page, null=True, related_name='terms_condition_page', blank=True, on_delete=models.SET_NULL,
-                                  verbose_name='صفحه قوانین')
+    terms_conditions = models.ForeignKey(Page, null=True, related_name='terms_condition_page', blank=True,
+                                         on_delete=models.SET_NULL,
+                                         verbose_name='صفحه قوانین')
     meta_title = models.CharField(max_length=600, null=True, blank=True, verbose_name='عنوان سئو صفحه اصلی')
     meta_desc = models.CharField(max_length=600, null=True, blank=True, verbose_name='توضیحات سئو صفحه اصلی')
     keywords = models.TextField(max_length=600, null=True, blank=True, verbose_name='کلمات کلیدی صفحه اصلی')
+    create_internal_link_task = models.BooleanField(default=True,
+                                                    verbose_name='وضعیت تسک لینک ساز داخلی')
+    product_internal_link_task_run_time = models.IntegerField(default=1000,
+                                                              verbose_name='فاصله زمانی اجرای متد لینک ساز داخلی محصولات')
+    post_internal_link_task_run_time = models.IntegerField(default=1000,
+                                                           verbose_name='فاصله زمانی اجرای متد لینک ساز داخلی نوشته ها')
+    category_link_task_run_time = models.IntegerField(default=1000,
+                                                      verbose_name='فاصله زمانی اجرای متد لینک ساز داخلی دسته بندی ها')
+    page_internal_link_task_run_time = models.IntegerField(default=1000,
+                                                           verbose_name='فاصله زمانی اجرای متد لینک ساز داخلی صفحه هات')
 
     def __str__(self):
         return "تنظیمات عمومی"
@@ -136,6 +147,22 @@ def setting_post_save_save_receiver(sender, instance, *args, **kwargs):
     from orders.Tasks import automatic_update
     delete_tasks('orders.Tasks.automatic_update')
     automatic_update()
+    if instance.create_internal_link_task:
+        delete_tasks('extensions.Tasks.create_product_internal_link')
+        delete_tasks('extensions.Tasks.create_post_internal_link')
+        delete_tasks('extensions.Tasks.create_category_internal_link')
+        delete_tasks('extensions.Tasks.create_page_internal_link')
+        from extensions.Tasks import create_product_internal_link, create_post_internal_link, \
+            create_category_internal_link, create_page_internal_link
+        create_product_internal_link()
+        create_post_internal_link()
+        create_category_internal_link()
+        create_page_internal_link()
+    else:
+        delete_tasks('extensions.Tasks.create_product_internal_link')
+        delete_tasks('extensions.Tasks.create_post_internal_link')
+        delete_tasks('extensions.Tasks.create_category_internal_link')
+        delete_tasks('extensions.Tasks.create_page_internal_link')
 
 
 post_save.connect(setting_post_save_save_receiver, sender=Setting)

@@ -68,7 +68,7 @@ class ProductResource(resources.ModelResource):
 class ProductAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     search_fields = ['slug', 'title']
     list_display = ['__str__', 'slug', 'image_tag', 'review_reason', 'active',
-                    'RootCategoryId', 'created_at','url_tag']
+                    'RootCategoryId', 'created_at', 'url_tag']
     list_filter = [('user', admin.RelatedOnlyFieldListFilter), 'active', 'brandId', 'RootCategoryId']
     form = ProductForm
     filter_horizontal = ('similar_products',)
@@ -91,6 +91,16 @@ class ProductAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if getattr(obj, 'user', None) is None:
             obj.user = request.user
+        from seo.models import JuiceLink
+        if obj.Description and obj.create_link_allowed:
+            links = JuiceLink.objects.all_sorted_by_prirority().filter(apply_for_products=True)
+            from extensions.seo import create_link_in_content, remove_link
+            content = remove_link(obj.Description)
+            for link in links:
+                authorized_tags_list = link.authorized_tags.split(",")
+                content = create_link_in_content(link.title, content, link.link,
+                                                 authorized_tags_list)
+            obj.Description = content
         obj.save()
         super().save_model(request, obj, form, change)
 
@@ -141,11 +151,25 @@ class ProductsCatsAdmin(ExportMixin, admin.ModelAdmin):
     search_fields = ['title']
     filter_horizontal = ['experts']
     form = ProductCategoryForm
-    exclude = ['depth',]
+    exclude = ['depth', ]
     resource_class = ProductsCatResource
 
     class Meta:
         model = ProductsCats
+
+    def save_model(self, request, obj, form, change):
+        from seo.models import JuiceLink
+        if obj.description and obj.create_link_allowed:
+            links = JuiceLink.objects.all_sorted_by_prirority().filter(apply_for_categories=True)
+            from extensions.seo import create_link_in_content, remove_link
+            content = remove_link(obj.description)
+            for link in links:
+                authorized_tags_list = link.authorized_tags.split(",")
+                content = create_link_in_content(link.title, content, link.link,
+                                                 authorized_tags_list)
+            obj.description = content
+        obj.save()
+        super().save_model(request, obj, form, change)
 
 
 class AttributeAdminResource(resources.ModelResource):
@@ -184,10 +208,10 @@ class ProductInventoryResource(resources.ModelResource):
 
 @admin.register(ProductInventory)
 class ProductInventoryAdmin(ImportExportModelAdmin):
-    list_display = ['__str__', 'quantity', 'regular_price','after_discount']
+    list_display = ['__str__', 'quantity', 'regular_price', 'after_discount']
     search_fields = ['products__title']
     exclude = ['price']
-    list_editable = ['regular_price','after_discount', 'quantity']
+    list_editable = ['regular_price', 'after_discount', 'quantity']
     list_filter = ['status', 'weight']
     resource_class = ProductInventoryResource
 

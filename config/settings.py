@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'ajax_select',
     'pages',
     'menus',
+    'seo',
     'blog',
     'background_task',
     'social_django',

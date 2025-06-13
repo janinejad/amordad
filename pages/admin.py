@@ -30,6 +30,18 @@ class PageAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if getattr(obj, 'user', None) is None:
             obj.user = request.user
+
+        from seo.models import JuiceLink
+        if obj.content and obj.create_link_allowed:
+            links = JuiceLink.objects.all_sorted_by_prirority().filter(apply_for_pages=True)
+            from extensions.seo import create_link_in_content, remove_link
+            content = remove_link(obj.content)
+            for link in links:
+                if link.title in obj.content:
+                    authorized_tags_list = link.authorized_tags.split(",")
+                    content = create_link_in_content(link.title, content, link.link,
+                                                     authorized_tags_list)
+            obj.content = content
         obj.save()
 
     def get_queryset(self, request):
