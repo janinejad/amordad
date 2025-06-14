@@ -72,6 +72,16 @@ MIDDLEWARE = [
     # "allauth.account.middleware.AccountMiddleware",
 ]
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://default:k3JZRxo$Z3AfeuMef5Gd@amor-redis-bzb-service:6379/0",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
 ROOT_URLCONF = 'config.urls'
 SITE_ID = 1
 TEMPLATES = [
@@ -110,7 +120,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 #         'USER': 'postgres',
 #         'PASSWORD': 'adOt4NwaCM64cWQesnOl',
 #         'HOST': 'remote-asiatech.runflare.com',
-#         'PORT': '31129',
+#         'PORT': '30768',
 #     }
 # }
 

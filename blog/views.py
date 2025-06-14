@@ -1,14 +1,12 @@
-import logging
 
 from django.contrib import messages
+from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render, reverse, redirect
-from django.http import JsonResponse
-
 from blog.forms import CommentForm
-# Create your views here.
 from blog.models import Tag, Post, PostCategory
+# Create your views here.
 
 
 def get_category_children(category):
@@ -26,11 +24,19 @@ def get_category_children(category):
 
 
 def blog(request, *args, cat_slug=None, tag_slug=None, **kwargs):
-    posts = Post.objects.all()
+    posts = cache.get('posts')
+    if not posts:
+        posts = Post.objects.all()
+        cache.set('posts', posts, 60 * 5)
     qs = request.GET.get("qs")
     c_slug = request.GET.get("c_slug")
     sort_by = request.GET.get("sort_by")
-    category = PostCategory.objects.all()
+
+    category = cache.get('category')
+    if not category:
+        category = PostCategory.objects.all()
+        cache.set('category', posts, 60 * 5)
+
     cat = None
     if c_slug:
         posts = posts.filter(category__slug=c_slug)
@@ -59,7 +65,10 @@ def blog(request, *args, cat_slug=None, tag_slug=None, **kwargs):
 
 
 def single_post(request, *args, post_slug=None, **kwargs):
-    post = get_object_or_404(Post, slug=post_slug)
+    post = cache.get(f"post_{post_slug}")
+    if not post:
+        post = get_object_or_404(Post, slug=post_slug)
+        cache.set(f"post_{post_slug}", post, 60 * 5)
     if post.http_response_gone:
         return redirect(reverse('handle_410_error'))
     form = CommentForm(request.POST or None)
@@ -77,9 +86,17 @@ def single_post(request, *args, post_slug=None, **kwargs):
             messages.error(request,
                            form)
     form = CommentForm()
-    other_post = Post.objects.filter(~Q(id=post.id)).order_by('-id')[:4]
+    other_post = cache.get(f"other_post_{post.id}")
+    if not other_post:
+        other_post = Post.objects.filter(~Q(id=post.id)).order_by('-id')[:4]
+        cache.set(f"other_post_{post.id}", other_post, 60 * 5)
+    tags = cache.get(f"tags_{post_slug}")
+    if not tags:
+        tags = post.tags.all()
+        cache.set(f"tags_{post_slug}", tags, 60 * 5)
+
     context = {
-        'tags': post.tags.all(),
+        'tags':tags,
         'other_post': other_post,
         'data': {'post': post, 'form': form},
     }
