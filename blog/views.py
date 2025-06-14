@@ -5,7 +5,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render, reverse, redirect
 from blog.forms import CommentForm
-from blog.models import Tag, Post, PostCategory
+from blog.models import Post, PostCategory
 # Create your views here.
 
 
@@ -104,9 +104,17 @@ def single_post(request, *args, post_slug=None, **kwargs):
 
 
 def blog_sidebar(request, post_id=None):
+    categories = cache.get('categories')
+    if not categories:
+        categories = PostCategory.objects.all()
+        cache.set('categories', categories, 60 * 5)
+    posts = cache.get('posts')
+    if not posts:
+        posts = Post.objects.all()[:6]
+        cache.set('posts', posts, 60 * 5)
     context = {
-        'categories': PostCategory.objects.all(),
-        'new_posts': Post.objects.all()[:6]
+        'categories': categories,
+        'new_posts': posts,
     }
     if post_id:
         post = Post.objects.filter(id=post_id).first()

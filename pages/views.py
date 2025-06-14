@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.core.cache import cache
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
@@ -16,8 +17,16 @@ from settings.models import Setting
 
 def page(request, *args, **kwargs):
     slug = kwargs['slug']
-    page = Page.objects.filter(slug=slug).first()
-    posts = Post.objects.all().order_by('-id')[:3]
+    page = cache.get(f"page_{slug}")
+    if not page:
+        page = Page.objects.filter(slug=slug).first()
+        cache.set(f"page_{slug}", page, 60 * 5)
+
+    posts = cache.get('posts')
+    if not posts:
+        posts = Post.objects.all().order_by('-id')[:3]
+        cache.set('posts', posts, 60 * 5)
+
     if page is None:
         raise Http404("صفحه مورد نظر یافت نشد")
     if page.http_response_gone:
@@ -32,16 +41,13 @@ def page(request, *args, **kwargs):
 class ContactUsView(View):
     def get(self, request: HttpRequest):
         form = ContactUsForm()
-        st = Setting.objects.first()
         context = {
             'form': form,
-            'st': st,
         }
         return render(request, 'contact_us.html', context)
 
     def post(self, request: HttpRequest):
         form = ContactUsForm(request.POST)
-        st = Setting.objects.first()
         if form.is_valid():
             form.save()
             messages.success(request,
@@ -49,7 +55,6 @@ class ContactUsView(View):
             return redirect(reverse('home'))
         context = {
             'form': form,
-            'st': st,
         }
         return render(request, 'contact_us.html', context)
 
