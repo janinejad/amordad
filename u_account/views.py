@@ -190,6 +190,41 @@ class ResetPasswordView(View):
         return render(request, 'reset_password.html', context)
 
 
+class ChangePasswordView(View):
+    def get(self, request: HttpRequest):
+        if not request.user.is_authenticated:
+            return redirect('/')
+
+        reset_pass_form = ResetPasswordForm()
+        context = {
+            'reset_pass_form': reset_pass_form,
+        }
+        return render(request, 'reset_password.html', context)
+
+    def post(self, request: HttpRequest, activation_code):
+        reset_pass_form = ResetPasswordForm(request.POST)
+        user: User = User.objects.filter(email_active_code__iexact=activation_code).first()
+        if user is None:
+            messages.error(request,
+                           'کابری با لینک فعال سازی ارسال شده یافت نشد.')
+            return redirect(reverse('login_page'))
+        if reset_pass_form.is_valid():
+            user_new_pass = reset_pass_form.cleaned_data.get('password')
+            user.set_password(user_new_pass)
+            user.email_active_code = get_random_string(72)
+            user.is_active = True
+            user.save()
+            messages.success(request,
+                             'تبریک! رمز عبور شما با موفقیت تغییر یافت. حالا شما می توانید با رمز عبور جدید خود وارد شوید.')
+            return redirect(reverse('home'))
+
+        context = {
+            'reset_pass_form': reset_pass_form,
+            'user': user
+        }
+
+        return render(request, 'reset_password.html', context)
+
 class PersonalInfoView(View):
     def get(self, request: HttpRequest):
         if not request.user.is_authenticated:
@@ -212,11 +247,9 @@ class PersonalInfoView(View):
             return redirect('/')
         user_model = get_object_or_404(User, id=request.user.id)
         form = EditInfoForm(request.POST, request.FILES, instance=user_model)
-        print("99999999999999999999    ", request.FILES)
         if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
             if form.is_valid():
                 instance = form.save(commit=False)
-                print("--------------------", form.cleaned_data.get("image"))
                 if not instance.is_official:
                     instance.firm_economical_no = None
                     instance.firm_national_id = None

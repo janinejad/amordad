@@ -315,3 +315,35 @@ class ResetPasswordForm(forms.Form):
         if not password == password2:
             raise forms.ValidationError('تایید رمز عبور اشتباه است.')
         return password2
+
+class ChangePasswordForm(forms.Form):
+    password = forms.CharField(
+        required=True, label='رمز عبور',
+        widget=forms.PasswordInput(
+            attrs={'placeholder': 'رمز عبور', 'class': 'form-control form-control-light', 'id': 'signin-password'}),
+        validators=[
+            validators.MaxLengthValidator(100)
+        ]
+    )
+    password2 = forms.CharField(
+        required=True, label='رمز عبور',
+        widget=forms.PasswordInput(
+            attrs={'placeholder': 'تایید رمز عبور', 'class': 'form-control form-control-light',
+                   'id': 'signin-password'}),
+        validators=[
+            validators.MaxLengthValidator(100)
+        ]
+    )
+
+    def clean_password(self):
+        password = self.cleaned_data.get("password")
+        if len(password) < 8:
+            raise forms.ValidationError('رمز عبور نباید کمتر از 8 کارکتر باشد.')
+        return password
+
+    def clean_password2(self):
+        password2 = self.cleaned_data.get("password2")
+        password = self.cleaned_data.get("password")
+        if not password == password2:
+            raise forms.ValidationError('تایید رمز عبور اشتباه است.')
+        return password2
