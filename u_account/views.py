@@ -37,7 +37,8 @@ def register(request):
             instance.save()
             user = User.objects.filter(id=instance.id).first()
             st: Setting = Setting.objects.first()
-            send_email_to_user('فعالسازی حساب کاربری', user.email, {'user': user, 'st': st}, 'emails/activate_account.html')
+            send_email_to_user('فعالسازی حساب کاربری', user.email, {'user': user, 'st': st},
+                               'emails/activate_account.html')
             messages.success(request,
                              'ثبت نام با موفقیت انجام شد. جهت فعال سازی حساب خود بر روی لینک فعال سازی ارسال شده به ایمیلتان مراجعه نمایید.')
             return JsonResponse({}, status=200)
@@ -210,10 +211,12 @@ class PersonalInfoView(View):
                            'شما می بایست ابتدا وارد حساب کاربری خود شوید!')
             return redirect('/')
         user_model = get_object_or_404(User, id=request.user.id)
-        form = EditInfoForm(request.POST or None, request.FILES or None, instance=user_model)
+        form = EditInfoForm(request.POST, request.FILES, instance=user_model)
+        print("99999999999999999999    ", request.FILES)
         if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
             if form.is_valid():
                 instance = form.save(commit=False)
+                print("--------------------", form.cleaned_data.get("image"))
                 if not instance.is_official:
                     instance.firm_economical_no = None
                     instance.firm_national_id = None

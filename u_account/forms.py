@@ -150,6 +150,7 @@ class EditInfoForm(forms.ModelForm):
             'image': forms.FileInput(
                 attrs={'class': 'file-uploader border-light bg-faded-light',
                        'accept': 'image/png, image/jpeg',
+                       'data-label-idle': "<i class='d-inline-block fi-camera-plus fs-2 text-light text-muted mb-2'></i><br/><span class='text-light opacity-70'>تغییر تصویر</span>",
                        'data-style-panel-layout': 'compact',
                        'data-image-preview-height': '160',
                        'data-image-crop-aspect-ratio': '1:1',
@@ -238,7 +239,7 @@ class EditInfoForm(forms.ModelForm):
     def clean_image(self):
         image = self.cleaned_data.get("image")
         if image:
-            if image.file.size > 1024000:
+            if image.size > 1024000:
                 raise forms.ValidationError('سایز تصویر نباید بیشت از یک مگا بایت باشد.')
         return image
 
