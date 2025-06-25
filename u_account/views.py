@@ -246,7 +246,7 @@ class PersonalInfoView(View):
                            'شما می بایست ابتدا وارد حساب کاربری خود شوید!')
             return redirect('/')
         user_model = get_object_or_404(User, id=request.user.id)
-        form = EditInfoForm(request.POST, request.FILES, instance=user_model)
+        form = EditInfoForm(request.POST, request.FILES or None, instance=user_model)
         if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
             if form.is_valid():
                 instance = form.save(commit=False)
