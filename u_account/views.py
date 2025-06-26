@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, HttpResponseNotFound, HttpResponseRedirect, HttpResponse, Http404, HttpRequest
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.views import View
 from django.contrib import messages
@@ -14,7 +15,8 @@ from weasyprint import HTML
 
 from orders.models import Order
 from settings.models import CompanyInfo, Financials, Setting
-from u_account.forms import RegisterForm, LoginForm, ForgotPasswordForm, ResetPasswordForm, EditInfoForm
+from u_account.forms import RegisterForm, LoginForm, ForgotPasswordForm, ResetPasswordForm, EditInfoForm, \
+    ChangePasswordForm
 from u_account.models import User
 from django.contrib.auth import login, logout
 
@@ -156,9 +158,19 @@ class ResetPasswordView(View):
         user: User = User.objects.filter(email_active_code__iexact=activation_code).first()
         if user is None:
             return redirect('/')
-
+        now = timezone.now()
+        user_otp_time = user.otp_create_time
+        diff = now - user_otp_time
+        SETTINGS = Setting.objects.all().first()
+        if SETTINGS is None:
+            messages.error(request,
+                           'خطایی پیش آمده! لطفا با پشتیبانی تماس حاصل فرمایید!')
+            return redirect('/')
+        if diff.seconds > SETTINGS.opt_time:
+            messages.error(request,
+                           'کد احراز منقضی شده است. لطفا دوباره درخواست فراموشی رمز ثبت بفرمایید!')
+            return redirect('/')
         reset_pass_form = ResetPasswordForm()
-
         context = {
             'reset_pass_form': reset_pass_form,
             'user': user
@@ -194,36 +206,35 @@ class ChangePasswordView(View):
     def get(self, request: HttpRequest):
         if not request.user.is_authenticated:
             return redirect('/')
-
-        reset_pass_form = ResetPasswordForm()
+        change_pass_form = ChangePasswordForm()
         context = {
-            'reset_pass_form': reset_pass_form,
+            'change_pass_form': change_pass_form,
         }
-        return render(request, 'reset_password.html', context)
+        return render(request, 'change_password.html', context)
 
-    def post(self, request: HttpRequest, activation_code):
-        reset_pass_form = ResetPasswordForm(request.POST)
-        user: User = User.objects.filter(email_active_code__iexact=activation_code).first()
-        if user is None:
+    def post(self, request: HttpRequest):
+        change_pass_form = ChangePasswordForm(request.POST)
+        if not request.user.is_authenticated:
             messages.error(request,
-                           'کابری با لینک فعال سازی ارسال شده یافت نشد.')
-            return redirect(reverse('login_page'))
-        if reset_pass_form.is_valid():
-            user_new_pass = reset_pass_form.cleaned_data.get('password')
-            user.set_password(user_new_pass)
-            user.email_active_code = get_random_string(72)
-            user.is_active = True
-            user.save()
-            messages.success(request,
-                             'تبریک! رمز عبور شما با موفقیت تغییر یافت. حالا شما می توانید با رمز عبور جدید خود وارد شوید.')
-            return redirect(reverse('home'))
+                           'جهت تغییر رمز عبور ابتدا وارد سایت شوید.')
+            return redirect('/')
+        if change_pass_form.is_valid():
+            user_old_pass = change_pass_form.cleaned_data.get('old_password')
+            is_password_correct = request.user.check_password(user_old_pass)
+            if is_password_correct:
+                new_password = change_pass_form.cleaned_data.get('password')
+                request.user.set_password(new_password)
+                messages.success(request,
+                                 'تبریک! رمز عبور شما با موفقیت تغییر یافت.')
+                return redirect(reverse('home'))
+            else:
+                change_pass_form.add_error('old_password', 'رمز عبور فعلی اشتباه است!')
 
         context = {
-            'reset_pass_form': reset_pass_form,
-            'user': user
+            'change_pass_form': change_pass_form,
         }
+        return render(request, 'change_password.html', context)
 
-        return render(request, 'reset_password.html', context)
 
 class PersonalInfoView(View):
     def get(self, request: HttpRequest):

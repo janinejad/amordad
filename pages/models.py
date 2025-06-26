@@ -30,10 +30,12 @@ class Page(models.Model):
     use_content_jinja = models.BooleanField(default=False, verbose_name='استفاده از کدهای html پویا در صفحه')
     updated_at = models.DateTimeField(auto_now=True, verbose_name="تاریخ به روز رسانی")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ثبت')
+    create_link_allowed = models.BooleanField(default=False, verbose_name='وضعیت ساخت لینک داخلی')
     canonical = models.URLField(verbose_name='لینک کنونیکال', null=True, blank=True)
     http_response_gone = models.BooleanField(default=False, verbose_name='410 شود')
     is_noindex = models.BooleanField(default=False, verbose_name='صفحه noindex شود')
     is_main_page = models.BooleanField(default=False, verbose_name='محتوای صفحه اصلی سایت')
+
 
     class Meta:
         verbose_name_plural = 'برگه ها'

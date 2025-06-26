@@ -131,7 +131,7 @@ class Post(models.Model):
     publish_at = models.DateTimeField(default=timezone.now, verbose_name='تاریخ انتشار')
     active = models.BooleanField(default=False, verbose_name='وضعیت')
     canonical = models.URLField(verbose_name='لینک کنونیکال', null=True, blank=True)
-    create_link_allowed = models.BooleanField(default=True, verbose_name='وضعیت ساخت لینک داخلی')
+    create_link_allowed = models.BooleanField(default=False, verbose_name='وضعیت ساخت لینک داخلی')
     is_noindex = models.BooleanField(default=False, verbose_name='صفحه noindex شود')
     http_response_gone = models.BooleanField(default=False, verbose_name='410 شود')
     objects = PostManger()

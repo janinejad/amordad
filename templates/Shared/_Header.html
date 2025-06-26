@@ -225,7 +225,7 @@
         <a class="navbar-brand me-3 me-xl-4" href="{% url 'home' %}"><img class="d-block"
                                                                           src="{{ st.brand_logo.url }}"
                                                                           width="116"
-                                                                          alt="Finder"></a>
+                                                                          alt="{{ st.site_title }}"></a>
         <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span
                 class="navbar-toggler-icon"></span></button>
@@ -250,8 +250,6 @@
                     </div>
                     <a class="dropdown-item" href="{% url 'account:edit_personal_info' %}"><i class="fi-user me-2"></i>اطلاعات
                         فردی</a>
-                    {#                    <a class="dropdown-item" href="car-finder-account-security.html"><i#}
-                    {#                        class="fi-lock me-2"></i>گذرواژه و امنیتی</a>#}
                     {% if request.user.is_staff %}
                         <a class="dropdown-item" href="/apanel/"><i
                                 class="fi-user me-2"></i>پنل مدیریتی</a>

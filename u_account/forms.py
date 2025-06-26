@@ -317,18 +317,26 @@ class ResetPasswordForm(forms.Form):
         return password2
 
 class ChangePasswordForm(forms.Form):
-    password = forms.CharField(
-        required=True, label='رمز عبور',
+    old_password = forms.CharField(
+        required=True, label='رمز عبور فعلی',
         widget=forms.PasswordInput(
-            attrs={'placeholder': 'رمز عبور', 'class': 'form-control form-control-light', 'id': 'signin-password'}),
+            attrs={'placeholder': 'رمز عبور فعلی', 'class': 'form-control form-control-light', 'id': 'signin-password'}),
+        validators=[
+            validators.MaxLengthValidator(100)
+        ]
+    )
+    password = forms.CharField(
+        required=True, label='رمز عبور جدید',
+        widget=forms.PasswordInput(
+            attrs={'placeholder': 'رمز عبور جدید', 'class': 'form-control form-control-light', 'id': 'signin-password'}),
         validators=[
             validators.MaxLengthValidator(100)
         ]
     )
     password2 = forms.CharField(
-        required=True, label='رمز عبور',
+        required=True, label='تکرار رمز عبور جدید',
         widget=forms.PasswordInput(
-            attrs={'placeholder': 'تایید رمز عبور', 'class': 'form-control form-control-light',
+            attrs={'placeholder': 'تکرار رمز عبور جدید', 'class': 'form-control form-control-light',
                    'id': 'signin-password'}),
         validators=[
             validators.MaxLengthValidator(100)
