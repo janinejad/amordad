@@ -29,6 +29,7 @@ DEBUG = False
 ALLOWED_HOSTS = ['https://amordadsteel.com', 'amordadsteel.com', 'http://amordadsteel.com']
 # ALLOWED_HOSTS = ['127.0.0.1']
 # Application definition
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
