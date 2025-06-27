@@ -144,25 +144,24 @@ class Setting(models.Model):
 
 
 def setting_post_save_save_receiver(sender, instance, *args, **kwargs):
-    from orders.Tasks import automatic_update
+    from orders.Tasks import automatic_update, create_product_internal_link, create_post_internal_link, \
+        create_category_internal_link, create_page_internal_link
     delete_tasks('orders.Tasks.automatic_update')
     automatic_update()
     if instance.create_internal_link_task:
-        delete_tasks('extensions.tasks.create_product_internal_link')
-        delete_tasks('extensions.tasks.create_post_internal_link')
-        delete_tasks('extensions.tasks.create_category_internal_link')
-        delete_tasks('extensions.tasks.create_page_internal_link')
-        from extensions.tasks import create_product_internal_link, create_post_internal_link, \
-            create_category_internal_link, create_page_internal_link
+        delete_tasks('orders.Tasks.create_product_internal_link')
+        delete_tasks('orders.Tasks.create_post_internal_link')
+        delete_tasks('orders.Tasks.create_category_internal_link')
+        delete_tasks('orders.Tasks.create_page_internal_link')
         create_product_internal_link()
         create_post_internal_link()
         create_category_internal_link()
         create_page_internal_link()
     else:
-        delete_tasks('extensions.tasks.create_product_internal_link')
-        delete_tasks('extensions.tasks.create_post_internal_link')
-        delete_tasks('extensions.tasks.create_category_internal_link')
-        delete_tasks('extensions.tasks.create_page_internal_link')
+        delete_tasks('orders.Tasks.create_product_internal_link')
+        delete_tasks('orders.Tasks.create_post_internal_link')
+        delete_tasks('orders.Tasks.create_category_internal_link')
+        delete_tasks('orders.Tasks.create_page_internal_link')
 
 
 post_save.connect(setting_post_save_save_receiver, sender=Setting)
