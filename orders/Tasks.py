@@ -107,7 +107,7 @@ def create_category_internal_link():
 
 @background(schedule=PAGE_INTERNAL_LINK_TASK)
 def create_page_internal_link():
-    jlinks = JuiceLink.objects.filter(apply_for_brands=True)
+    jlinks = JuiceLink.objects.filter(apply_for_pages=True)
     from pages.models import Page
     for page in Page.objects.filter(create_link_allowed=True):
         html_content = remove_link(page.content)
