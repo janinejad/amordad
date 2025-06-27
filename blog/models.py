@@ -1,10 +1,9 @@
-import os
 
-from ckeditor_uploader.fields import RichTextUploadingField
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import pre_save
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.safestring import mark_safe
+from django_ckeditor_5.fields import CKEditor5Field
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 from jalali_date import datetime2jalali
@@ -13,7 +12,6 @@ from extensions.utils import get_filename_ext, unique_slug_generator
 from django.db import models
 
 from product.models import Product
-# Create your models here.
 from u_account.models import User
 
 
@@ -117,7 +115,7 @@ class Post(models.Model):
     meta_desc = models.TextField(max_length=250, blank=True, null=True, verbose_name='توضیحات سئو')
     keywords = models.TextField(max_length=150, null=True, blank=True, verbose_name='کلمات کلیدی')
     slug = models.SlugField(unique=True, verbose_name='نام در url')
-    Description = RichTextUploadingField(blank=True, null=True, verbose_name='توضیحات اصلی')
+    Description = CKEditor5Field(blank=True, null=True, verbose_name='توضیحات اصلی')
     image = ProcessedImageField(upload_to=upload_image_path, processors=[ResizeToFill(1284, 600)],
                                 format='WEBP', verbose_name='تصویر شاخص',
                                 blank=True, null=True,help_text='ابعاد تصویر 1284 عرض در 600 ارتفاع')

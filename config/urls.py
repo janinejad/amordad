@@ -38,7 +38,7 @@ urlpatterns = [
     path('', include('orders.urls', namespace='orders')),
     path('header-js-codes', header_js_code, name='header_js_code'),
     path('footer-js-codes', footer_js_code, name='footer_js_code'),
-    path('ckeditor/', include('ckeditor_uploader.urls')),
+    path("ckeditor5/", include('django_ckeditor_5.urls')),
     re_path(r'^ajax_select/', include(ajax_select_urls)),
     path('header/', header, name='header'),
     path('footer/', footer, name='footer'),

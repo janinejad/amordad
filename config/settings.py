@@ -54,10 +54,97 @@ INSTALLED_APPS = [
     'social_django',
     'jalali_date',
     'product',
-    'ckeditor',
+    'django_ckeditor_5',
     'import_export',
     'easy_select2',
 ]
+
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+customColorPalette = [
+    {
+        'color': 'hsl(4, 90%, 58%)',
+        'label': 'Red'
+    },
+    {
+        'color': 'hsl(340, 82%, 52%)',
+        'label': 'Pink'
+    },
+    {
+        'color': 'hsl(291, 64%, 42%)',
+        'label': 'Purple'
+    },
+    {
+        'color': 'hsl(262, 52%, 47%)',
+        'label': 'Deep Purple'
+    },
+    {
+        'color': 'hsl(231, 48%, 48%)',
+        'label': 'Indigo'
+    },
+    {
+        'color': 'hsl(207, 90%, 54%)',
+        'label': 'Blue'
+    },
+]
+CKEDITOR_5_MAX_FILE_SIZE = 5
+CKEDITOR_5_CONFIGS = {
+    'default': {
+        'language': 'fa',  # محتوای فارسی
+        'uiLocale': 'fa',  # رابط کاربری فارسی
+        'toolbar': {
+            'items': [
+                'heading', '|',
+                'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', '|',
+                'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|',
+                'link', 'highlight', 'code', 'codeBlock', 'sourceEditing', '|',
+                'bulletedList', 'numberedList', 'todoList', '|',
+                'outdent', 'indent', '|',
+                'blockQuote', 'insertTable', 'mediaEmbed', 'imageUpload', 'insertImage', '|',
+                'removeFormat', 'undo', 'redo'
+            ],
+            'shouldNotGroupWhenFull': True
+        },
+        'image': {
+            'toolbar': [
+                'imageTextAlternative', '|',
+                'imageStyle:alignLeft', 'imageStyle:alignCenter', 'imageStyle:alignRight', 'imageStyle:side'
+            ],
+            'styles': [
+                'alignLeft', 'alignCenter', 'alignRight', 'side'
+            ]
+        },
+        'table': {
+            'contentToolbar': [
+                'tableColumn', 'tableRow', 'mergeTableCells',
+                'tableProperties', 'tableCellProperties'
+            ],
+            'tableProperties': {
+                'borderColors': 'customColorPalette',
+                'backgroundColors': 'customColorPalette'
+            },
+            'tableCellProperties': {
+                'borderColors': 'customColorPalette',
+                'backgroundColors': 'customColorPalette'
+            }
+        },
+        'heading': {
+            'options': [
+                {'model': 'paragraph', 'title': 'پاراگراف', 'class': 'ck-heading_paragraph'},
+                {'model': 'heading1', 'view': 'h1', 'title': 'سرتیتر 1', 'class': 'ck-heading_heading1'},
+                {'model': 'heading2', 'view': 'h2', 'title': 'سرتیتر 2', 'class': 'ck-heading_heading2'},
+                {'model': 'heading3', 'view': 'h3', 'title': 'سرتیتر 3', 'class': 'ck-heading_heading3'}
+            ]
+        },
+        'list': {
+            'properties': {
+                'styles': True,
+                'startIndex': True,
+                'reversed': True
+            }
+        }
+    }
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -72,6 +159,7 @@ MIDDLEWARE = [
     # "allauth.account.middleware.AccountMiddleware",
 ]
 
+#
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
@@ -224,16 +312,7 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
 
-CKEDITOR_UPLOAD_PATH = 'uploads/'
 
-CKEDITOR_CONFIGS = {
-    'default': {
-        'toolbar': 'full',
-        'width': '100%',
-        'allowedContent': True,
-    },
-
-}
 
 JALALI_DATE_DEFAULTS = {
     # if change it to true then all dates of the list_display will convert to the Jalali.

@@ -1,13 +1,13 @@
 import math
 import os
 from datetime import datetime
-from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.db.models import Q, Min
 from django.db.models.signals import pre_save, post_save
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.safestring import mark_safe
+from django_ckeditor_5.fields import CKEditor5Field
 from imagekit.models import ProcessedImageField
 from jalali_date import datetime2jalali
 from pilkit.processors import ResizeToFill
@@ -72,8 +72,8 @@ class Brand(models.Model):
     slug = models.SlugField(max_length=150, unique=True, verbose_name='عنوان در url')
     is_active = models.BooleanField(default=True, verbose_name='وضعیت')
     updated_at = models.DateTimeField(auto_now=True, verbose_name="تاریخ به روز رسانی")
-    shortDescription = RichTextUploadingField(blank=True, null=True, verbose_name='توضیحات کوتاه')
-    Description = RichTextUploadingField(blank=True, null=True, verbose_name='توضیحات اصلی')
+    shortDescription = CKEditor5Field(blank=True, null=True, verbose_name='توضیحات کوتاه')
+    Description = CKEditor5Field(blank=True, null=True, verbose_name='توضیحات اصلی')
     canonical = models.URLField(verbose_name='لینک کنونیکال', null=True, blank=True)
     create_link_allowed = models.BooleanField(default=False, verbose_name='وضعیت ساخت لینک داخلی')
     is_noindex = models.BooleanField(default=False, verbose_name='صفحه noindex شود')
@@ -154,7 +154,7 @@ class ProductsCats(models.Model):
     meta_title = models.CharField(blank=True, null=True, max_length=250, verbose_name='عنوان سئو')
     meta_description = models.TextField(blank=True, null=True, max_length=500, verbose_name='توضیحات سئو')
     keywords = models.TextField(max_length=250, null=True, blank=True, verbose_name='کلمات کلیدی')
-    description = RichTextUploadingField(blank=True, null=True, verbose_name='توضیحات')
+    description = CKEditor5Field(blank=True, null=True, verbose_name='توضیحات')
     image = ProcessedImageField(upload_to=upload_image_path, processors=[ResizeToFill(1120, 630)],
                                 format='WEBP', verbose_name='تصویر شاخص',
                                 blank=True, null=True)
@@ -320,7 +320,7 @@ class Product(models.Model):
     meta_desc = models.CharField(max_length=600, null=True, blank=True, verbose_name='توضیحات سئو')
     keywords = models.TextField(max_length=600, null=True, blank=True, verbose_name='کلمات کلیدی')
     slug = models.SlugField(unique=True, blank=True, verbose_name='نام در url')
-    Description = RichTextUploadingField(blank=True, null=True, verbose_name='توضیحات اصلی')
+    Description = CKEditor5Field(blank=True, null=True, verbose_name='توضیحات اصلی')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='ثبت کننده')
     image = ProcessedImageField(upload_to=upload_image_path, processors=[ResizeToFill(1120, 630)],
                                 format='WEBP', verbose_name='تصویر شاخص',
