@@ -6,6 +6,7 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, render, reverse, redirect
 from blog.forms import CommentForm
 from blog.models import Post, PostCategory
+import hashlib
 # Create your views here.
 
 
@@ -23,43 +24,99 @@ def get_category_children(category):
     return all_categories
 
 
+# def blog(request, *args, cat_slug=None, tag_slug=None, **kwargs):
+#     posts = cache.get('posts')
+#     if not posts:
+#         posts = Post.objects.all()
+#         cache.set('posts', posts, 60 * 5)
+#     qs = request.GET.get("qs")
+#     c_slug = request.GET.get("c_slug")
+#     sort_by = request.GET.get("sort_by")
+#
+#     category = cache.get('category')
+#     if not category:
+#         category = PostCategory.objects.all()
+#         cache.set('category', posts, 60 * 5)
+#
+#     cat = None
+#     if c_slug:
+#         posts = posts.filter(category__slug=c_slug)
+#     if sort_by:
+#         if sort_by == "2":
+#             posts = posts.order_by("id")
+#     if cat_slug:
+#         posts = posts.filter(category__slug=cat_slug)
+#         cat = PostCategory.objects.filter(slug=cat_slug).first()
+#     if tag_slug:
+#         posts = posts.filter(tags__slug=tag_slug)
+#     if qs:
+#         lookup = Q(title__contains=qs) | Q(Description__contains=qs)
+#         posts = posts.filter(lookup)
+#     paginator = Paginator(posts, 9)
+#     page_number = request.GET.get('page')
+#     page_obj = paginator.get_page(page_number)
+#     context = {
+#         'paginator': paginator,
+#         'page_obj': page_obj,
+#         'page_number': page_number,
+#         'category': category,
+#         'page_cat':cat,
+#     }
+#     return render(request, 'blog.html', context)
 def blog(request, *args, cat_slug=None, tag_slug=None, **kwargs):
-    posts = cache.get('posts')
-    if not posts:
-        posts = Post.objects.all()
-        cache.set('posts', posts, 60 * 5)
     qs = request.GET.get("qs")
     c_slug = request.GET.get("c_slug")
     sort_by = request.GET.get("sort_by")
+    page_number = request.GET.get("page")
 
-    category = cache.get('category')
-    if not category:
-        category = PostCategory.objects.all()
-        cache.set('category', posts, 60 * 5)
+    # ساخت کلید یکتا برای کش ترکیبی
+    cache_key_data = f"qs={qs}&c_slug={c_slug}&cat_slug={cat_slug}&tag_slug={tag_slug}&sort_by={sort_by}"
+    cache_key = f"posts_cache_{hashlib.md5(cache_key_data.encode()).hexdigest()}"
 
-    cat = None
-    if c_slug:
-        posts = posts.filter(category__slug=c_slug)
-    if sort_by:
+    posts = cache.get(cache_key)
+    if not posts:
+        posts = Post.objects.all()
+
+        # فیلتر جستجو
+        if qs:
+            posts = posts.filter(Q(title__icontains=qs) | Q(Description__icontains=qs))
+
+        # فیلتر دسته‌بندی URL و GET
+        if cat_slug:
+            posts = posts.filter(category__slug=cat_slug)
+        if c_slug:
+            posts = posts.filter(category__slug=c_slug)
+
+        # فیلتر تگ
+        if tag_slug:
+            posts = posts.filter(tags__slug=tag_slug)
+
+        # مرتب‌سازی
         if sort_by == "2":
             posts = posts.order_by("id")
-    if cat_slug:
-        posts = posts.filter(category__slug=cat_slug)
-        cat = PostCategory.objects.filter(slug=cat_slug).first()
-    if tag_slug:
-        posts = posts.filter(tags__slug=tag_slug)
-    if qs:
-        lookup = Q(title__contains=qs) | Q(Description__contains=qs)
-        posts = posts.filter(lookup)
+
+        # ذخیره در کش برای ۳۰ دقیقه
+        cache.set(cache_key, posts, 60 * 30)
+
+    # گرفتن دسته‌بندی‌ها از کش
+    category = cache.get('categories')
+    if not category:
+        category = PostCategory.objects.all()
+        cache.set('categories', category, 60 * 30)
+
+    # مشخص کردن دسته انتخاب شده
+    cat = PostCategory.objects.filter(slug=cat_slug).first() if cat_slug else None
+
+    # صفحه‌بندی
     paginator = Paginator(posts, 9)
-    page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+
     context = {
         'paginator': paginator,
         'page_obj': page_obj,
         'page_number': page_number,
         'category': category,
-        'page_cat':cat,
+        'page_cat': cat,
     }
     return render(request, 'blog.html', context)
 

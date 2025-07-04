@@ -1,7 +1,7 @@
 import math
 
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save,pre_save
 from django.utils import timezone
 
 from extensions.utils import get_filename_ext, delete_tasks
@@ -123,6 +123,7 @@ class Setting(models.Model):
     keywords = models.TextField(max_length=600, null=True, blank=True, verbose_name='کلمات کلیدی صفحه اصلی')
     create_internal_link_task = models.BooleanField(default=True,
                                                     verbose_name='وضعیت تسک لینک ساز داخلی')
+    clear_cache = models.BooleanField(default=False,verbose_name='پاک کردن کش سایت')
     product_internal_link_task_run_time = models.IntegerField(default=1000,
                                                               verbose_name='فاصله زمانی اجرای متد لینک ساز داخلی محصولات')
     post_internal_link_task_run_time = models.IntegerField(default=1000,
@@ -166,6 +167,13 @@ def setting_post_save_save_receiver(sender, instance, *args, **kwargs):
 
 post_save.connect(setting_post_save_save_receiver, sender=Setting)
 
+def setting_pre_post_save_save_receiver(sender, instance, *args, **kwargs):
+    if instance.clear_cache:
+        from django.core.cache import cache
+        cache.clear()
+        instance.clear_cache = False
+
+pre_save.connect(setting_pre_post_save_save_receiver, sender=Setting)
 
 class JsCodeManager(models.Manager):
     def all(self):
