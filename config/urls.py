@@ -23,7 +23,7 @@ from django.views.generic import TemplateView
 
 from config import settings
 from config.views import home, header, footer, handle_410_error, header_js_code, footer_js_code, SitemapIndexView, \
-    PageView, ProductsCatsteeView, ProductSitemapView, TagsView, PostView, PostCategoryView
+    PageView, ProductsCatsteeView, ProductSitemapView, TagsView, PostView, PostCategoryView, upload_image
 
 app_name = 'amor'
 urlpatterns = [
@@ -51,6 +51,8 @@ urlpatterns = [
     path('sitemap-posts.xml', PostView.as_view(), name='sitemap'),
     path('sitemap-post-categories.xml', PostCategoryView.as_view(), name='sitemap'),
     path("robots.txt", TemplateView.as_view(template_name="Shared/robots.txt", content_type="text/plain")),
+    path('tinymce/', include('tinymce.urls')),
+    path('upload-image/', upload_image, name='upload_image'),
 ]
 
 if settings.DEBUG:

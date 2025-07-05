@@ -52,7 +52,38 @@ INSTALLED_APPS = [
     'django_ckeditor_5',
     'import_export',
     'easy_select2',
+    'tinymce',
 ]
+TINYMCE_DEFAULT_CONFIG = {
+    "height": 500,
+    "width": "100%",
+    "menubar": True,
+    "plugins": (
+        "advlist autolink lists link image charmap print preview anchor "
+        "searchreplace visualblocks code fullscreen "
+        "insertdatetime media table paste help wordcount codesample"
+    ),
+    "toolbar": (
+        "undo redo | formatselect | bold italic backcolor | "
+        "alignleft aligncenter alignright alignjustify | "
+        "bullist numlist outdent indent | removeformat | "
+        "link image media | code fullscreen | help"
+    ),
+    "images_upload_url": "/upload-image/",
+    "automatic_uploads": True,
+    "file_picker_types": "image",
+    "image_advtab": True,
+    "relative_urls": False,
+    "content_css": [
+        "/public/static/vendor/tiny-slider/dist/tiny-slider.css",
+        "/public/static/css/theme.min.css",
+        "/public/static/css/admin-customs.css",
+    ],
+    "content_js": [
+        "/public/static/tinymce/plugins/paste/plugin.min.js",
+        "/public/static/tinymce/plugins/print/plugin.min.js"
+    ],
+}
 
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 customColorPalette = [
@@ -136,10 +167,22 @@ CKEDITOR_5_CONFIGS = {
                 'startIndex': True,
                 'reversed': True
             }
-        }
+        },
+        'htmlSupport': {
+            'allow': [
+                {
+                    'name': '/.*/',
+                    'attributes': True,
+                    'classes': True,
+                    'styles': True
+                }
+            ]
+        },
+        'htmlEmbed': {
+            'showPreviews': True
+        },
     }
 }
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -306,8 +349,6 @@ EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
-
-
 
 JALALI_DATE_DEFAULTS = {
     # if change it to true then all dates of the list_display will convert to the Jalali.

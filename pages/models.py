@@ -6,6 +6,8 @@ from jalali_date import datetime2jalali
 from product.models import Product
 from u_account.models import User
 
+from tinymce.models import HTMLField
+
 
 class Page(models.Model):
     STATUS = (
@@ -22,7 +24,8 @@ class Page(models.Model):
     meta_desc = models.CharField(max_length=156, null=True, blank=True, verbose_name='توضیحات متا')
     meta_title = models.CharField(max_length=60, null=True, blank=True, verbose_name='عنوان سئو')
     keywords = models.CharField(max_length=150, verbose_name='کلمات کلیدی')
-    content = CKEditor5Field(blank=True, null=True, verbose_name='توضیحات اصلی')
+    # content = CKEditor5Field(blank=True, null=True, verbose_name='توضیحات اصلی')
+    content = HTMLField(blank=True, null=True, verbose_name='توضیحات اصلی')
     content_jinja = models.TextField(null=True, blank=True, verbose_name='کدهای html پویا')
     use_content_jinja = models.BooleanField(default=False, verbose_name='استفاده از کدهای html پویا در صفحه')
     updated_at = models.DateTimeField(auto_now=True, verbose_name="تاریخ به روز رسانی")

@@ -166,3 +166,18 @@ class PageView(TemplateView):
             'locations': Page.objects.all()
         }
         return context
+
+
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.core.files.storage import default_storage
+import os
+
+@csrf_exempt
+def upload_image(request):
+    if request.method == 'POST':
+        image = request.FILES.get('file')
+        path = default_storage.save(f'uploads/{image.name}', image)
+        image_url = os.path.join('/public/media/', path)
+        return JsonResponse({'location': image_url})
+

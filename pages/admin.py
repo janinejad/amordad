@@ -1,14 +1,15 @@
 from django.contrib import admin
 from .models import Page, ContactUs, ContactSubject, Emails
 import logging
+
+
 # Register your models here.
 
 class PageAdmin(admin.ModelAdmin):
-    list_display = ['title','slug','update_at_ir','review_reason','url_tag']
+    list_display = ['title', 'slug', 'update_at_ir', 'review_reason', 'url_tag']
     list_filter = ['status']
     exclude = ('created_at',)
     model = Page
-
     def add_view(self, request, form_url='', extra_context=None):
         self.exclude = ('user', 'status', 'review_reason',)
         return super(PageAdmin, self).add_view(request, form_url, extra_context)
@@ -50,13 +51,15 @@ class PageAdmin(admin.ModelAdmin):
             return qs
         return qs.filter(user=request.user)
 
-admin.site.register(Page,PageAdmin)
+
+admin.site.register(Page, PageAdmin)
 
 
 @admin.register(ContactUs)
 class ContactUsAdmin(admin.ModelAdmin):
-    list_display = ['__str__','title']
-    list_filter = ['status','title']
+    list_display = ['__str__', 'title']
+    list_filter = ['status', 'title']
+
 
 @admin.register(ContactSubject)
 class ContactUsAdmin(admin.ModelAdmin):

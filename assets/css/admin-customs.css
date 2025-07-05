@@ -1,0 +1,10 @@
+
+body.mce-content-body {
+    background-color: rgb(31 27 45) !important;
+}
+.tox[dir=rtl] {
+    direction: ltr !important;
+    text-align: left !important;
+    font-family: monospace !important;
+    white-space: pre !important;
+}
