@@ -1,7 +1,7 @@
 import math
 
 from django.db import models
-from django.db.models.signals import post_save,pre_save
+from django.db.models.signals import post_save, pre_save
 from django.utils import timezone
 
 from extensions.utils import get_filename_ext, delete_tasks
@@ -101,7 +101,8 @@ class Setting(models.Model):
     work_time_text = models.TextField(max_length=500, null=True, verbose_name="متن ساعات کاری فروشگاه ")
     copy_right_text = models.TextField(max_length=500, null=True, verbose_name="متن کپی رایت ")
     address = models.TextField(max_length=500, null=True, verbose_name="آدرس")
-    tel_no = models.CharField(max_length=150, verbose_name='شماره تماس', null=True)
+    tel_no = models.CharField(max_length=150, verbose_name='شماره تماس 1', null=True)
+    tel_no2 = models.CharField(max_length=150, verbose_name='شماره تماس 2', null=True,blank=True)
     whatsapp_num = models.CharField(max_length=150, verbose_name='شماره واتس اپ', null=True)
     email_address = models.EmailField(max_length=254, null=True, blank=True, verbose_name='آدرس ایمیل')
     first_page_tag_line = models.CharField(max_length=250, null=True, blank=True, verbose_name='شعار صفحه اول')
@@ -112,7 +113,9 @@ class Setting(models.Model):
     twitter_link = models.URLField(max_length=500, null=True, blank=True, verbose_name="لینک توییتر")
     facebook_link = models.URLField(max_length=500, null=True, blank=True, verbose_name="لینک فیسبوک")
     about_us_page = models.ForeignKey(Page, null=True, related_name='about_us_page', blank=True,
-                                      on_delete=models.SET_NULL, verbose_name='صفحه تماس با ما')
+                                      on_delete=models.SET_NULL, verbose_name='صفحه درباره ما')
+    contact_us_page = models.ForeignKey(Page, null=True, related_name='contact_us_page', blank=True,
+                                        on_delete=models.SET_NULL, verbose_name='صفحه تماس با ما')
     main_page = models.ForeignKey(Page, null=True, related_name='main_page', blank=True, on_delete=models.SET_NULL,
                                   verbose_name='صفحه اصلی')
     terms_conditions = models.ForeignKey(Page, null=True, related_name='terms_condition_page', blank=True,
@@ -123,7 +126,7 @@ class Setting(models.Model):
     keywords = models.TextField(max_length=600, null=True, blank=True, verbose_name='کلمات کلیدی صفحه اصلی')
     create_internal_link_task = models.BooleanField(default=True,
                                                     verbose_name='وضعیت تسک لینک ساز داخلی')
-    clear_cache = models.BooleanField(default=False,verbose_name='پاک کردن کش سایت')
+    clear_cache = models.BooleanField(default=False, verbose_name='پاک کردن کش سایت')
     product_internal_link_task_run_time = models.IntegerField(default=1000,
                                                               verbose_name='فاصله زمانی اجرای متد لینک ساز داخلی محصولات')
     post_internal_link_task_run_time = models.IntegerField(default=1000,
@@ -167,13 +170,16 @@ def setting_post_save_save_receiver(sender, instance, *args, **kwargs):
 
 post_save.connect(setting_post_save_save_receiver, sender=Setting)
 
+
 def setting_pre_post_save_save_receiver(sender, instance, *args, **kwargs):
     if instance.clear_cache:
         from django.core.cache import cache
         cache.clear()
         instance.clear_cache = False
 
+
 pre_save.connect(setting_pre_post_save_save_receiver, sender=Setting)
+
 
 class JsCodeManager(models.Manager):
     def all(self):

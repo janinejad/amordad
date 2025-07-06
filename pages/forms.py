@@ -1,27 +1,32 @@
 from django import forms
-from .models import ContactUs,Emails
+from .models import ContactUs, Emails
 
 
 class ContactUsForm(forms.ModelForm):
     class Meta:
         model = ContactUs
-        fields = ['name', 'phone_number','title', 'text']
+        fields = ['name', 'phone_number', 'title', 'text']
         widgets = {
             'name': forms.TextInput(
                 attrs={'class': 'form-control form-control-lg form-control-light', 'id': 'c-name',
-                       'required': 'required',
-                       'placeholder': 'نام و نام خانوادگی'}),
+                       'required': 'required'}),
             'title': forms.Select(
                 attrs={'class': 'form-select form-select-lg form-select-light', 'id': 'c-subject',
-                       'required': 'required',
-                       'placeholder': 'عنوان'}),
+                       'required': 'required'}),
             'phone_number': forms.TextInput(
                 attrs={'class': 'form-control form-control-lg form-control-light', 'required': 'required',
-                       'placeholder': 'شماره تلفن', 'id': 'c-phone'}),
+                       'id': 'c-phone'}),
             'text': forms.Textarea(
                 attrs={'class': 'form-control form-control-lg form-control-light', 'required': 'required',
-                       'id': 'c-message', 'rows': "4", 'placeholder': 'لطفا متن موردنظر خود را بنویسید...'}),
+                       'id': 'c-message', 'rows': "4"}),
         }
+
+    def __init__(self, *args, **kwargs):
+        cf = kwargs.pop('cf', None)
+        super(ContactUsForm, self).__init__(*args, **kwargs)
+        if cf is not None:
+            self.fields['title'].queryset = cf.contactsubject_set.all()
+
 
 class SendEmailForm(forms.ModelForm):
     class Meta:

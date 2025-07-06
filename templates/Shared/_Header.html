@@ -309,7 +309,7 @@
                     </ul>
                 </li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'blog:blog' %}">وبلاگ</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'pages:contact_us' %}">تماس با ما</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ st.contact_us_page.get_abs_url }}">تماس با ما</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ st.about_us_page.get_abs_url }}">درباره ما</a></li>
                 {% if not request.user.is_authenticated %}
                     <li class="nav-item d-lg-none"><a class="nav-link" href="#signin-modal" data-bs-toggle="modal"><i

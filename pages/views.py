@@ -1,12 +1,12 @@
 from django.contrib import messages
 from django.core.cache import cache
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import View
 
 from blog.models import Post
 from pages.forms import ContactUsForm, SendEmailForm
-from pages.models import Page, Emails
+from pages.models import Page, Emails, Contact
 from django.http import Http404, HttpResponseGone, HttpRequest, JsonResponse
 
 from settings.models import Setting
@@ -39,10 +39,13 @@ def page(request, *args, **kwargs):
 
 
 class ContactUsView(View):
-    def get(self, request: HttpRequest):
-        form = ContactUsForm()
+    def get(self, request: HttpRequest, slug=None):
+        cf = get_object_or_404(Contact, slug=slug)
+        data = {'subject': None}
+        form = ContactUsForm(initial=data,cf=cf)
         context = {
             'form': form,
+            'is_en':cf.is_english_form,
         }
         return render(request, 'contact_us.html', context)
 

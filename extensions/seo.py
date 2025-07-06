@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from django.template.loader import render_to_string
 
 
 def generate_toc(html_content):
@@ -57,21 +58,24 @@ def create_link_in_content(specific_text, content, url, authorized_tags_list):
     updated_context = soup.prettify()
     return updated_context
 
-# def create_product_inside_posts(content):
-#     import re
-#     soup = BeautifulSoup(content, "html.parser")
-#     p_tags = soup.find_all(string=re.compile(r'\[.*?\]'))
-#     from j_product.models import Product
-#     for p in p_tags:
-#         lst = re.findall(r'\[(.*?)\]', p.get_text())
-#         sub_lst = [int(id) for id in lst[0].strip("'").split(",")]
-#         divs = "<section class='dt-sl dt-sn mb-5'><div class='row mb-3'><div class='col-lg-12 col-md-12 col-sm-12 col-12 pt-4'><div class='row'>"
-#         products = Product.objects.filter(id__in=sub_lst)
-#         from j_marketing.views import get_suggestion_html
-#         divs += get_suggestion_html(products)
-#         divs += "</div></div></div></section>"
-#         p.replace_with(
-#             BeautifulSoup(str(p).replace(f"[{lst[0]}]", divs),
-#                           'html.parser'))
-#     updated_context = soup.prettify()
-#     return updated_context
+
+def get_suggestion_html(object,template_name):
+    html = render_to_string(template_name=template_name, context={'object': object})
+    return html
+
+
+def create_contact_form(content):
+    import re
+    soup = BeautifulSoup(content, "html.parser")
+    p_tags = soup.find_all(string=re.compile(r'\[.*?\]'))
+    from pages.models import ContactUs
+    for p in p_tags:
+        lst = re.findall(r'\[(.*?)\]', p.get_text())
+        sub_lst = [int(id) for id in lst[0].strip("'").split(",")]
+        products = ContactUs.objects.filter(sl=sub_lst)
+        divs = get_suggestion_html(products)
+        p.replace_with(
+            BeautifulSoup(str(p).replace(f"[{lst[0]}]", divs),
+                          'html.parser'))
+    updated_context = soup.prettify()
+    return updated_context

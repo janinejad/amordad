@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Page, ContactUs, ContactSubject, Emails
+from .models import Page, ContactUs, ContactSubject, Emails, Contact
 import logging
 
 
@@ -62,8 +62,14 @@ class ContactUsAdmin(admin.ModelAdmin):
 
 
 @admin.register(ContactSubject)
-class ContactUsAdmin(admin.ModelAdmin):
+class ContactSubjectAdmin(admin.ModelAdmin):
     list_display = ['__str__']
+    list_filter = ['form','form__is_english_form']
+
+@admin.register(Contact)
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ['__str__']
+    list_filter = ['is_english_form']
 
 
 @admin.register(Emails)

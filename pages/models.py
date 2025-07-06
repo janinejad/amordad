@@ -24,10 +24,9 @@ class Page(models.Model):
     meta_desc = models.CharField(max_length=156, null=True, blank=True, verbose_name='توضیحات متا')
     meta_title = models.CharField(max_length=60, null=True, blank=True, verbose_name='عنوان سئو')
     keywords = models.CharField(max_length=150, verbose_name='کلمات کلیدی')
-    # content = CKEditor5Field(blank=True, null=True, verbose_name='توضیحات اصلی')
     content = HTMLField(blank=True, null=True, verbose_name='توضیحات اصلی')
     content_jinja = models.TextField(null=True, blank=True, verbose_name='کدهای html پویا')
-    use_content_jinja = models.BooleanField(default=False, verbose_name='استفاده از کدهای html پویا در صفحه')
+    contact_form = models.ForeignKey("Contact",on_delete=models.SET_NULL,null=True,blank=True, verbose_name='فرم تماس')
     updated_at = models.DateTimeField(auto_now=True, verbose_name="تاریخ به روز رسانی")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ثبت')
     create_link_allowed = models.BooleanField(default=False, verbose_name='وضعیت ساخت لینک داخلی')
@@ -35,7 +34,6 @@ class Page(models.Model):
     http_response_gone = models.BooleanField(default=False, verbose_name='410 شود')
     is_noindex = models.BooleanField(default=False, verbose_name='صفحه noindex شود')
     is_main_page = models.BooleanField(default=False, verbose_name='محتوای صفحه اصلی سایت')
-
 
     class Meta:
         verbose_name_plural = 'برگه ها'
@@ -63,7 +61,23 @@ class Page(models.Model):
     url_tag.short_description = "لینک"
 
 
+class Contact(models.Model):
+    title = models.CharField(max_length=250, verbose_name='عنوان',
+                             help_text='این فیلد نباید خالی باشد و تعداد کارکترهای آن باید بیشتر از 150 کاراکتر نباشند')
+    slug = models.SlugField(null=True, help_text="در ابرازکها جهت فراخوانی فرم استفاده می شود", verbose_name='نامک')
+    is_english_form = models.BooleanField(default=False, verbose_name='فرم انگلیسی است')
+    status = models.BooleanField(default=False, verbose_name='وضعیت')
+
+    class Meta:
+        verbose_name_plural = 'فرم های تماس'
+        verbose_name = 'فرم تماس'
+
+    def __str__(self):
+        return self.title
+
+
 class ContactSubject(models.Model):
+    form = models.ForeignKey(Contact,null=True, on_delete=models.CASCADE, verbose_name='فرم')
     title = models.CharField(max_length=250, verbose_name='عنوان')
 
     class Meta:
@@ -95,7 +109,7 @@ class ContactUs(models.Model):
 
 
 class Emails(models.Model):
-    email = models.EmailField(max_length=250,verbose_name='آدرس ایمیل')
+    email = models.EmailField(max_length=250, verbose_name='آدرس ایمیل')
     date = models.DateTimeField(auto_now=True, verbose_name='زمان ثبت تماس')
 
     class Meta:

@@ -46,6 +46,11 @@
             <div class="col-xl-2 col-lg-3 col-sm-6 col-md-3 mb-2 mb-sm-4"><a
                     class="d-flex align-items-center text-decoration-none mb-2" href="tel:+98{{ st.tel_no }}"><i
                     class="fi-device-mobile me-2"></i><span class="text-light">0{{ st.tel_no }}</span></a>
+                {% if st.tel_no2 %}
+                    <a
+                            class="d-flex align-items-center text-decoration-none mb-2" href="tel:+98{{ st.tel_no2 }}"><i
+                            class="fi-device-mobile me-2"></i><span class="text-light">0{{ st.tel_no2 }}</span></a>
+                {% endif %}
                 <a
                         class="d-flex align-items-center text-decoration-none mb-2" href="{{ st.whatsapp_link }}"><i
                         class="fi-whatsapp me-2"></i><span class="text-light">0{{ st.whatsapp_num }}</span></a>

@@ -1,14 +1,133 @@
-{% extends 'Shared/_MainLayout.html' %}
 {% load static %}
-{% block content %}
+{% if is_en %}
     <section class="container my-5 pt-5 pb-lg-5">
-        <!-- Breadcrumb-->
-        <nav class="mb-4 pt-md-3" aria-label="Breadcrumb">
-            <ol class="breadcrumb breadcrumb-light">
-                <li class="breadcrumb-item"><a href="{% url 'home' %}">خانه</a></li>
-                <li class="breadcrumb-item active" aria-current="page">تماس با ما</li>
-            </ol>
-        </nav>
+        <div class="row gy-4">
+            <div class="col-md-6" style="direction: ltr; text-align: left;">
+                <!-- Contact form-->
+                <form method="post" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label class="form-label text-light" for="c-name">Full Name<span
+                                class="text-danger">*</span></label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for err in form.name.errors %}
+                                    {{ err }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label text-light" for="c-phone">Phone Number<span
+                                class="text-danger">*</span></label>
+                        {{ form.phone_number }}
+                        {% if form.phone_number.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for err in form.phone_number.errors %}
+                                    {{ err }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label text-light" for="c-subject">Subject<span
+                                class="text-danger">*</span></label>
+                        {{ form.title }}
+                        {% if form.title.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for err in form.title.errors %}
+                                    {{ err }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label text-light" for="c-message">Message<span
+                                class="text-danger">*</span></label>
+                        {{ form.text }}
+                        {% if form.text.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for err in form.text.errors %}
+                                    {{ err }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="pt-2">
+                        <button class="btn btn-lg btn-primary w-sm-auto w-100" type="submit">Submit Form</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-4 col-md-6 offset-lg-2" style="direction: ltr; text-align: left;">
+                <div class="mb-md-5 mb-4 pb-md-4">
+                    <h1 class="mb-md-4 text-light titr">Contact Us</h1>
+                    <p class="mb-0 fs-lg text-light opacity-70">
+                        Don't worry — only our experts will see this information, and they'll contact you as soon as
+                        possible!
+                    </p>
+                </div>
+
+                <!-- Public Relations -->
+                <div class="d-flex align-items-start mb-4 pb-md-3">
+                    <img class="ms-3 flex-shrink-0"
+                         src="{% static 'img/car-finder/icons/envelope.svg' %}"
+                         width="32" alt="Envelope icon">
+                    <div>
+                        <h3 class="h6 mb-2 pb-1 text-light fw-normal ms-1">Public Relations</h3>
+                        <p class="mb-0 text-light">
+                <span class="opacity-70">
+                    For general inquiries, including partnership opportunities, please send us an email. Our address is:
+                </span>
+                            <a class="ms-1 text-nowrap" href="mailto:{{ st.email_address }}"></a>{{ st.email_address }}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Phone Contact -->
+                <div class="d-flex align-items-start mb-4 pb-md-3">
+                    <img class="ms-3 flex-shrink-0"
+                         src="{% static 'img/car-finder/icons/chat.svg' %}"
+                         width="32" alt="Our phone number">
+                    <div>
+                        <h3 class="h6 mb-2 pb-1 text-light fw-normal ms-1">Phone Contact</h3>
+                        <p class="mb-0 text-light">
+                            <span class="opacity-70">Our phone number:</span>
+                            <a class="ms-1 text-nowrap" href="tel:{{ st.tel_no }}"></a>{{ st.tel_no }}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Address -->
+                <div class="d-flex align-items-start mb-4 pb-md-3">
+                    <img class="ms-3 flex-shrink-0"
+                         src="{% static 'img/car-finder/icons/map-pin.svg' %}"
+                         width="32" alt="Our address">
+                    <div>
+                        <h3 class="h6 mb-2 pb-1 text-light fw-normal ms-1">Our Address</h3>
+                        <p class="mb-0 text-light">
+                            <span class="opacity-70">{{ st.address }}</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Working Hours -->
+                <div class="d-flex align-items-start mb-4 pb-md-3">
+                    <img class="ms-3 flex-shrink-0"
+                         src="{% static 'img/car-finder/icons/flag.svg' %}"
+                         width="32" alt="Working hours">
+                    <div>
+                        <h3 class="h6 mb-2 pb-1 text-light fw-normal ms-1">Working Hours</h3>
+                        <p class="mb-0 text-light">
+                            <span class="opacity-70">{{ st.work_time_text }}</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% else %}
+    <section class="container my-5 pt-5 pb-lg-5">
         <div class="row gy-4">
             <div class="col-lg-4 col-md-6">
                 <div class="mb-md-5 mb-4 pb-md-4">
@@ -115,47 +234,4 @@
             </div>
         </div>
     </section>
-{% endblock %}
-{% block schema %}
-    <script type="application/ld+json">
-        {
-          "@context": "https://schema.org",
-          "@type": "ContactPoint",
-          "telephone": "+98{{ st.tel_no }}",
-              "contactType": "sales"
-            }
-    </script>
-{% endblock %}
-{% block js %}
-    <script src="{% static 'vendor/jquery-3.6.0.js' %}"></script>
-    <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'vendor/simplebar/dist/simplebar.min.js' %}"></script>
-    <script src="{% static 'vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js' %}"></script>
-    <script src="{% static 'vendor/leaflet/dist/leaflet.js' %}"></script>
-    <script src="{% static 'js/cruds/auth.js' %}"></script>
-    <!-- Main theme script-->
-    <script src="{% static 'js/theme.min.js' %}"></script>
-{% endblock %}
-{% block css %}
-    <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
-{% endblock %}
-{% block page_meta %}
-    <link rel="alternate" href="{{ st.siteUrl }}/contact-us/" hrefLang="fa-IR"/>
-    <title> {{ st.brand_name }}تماس با </title>
-    <meta name="description"
-          content="شما عزیزان می توانید همه روزه با راه های ارتباطی مانند شماره تماس و ایمیل با ما در تماس باشید."/>
-    <meta name="keywords"
-          content="تماس با {{ st.brand_name }}, شماره تماس {{ st.brand_name }}, ایمیل {{ st.brand_name }}"/>
-    <meta property="og:locale" content="fa_IR"/>
-    <meta property="og:type" content="article"/>
-    <meta property="og:title"
-          content="شما عزیزان می توانید همه روزه با راه های ارتباطی مانند شماره تماس و ایمیل با ما در تماس باشید."/>
-    <meta property="og:description"
-          content="شما عزیزان می توانید همه روزه با راه های ارتباطی مانند شماره تماس و ایمیل با ما در تماس باشید."/>
-    <meta property="og:url" content="{{ st.siteUrl }}/contact-us/"/>
-    <meta property="og:site_name" content="{{ st.brand_name }}"/>
-    <meta name="twitter:description"
-          content="شما عزیزان می توانید همه روزه با راه های ارتباطی مانند شماره تماس و ایمیل با ما در تماس باشید."/>
-    <meta name="twitter:title"
-          content="شما عزیزان می توانید همه روزه با راه های ارتباطی مانند شماره تماس و ایمیل با ما در تماس باشید."/>
-{% endblock %}
+{% endif %}
