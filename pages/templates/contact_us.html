@@ -1,8 +1,11 @@
 {% load static %}
 {% if is_en %}
-    <section class="container my-5 pt-5 pb-lg-5">
+    <section class="container my-5 pt-3 pb-lg-5">
         <div class="row gy-4">
-            <div class="col-md-6" style="direction: ltr; text-align: left;">
+            <div class="col-md-6 order-2 order-sm-2 order-md-1" style="direction: ltr; text-align: left;">
+                <div class="mb-md-5 mb-4 pb-md-4">
+                    <h1 class="mb-md-4 text-light titr">Contact Form</h1>
+                </div>
                 <!-- Contact form-->
                 <form method="post" class="needs-validation" novalidate>
                     {% csrf_token %}
@@ -59,7 +62,8 @@
                     </div>
                 </form>
             </div>
-            <div class="col-lg-4 col-md-6 offset-lg-2" style="direction: ltr; text-align: left;">
+            <div class="col-lg-4 order-1 order-sm-1 order-md-2 col-md-6 offset-lg-2"
+                 style="direction: ltr; text-align: left;">
                 <div class="mb-md-5 mb-4 pb-md-4">
                     <h1 class="mb-md-4 text-light titr">Contact Us</h1>
                     <p class="mb-0 fs-lg text-light opacity-70">
@@ -93,7 +97,7 @@
                         <h3 class="h6 mb-2 pb-1 text-light fw-normal ms-1">Phone Contact</h3>
                         <p class="mb-0 text-light">
                             <span class="opacity-70">Our phone number:</span>
-                            <a class="ms-1 text-nowrap" href="tel:{{ st.tel_no }}"></a>{{ st.tel_no }}
+                            <a class="ms-1 text-nowrap en-num" href="tel:{{ st.tel_no }}"></a>{{ st.tel_no }}
                         </p>
                     </div>
                 </div>
@@ -119,7 +123,7 @@
                     <div>
                         <h3 class="h6 mb-2 pb-1 text-light fw-normal ms-1">Working Hours</h3>
                         <p class="mb-0 text-light">
-                            <span class="opacity-70">{{ st.work_time_text }}</span>
+                            <span class="opacity-70 en-num">{{ st.work_time_text }}</span>
                         </p>
                     </div>
                 </div>
@@ -127,7 +131,7 @@
         </div>
     </section>
 {% else %}
-    <section class="container my-5 pt-5 pb-lg-5">
+    <section class="container my-5 pt-3 pb-lg-5">
         <div class="row gy-4">
             <div class="col-lg-4 col-md-6">
                 <div class="mb-md-5 mb-4 pb-md-4">

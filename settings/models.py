@@ -115,7 +115,9 @@ class Setting(models.Model):
     about_us_page = models.ForeignKey(Page, null=True, related_name='about_us_page', blank=True,
                                       on_delete=models.SET_NULL, verbose_name='صفحه درباره ما')
     contact_us_page = models.ForeignKey(Page, null=True, related_name='contact_us_page', blank=True,
-                                        on_delete=models.SET_NULL, verbose_name='صفحه تماس با ما')
+                                        on_delete=models.SET_NULL, verbose_name='صفحه تماس با ما- فارسی')
+    contact_us_en_page = models.ForeignKey(Page, null=True, related_name='contact_us_en_page', blank=True,
+                                        on_delete=models.SET_NULL, verbose_name='صفحه تماس با ما - انگلیسی')
     main_page = models.ForeignKey(Page, null=True, related_name='main_page', blank=True, on_delete=models.SET_NULL,
                                   verbose_name='صفحه اصلی')
     terms_conditions = models.ForeignKey(Page, null=True, related_name='terms_condition_page', blank=True,

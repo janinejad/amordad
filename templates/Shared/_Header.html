@@ -91,7 +91,7 @@
                                 به حساب کاربری</a></div>
                             <div class="d-sm-none d-md-block d-lg-block">
                                 <br>
-                            <br><br><br><br><br><br><br><br><br>
+                                <br><br><br><br><br><br><br><br><br>
                             </div>
                         </div>
                         <div class="col-md-6 px-4 pt-2 pb-4 px-sm-5 pb-sm-5 pt-md-5">
@@ -122,13 +122,15 @@
                                     <div id="err_email" class="invalid-feedback"></div>
                                 </div>
                                 <div class="mb-4">
-                                    <label class="form-label text-light" for="{{ register_form.national_code.auto_id }}">
+                                    <label class="form-label text-light"
+                                           for="{{ register_form.national_code.auto_id }}">
                                         کد ملی</label>
                                     {{ register_form.national_code }}
                                     <div id="err_national_code" class="invalid-feedback"></div>
                                 </div>
                                 <div class="mb-4">
-                                    <label class="form-label text-light" for="{{ register_form.personal_address.auto_id }}">
+                                    <label class="form-label text-light"
+                                           for="{{ register_form.personal_address.auto_id }}">
                                         آدرس پستی</label>
                                     {{ register_form.personal_address }}
                                     <div id="err_personal_address" class="invalid-feedback"></div>
@@ -168,7 +170,8 @@
                                     {{ register_form.agree_to_terms }}
                                     <label class="form-check-label"
                                            for="{{ register_form.agree_to_terms.auto_id }}"><span class='opacity-70'>با ثبت نام در این سایت </span>
-                                        <a href='{{ st.terms_conditions.get_abs_url }}' class='text-light'>شرایط و قوانین </a> سایت را میپذیرم.</label>
+                                        <a href='{{ st.terms_conditions.get_abs_url }}' class='text-light'>شرایط و
+                                            قوانین </a> سایت را میپذیرم.</label>
                                     <div id="err_agree_to_terms" class="invalid-feedback"></div>
                                 </div>
                                 <button class="btn btn-primary btn-lg w-100" id="registerFormBtn" type="submit">ثبت
@@ -235,12 +238,14 @@
         {% else %}
             <div class="dropdown d-none d-lg-block order-lg-3 my-n2 me-3"><a class="d-block py-2"
                                                                              href="#"><img
-                    class="rounded-circle" src="{% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'img/avatars/02.png' %}{% endif %}"
+                    class="rounded-circle" src="
+                    {% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'img/avatars/02.png' %}{% endif %}"
                     width="40" alt="Robert Fox"></a>
                 <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
                     <div class="d-flex align-items-start border-bottom border-light px-3 py-1 mb-2"
                          style="width: 16rem;">
-                        <img class="rounded-circle" src="{% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'img/avatars/02.png' %}{% endif %}"
+                        <img class="rounded-circle" src="
+                                {% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'img/avatars/02.png' %}{% endif %}"
                              width="48" alt="Robert Fox">
                         <div class="ps-3 text-end">
                             <h6 class="fs-base text-light mb-0">{{ request.user|truncatechars:15 }}</h6>
@@ -311,6 +316,7 @@
                 <li class="nav-item"><a class="nav-link" href="{% url 'blog:blog' %}">وبلاگ</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ st.contact_us_page.get_abs_url }}">تماس با ما</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ st.about_us_page.get_abs_url }}">درباره ما</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ st.contact_us_en_page.get_abs_url }}"><img class="me-2" src="{% static 'img/flags/en.png' %}" width="20" alt="english"> Contact Us</a></li>
                 {% if not request.user.is_authenticated %}
                     <li class="nav-item d-lg-none"><a class="nav-link" href="#signin-modal" data-bs-toggle="modal"><i
                             class="fi-user me-2"></i>ورودs به حساب کاربری</a></li>
