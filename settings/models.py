@@ -104,6 +104,7 @@ class Setting(models.Model):
     en_address = models.TextField(max_length=500, null=True, verbose_name="آدرس انگلیسی")
     tel_no = models.CharField(max_length=150, verbose_name='شماره تماس 1', null=True)
     tel_no2 = models.CharField(max_length=150, verbose_name='شماره تماس 2', null=True,blank=True)
+    mobile = models.CharField(max_length=150, verbose_name='موبایل', null=True,blank=True)
     whatsapp_num = models.CharField(max_length=150, verbose_name='شماره واتس اپ', null=True)
     email_address = models.EmailField(max_length=254, null=True, blank=True, verbose_name='آدرس ایمیل')
     first_page_tag_line = models.CharField(max_length=250, null=True, blank=True, verbose_name='شعار صفحه اول')
