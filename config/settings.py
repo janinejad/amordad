@@ -197,7 +197,7 @@ MIDDLEWARE = [
     # "allauth.account.middleware.AccountMiddleware",
 ]
 
-#
+
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
@@ -207,7 +207,7 @@ CACHES = {
         }
     }
 }
-
+#
 # CACHES = {
 #     "default": {
 #         "BACKEND": "django_redis.cache.RedisCache",
@@ -260,7 +260,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 #     }
 # }
 
-#
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
