@@ -58,7 +58,7 @@ def footer(request):
 
 
 def handle_410_error(request):
-    return render(request, '404.html', status=410)
+    return render(request, '404.html', status=404)
 
 
 def header_js_code(request):

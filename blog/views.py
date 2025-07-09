@@ -124,7 +124,9 @@ def blog(request, *args, cat_slug=None, tag_slug=None, **kwargs):
 def single_post(request, *args, post_slug=None, **kwargs):
     post = cache.get(f"post_{post_slug}")
     if not post:
-        post = get_object_or_404(Post, slug=post_slug,active=True)
+        post = Post.objects.filter(slug=post_slug,active=True).first()
+        if not post:
+            return redirect(reverse('handle_410_error'))
         cache.set(f"post_{post_slug}", post, 60 * 5)
     if post.http_response_gone:
         return redirect(reverse('handle_410_error'))

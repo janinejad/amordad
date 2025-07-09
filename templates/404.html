@@ -9,7 +9,7 @@
             <div class="ratio ratio-16x9 mx-auto mb-lg-5 mb-4 py-4" style="max-width: 556px;">
                 <img src="{% static 'img/customs/404.png' %}" alt="">
             </div>
-            <p class="h3 mb-lg-5 mb-4 pb-2 text-light">با عرض پوزش صفحه درخواستی وجود ندارد.</p><a class="btn btn-lg btn-primary w-sm-auto w-100 mb-3 me-sm-4" href="{% url 'home' %}">صفحه اصلی</a><a class="btn btn-lg btn-outline-light w-sm-auto w-100 mb-3" href="{% url 'pages:contact_us' %}">تماس با ما</a>
+            <p class="h3 mb-lg-5 mb-4 pb-2 text-light">با عرض پوزش صفحه درخواستی وجود ندارد.</p><a class="btn btn-lg btn-primary w-sm-auto w-100 mb-3 me-sm-4" href="{% url 'home' %}">صفحه اصلی</a><a class="btn btn-lg btn-outline-light w-sm-auto w-100 mb-3" href="{{ st.contact_us_page.get_abs_url }}">تماس با ما</a>
           </div>
         </div>
       </section>
