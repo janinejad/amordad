@@ -9,5 +9,6 @@ from .models import User
 class UaerAdmin(ModelAdminJalaliMixin,admin.ModelAdmin):
     list_display = ['__str__','is_superuser','is_active']
     list_filter = ['is_active']
+    search_fields = ['email','firstname','lastname','mobile']
     filter_horizontal = ('user_permissions', 'groups',)
     exclude = ['password']
