@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.http import Http404
 from django.shortcuts import get_object_or_404, render, reverse, redirect
 from blog.forms import CommentForm
 from blog.models import Post, PostCategory
@@ -124,7 +125,9 @@ def blog(request, *args, cat_slug=None, tag_slug=None, **kwargs):
 def single_post(request, *args, post_slug=None, **kwargs):
     post = cache.get(f"post_{post_slug}")
     if not post:
-        post = get_object_or_404(Post, slug=post_slug)
+        post = Post.objects.all().filter(slug=post_slug).first()
+        if not post:
+            return Http404
         cache.set(f"post_{post_slug}", post, 60 * 5)
     if post.http_response_gone:
         return redirect(reverse('handle_410_error'))
