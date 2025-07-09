@@ -145,7 +145,7 @@ def single_post(request, *args, post_slug=None, **kwargs):
     form = CommentForm()
     other_post = cache.get(f"other_post_{post.id}")
     if not other_post:
-        other_post = Post.objects.filter(~Q(id=post.id)).order_by('-id')[:4]
+        other_post = Post.objects.all().filter(~Q(id=post.id)).order_by('-id')[:4]
         cache.set(f"other_post_{post.id}", other_post, 60 * 5)
     tags = cache.get(f"tags_{post_slug}")
     if not tags:
