@@ -127,7 +127,7 @@ def single_post(request, *args, post_slug=None, **kwargs):
     if not post:
         post = Post.objects.all().filter(slug=post_slug).first()
         if not post:
-            return Http404
+            raise Http404
         cache.set(f"post_{post_slug}", post, 60 * 5)
     if post.http_response_gone:
         return redirect(reverse('handle_410_error'))
