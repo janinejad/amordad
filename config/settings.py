@@ -21,9 +21,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# ALLOWED_HOSTS = ['https://amordadsteel.com', 'amordadsteel.com', 'http://amordadsteel.com']
-ALLOWED_HOSTS = ['127.0.0.1']
+DEBUG = False
+ALLOWED_HOSTS = ['https://amordadsteel.com', 'amordadsteel.com', 'http://amordadsteel.com']
+# ALLOWED_HOSTS = ['127.0.0.1']
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -198,25 +198,25 @@ MIDDLEWARE = [
 ]
 
 
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django_redis.cache.RedisCache",
-#         "LOCATION": "redis://default:k3JZRxo$Z3AfeuMef5Gd@amor-redis-bzb-service:6379/0",
-#         "OPTIONS": {
-#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-#         }
-#     }
-# }
-#
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
+        "LOCATION": "redis://default:k3JZRxo$Z3AfeuMef5Gd@amor-redis-bzb-service:6379/0",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     }
 }
+#
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": "redis://127.0.0.1:6379/1",
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#         }
+#     }
+# }
 
 ROOT_URLCONF = 'config.urls'
 SITE_ID = 1
@@ -249,28 +249,28 @@ WSGI_APPLICATION = 'config.wsgi.application'
 #     }
 # }
 #
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'amordadvlv_db',
-        'USER': 'postgres',
-        'PASSWORD': 'adOt4NwaCM64cWQesnOl',
-        'HOST': 'remote-asiatech.runflare.com',
-        'PORT': '30768',
-    }
-}
-
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 #         'NAME': 'amordadvlv_db',
 #         'USER': 'postgres',
 #         'PASSWORD': 'adOt4NwaCM64cWQesnOl',
-#         'HOST': 'amordad-fei-service',
-#         'PORT': '5432',
+#         'HOST': 'remote-asiatech.runflare.com',
+#         'PORT': '30768',
 #     }
 # }
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'amordadvlv_db',
+        'USER': 'postgres',
+        'PASSWORD': 'adOt4NwaCM64cWQesnOl',
+        'HOST': 'amordad-fei-service',
+        'PORT': '5432',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
