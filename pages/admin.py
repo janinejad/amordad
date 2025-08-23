@@ -22,10 +22,7 @@ class PageAdmin(admin.ModelAdmin):
         return True
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
-        if request.user.is_superuser or request.user.is_content_manager:
-            self.exclude = ('user',)
-        else:
-            self.exclude = ('user', 'status', 'review_reason',)
+        self.exclude = ('user', 'status', 'review_reason',)
         return super(PageAdmin, self).change_view(request, object_id, form_url, extra_context)
 
     def save_model(self, request, obj, form, change):
