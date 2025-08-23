@@ -45,12 +45,6 @@ class PageAdmin(admin.ModelAdmin):
             obj.content = content
         obj.save()
 
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        if request.user.is_superuser or request.user.is_content_manager:
-            return qs
-        return qs.filter(user=request.user)
-
 
 admin.site.register(Page, PageAdmin)
 
