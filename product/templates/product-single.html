@@ -400,14 +400,11 @@
           content="{% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{% endif %}"/>
     <meta name="keywords"
           content="{% if product.keywords %}{{ product.keywords }}{% else %}{{ product.title }}{% endif %}"/>
-    <link rel="canonical" href="
-            {% if product.canonical %}{{ product.canonical }}{% else %}{{ product.get_full_sharing_url }}{% endif %}"/>
+    <link rel="canonical" href="{% if product.canonical %}{{ product.canonical }}{% else %}{{ product.get_full_sharing_url }}{% endif %}"/>
     <meta property="og:locale" content="fa_IR"/>
     <meta property="og:type" content="article"/>
-    <meta property="og:title"
-          content="{% if product.meta_title %}{{ product.meta_title }}{% else %}{{ product.title }}{% endif %}"/>
-    <meta property="og:description" content="
-            {% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{{ SST.setting.brand_name }}{% endif %}"/>
+    <meta property="og:title" content="{% if product.meta_title %}{{ product.meta_title }}{% else %}{{ product.title }}{% endif %}"/>
+    <meta property="og:description" content="{% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{{ SST.setting.brand_name }}{% endif %}"/>
     <meta property="og:url" content="{{ product.get_full_sharing_url }}"/>
     <meta property="article:modified_time" content="{{ product.updated_at_f }}"/>
     <meta property="og:updated_time" content="{{ product.updated_at_f }}"/>
@@ -415,12 +412,12 @@
     <meta property="og:image:secure_url" content="{{ product.image.url }}"/>
     <meta property="og:image:width" content="1120"/>
     <meta property="og:image:height" content="630"/>
-    <meta property="og:image:alt" content="
-            {% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{{ SST.setting.brand_name }}{% endif %}"/>
+    <meta property="og:image:alt" content="{% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{{ SST.setting.brand_name }}{% endif %}"/>
     <meta name="twitter:card" content="summary_large_image"/>
-    <meta name="twitter:description" content="
-            {% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{{ SST.setting.brand_name }}{% endif %}"/>
-    <meta name="twitter:title"
-          content="{% if product.meta_title %}{{ product.meta_title }}{% else %}{{ product.title }}{% endif %}"/>
+    <meta name="twitter:description" content="{% if product.meta_desc %}{{ product.meta_desc }}{% else %}{{ product.title }}{{ SST.setting.brand_name }}{% endif %}"/>
+    <meta name="twitter:title" content="{% if product.meta_title %}{{ product.meta_title }}{% else %}{{ product.title }}{% endif %}"/>
     <meta name="twitter:image" content="{{ product.image.url }}"/>
+    <meta name="product_price" content="{{ product.get_product_price.price }}">
+    <meta name="product_old_price" content="{{ product.get_product_price.regular_price }}">
+    <meta name="availability" content="instock or outofstock">
 {% endblock %}

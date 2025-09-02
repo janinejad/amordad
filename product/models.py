@@ -347,12 +347,22 @@ class Product(models.Model):
         verbose_name_plural = 'محصولات'
         verbose_name = 'محصول'
 
-    def get_price(self):
+    def get_product_price(self):
+        item: ProductInventory = self.productinventory_set.order_by('price').first()
         price = 0
-        lowest_price = self.productinventory_set.aggregate(min_value=Min('price'))['min_value']
-        if lowest_price:
-            price = lowest_price
-        return '{:,} تومان'.format(math.trunc(price))
+        regular_price = 0
+        if item and item.regular_price:
+            price = math.trunc(item.price)
+            regular_price = math.trunc(item.regular_price)
+        context = {
+            'price': price,
+            'regular_price': regular_price,
+        }
+        return context
+
+    def get_price(self):
+        item = self.get_product_price()
+        return '{:,} تومان'.format(math.trunc(item["price"]))
 
     def updated_at_f(self):
         return f"{self.updated_at.strftime('%Y-%m-%dT%H:%M:%S')}.000Z"
@@ -454,6 +464,7 @@ class ProductGallery(models.Model):
 class ProductInventoryManager(models.Manager):
     def all_availble(self):
         return self.get_queryset().filter(quantity__gt=0, in_basket__gt=0).order_by('price').distinct()
+
     def all(self):
         return self.get_queryset().order_by('-quantity').distinct()
 
@@ -511,6 +522,7 @@ class ProductInventory(models.Model):
         else:
             name = self.title
         return name
+
     def variant_is_availble(self):
         if self.quantity > 0:
             return True
