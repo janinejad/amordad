@@ -419,5 +419,5 @@
     <meta name="twitter:image" content="{{ product.image.url }}"/>
     <meta name="product_price" content="{{ product.get_product_price.price }}">
     <meta name="product_old_price" content="{{ product.get_product_price.regular_price }}">
-    <meta name="availability" content="instock or outofstock">
+    <meta name="availability" content="{{ product.is_available|yesno:'instock,outofstock'}}">
 {% endblock %}
