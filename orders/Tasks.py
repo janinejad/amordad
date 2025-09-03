@@ -69,7 +69,7 @@ def create_product_internal_link():
             if jlink.title in product.Description:
                 authorized_tags_list = jlink.authorized_tags.split(",")
                 product.Description = create_link_in_content(jlink.title, html_content, jlink.link,
-                                                             authorized_tags_list)
+                                                             authorized_tags_list,jlink.no_fallow)
                 product.save()
                 html_content = product.Description
     create_product_internal_link()
@@ -85,7 +85,7 @@ def create_post_internal_link():
             if jlink.title in post.Description:
                 authorized_tags_list = jlink.authorized_tags.split(",")
                 post.Description = create_link_in_content(jlink.title, html_content, jlink.link,
-                                                          authorized_tags_list)
+                                                          authorized_tags_list,jlink.no_fallow)
                 post.save()
                 html_content = post.Description
     create_post_internal_link()
@@ -101,7 +101,7 @@ def create_category_internal_link():
             if jlink.title in cat.description:
                 authorized_tags_list = jlink.authorized_tags.split(",")
                 cat.description = create_link_in_content(jlink.title, html_content, jlink.link,
-                                                         authorized_tags_list)
+                                                         authorized_tags_list,jlink.no_fallow)
                 cat.save()
                 html_content = cat.description
     create_category_internal_link()
@@ -116,7 +116,7 @@ def create_page_internal_link():
             if jlink.title in page.content:
                 authorized_tags_list = jlink.authorized_tags.split(",")
                 page.content = create_link_in_content(jlink.title, html_content, jlink.link,
-                                                      authorized_tags_list)
+                                                      authorized_tags_list,jlink.no_fallow)
                 page.save()
                 html_content = page.content
 

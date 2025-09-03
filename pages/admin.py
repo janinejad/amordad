@@ -38,7 +38,7 @@ class PageAdmin(admin.ModelAdmin):
                 if link.title in obj.content:
                     authorized_tags_list = link.authorized_tags.split(",")
                     content = create_link_in_content(link.title, content, link.link,
-                                                     authorized_tags_list)
+                                                     authorized_tags_list,link.no_fallow)
             obj.content = content
         obj.save()
 

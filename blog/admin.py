@@ -50,7 +50,7 @@ class PostAdmin(admin.ModelAdmin):
                 if link.title in obj.Description:
                     authorized_tags_list = link.authorized_tags.split(",")
                     content = create_link_in_content(link.title, content, link.link,
-                                                     authorized_tags_list)
+                                                     authorized_tags_list,link.no_fallow)
             obj.Description = content
         obj.save()
         super().save_model(request, obj, form, change)

@@ -31,8 +31,11 @@ def remove_link(content):
     return updated_content
 
 
-def create_link_in_content(specific_text, content, url, authorized_tags_list):
+def create_link_in_content(specific_text, content, url, authorized_tags_list,no_fallow):
     soup = BeautifulSoup(content, 'html.parser')
+    no_fallow_lnk = ""
+    if no_fallow:
+        no_fallow_lnk = ' rel="nofollow"'
     for authorized_tag in authorized_tags_list:
         tags = soup.find_all(authorized_tag)
         tag_num = 0
@@ -40,7 +43,7 @@ def create_link_in_content(specific_text, content, url, authorized_tags_list):
             # if specific_text in tag.get_text() and tag.find_parent().name not in ['th', 'hd']:
             if specific_text in tag.get_text():
                 if tag_num == 0:
-                    convert_specific_text_to_link = f'<a href="{url}">{specific_text}</a>'
+                    convert_specific_text_to_link = f'<a href="{url}"{no_fallow_lnk}>{specific_text}</a>'
                     tag.replace_with(
                         BeautifulSoup(str(tag).replace(specific_text, convert_specific_text_to_link, 1),
                                       'html.parser'))

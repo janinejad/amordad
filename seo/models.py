@@ -22,6 +22,7 @@ class JuiceLink(models.Model):
     apply_for_products = models.BooleanField(default=False, verbose_name='برای توضیحات محصولات اعمال گردد')
     apply_for_pages = models.BooleanField(default=False, verbose_name='برای صفحه هات اعمال گردد')
     apply_for_categories = models.BooleanField(default=False, verbose_name='برای دسته بندی محصولات اعمال گردد')
+    no_fallow = models.BooleanField(default=False,verbose_name="نو فالو شود")
     objects = JuiceLinkManager()
 
     class Meta:
